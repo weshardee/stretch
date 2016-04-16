@@ -5,8 +5,8 @@ using UnityStandardAssets.CrossPlatformInput;
 public class Move : MonoBehaviour {
 
 	private float _Speed = 1f;
-	private float _MinScale = 0.5f;
 	private float _MaxStretch = 5f;
+	private float _MaxShrink = 0.5f;
 	
 	void Start () {
 	
@@ -19,7 +19,7 @@ public class Move : MonoBehaviour {
 		// TODO constrain position by environment
 		
 		transform.localPosition = input * _MaxStretch;
-		transform.localScale = (1 - howStretched) * Vector2.one;
+		transform.localScale = (1 - _MaxShrink * howStretched) * Vector2.one;
 	}
 	
 	private Vector2 GetInput()
