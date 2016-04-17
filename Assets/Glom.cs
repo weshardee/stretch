@@ -3,8 +3,10 @@ using System.Collections;
 
 public class Glom : MonoBehaviour {
 	// editor components
-	public SpringJoint2D glomJoint;
 	public LayerMask layerMask;
+	
+	// local components
+	private SpringJoint2D _GlomJoint;
 	
 	// state flags
 	private bool _CanGlom = true;
@@ -22,10 +24,10 @@ public class Glom : MonoBehaviour {
 	
 	public bool IsGlommed { 
 		get {
-			return glomJoint.enabled;
+			return _GlomJoint.enabled;
 		} 
 		private set {
-			glomJoint.enabled = value;
+			_GlomJoint.enabled = value;
 		} 
 	}
 	
@@ -36,20 +38,20 @@ public class Glom : MonoBehaviour {
 	
 	void Start () {
 		// create and configure joint
-		glomJoint = gameObject.AddComponent<SpringJoint2D>();
-		glomJoint.autoConfigureConnectedAnchor = false;
-		glomJoint.autoConfigureDistance = false;
-		glomJoint.distance = 0;
-		glomJoint.enableCollision = true;
-		glomJoint.enabled = false;
-		glomJoint.frequency = 4;
-		glomJoint.dampingRatio = 1;
+		_GlomJoint = gameObject.AddComponent<SpringJoint2D>();
+		_GlomJoint.autoConfigureConnectedAnchor = false;
+		_GlomJoint.autoConfigureDistance = false;
+		_GlomJoint.distance = 0;
+		_GlomJoint.enableCollision = true;
+		_GlomJoint.enabled = false;
+		_GlomJoint.frequency = 4;
+		_GlomJoint.dampingRatio = 1;
 	}
 	
 	void Update () {
 		if (IsGlommed) {
-			Vector2 anchorInWorldSpace = glomJoint.anchor + (Vector2)transform.position;
-			Debug.DrawLine(anchorInWorldSpace, glomJoint.connectedAnchor, Color.green);
+			Vector2 anchorInWorldSpace = _GlomJoint.anchor + (Vector2)transform.position;
+			Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.green);
 		}
 	}
 	
@@ -62,9 +64,9 @@ public class Glom : MonoBehaviour {
 	void GlomTo(Collision2D coll) {
 		_GlomPoint = coll.contacts[0].point;
 		
-		// set the point of contact as the connected anchor point of the glomJoint
+		// set the point of contact as the connected anchor point of the _GlomJoint
 		Vector2 point = (Vector2)coll.contacts[0].point;
-		glomJoint.connectedAnchor = point;
+		_GlomJoint.connectedAnchor = point;
 
 		// set joint status
 		IsGlommed = true;	
