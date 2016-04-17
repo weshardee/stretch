@@ -3,13 +3,26 @@ using System.Collections;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class Stretch : MonoBehaviour {
+	public Transform core;
 	public SpringJoint2D collapsingSpring;
 	public SpringJoint2D reachingSpring;
 
 	public const float MaxStretch = 1.5f;
 
-	private bool _WasStretched;
-	public bool IsStretching { get; private set; }
+	private bool _WasStretched = false;
+	private bool _IsStretching = false;
+	public bool IsStretching { 
+		get {
+			return _IsStretching;
+		} 
+		private set {
+			_WasStretched = _IsStretching;
+			_IsStretching = value;
+			indicatorRenderer.enabled = value;
+			collapsingSpring.enabled = !value;
+			reachingSpring.enabled = value;
+		} 
+	}
 	public float HowStretched { get; private set; }
 	
 	private Renderer indicatorRenderer;
@@ -23,24 +36,11 @@ public class Stretch : MonoBehaviour {
 	void Update () {
 		Vector2 input = GetInput();
 		float howStretched = input.sqrMagnitude;
-		
-		_WasStretched = IsStretching;
-		IsStretching = (howStretched > 0) && (howStretched >= HowStretched); // check if stretch is decreasing
+		bool isCollapsing = howStretched < HowStretched; // check if stretch is decreasing
+		bool isNeutral = howStretched == 0;
 		HowStretched = howStretched;
 		
-		bool stretchJustStarted = !_WasStretched && IsStretching;
-		bool stretchJustEnded = _WasStretched && !IsStretching;
-		
-		if (stretchJustStarted) {
-			indicatorRenderer.enabled = true;
-			collapsingSpring.enabled = false;
-			reachingSpring.enabled = true;
-		} else if (stretchJustEnded) {
-			indicatorRenderer.enabled = false;
-			collapsingSpring.enabled = true;
-			reachingSpring.enabled = false;
-		}
-		
+		IsStretching = !isCollapsing && !isNeutral;
 		if (IsStretching) {
 			Vector2 goalPosition = input * MaxStretch; 
 			transform.localPosition = goalPosition;
@@ -64,5 +64,4 @@ public class Stretch : MonoBehaviour {
 		
 		return input;
 	}
-
 }
