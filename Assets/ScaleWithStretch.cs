@@ -6,7 +6,7 @@ public class ScaleWithStretch : MonoBehaviour {
 	public Transform end1;
 	public Transform end2;
 	
-	private float _ScaleAtMaxStretch = 0.5f;
+	private const float _ScaleAtMaxStretch = 0.7f;
 	
 	// Use this for initialization
 	void Start () {
