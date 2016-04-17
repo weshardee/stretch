@@ -3,6 +3,7 @@ using System.Collections;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class Stretch : MonoBehaviour {
+	public Glom frontGlom;
 	public Transform core;
 	public SpringJoint2D collapsingSpring;
 	public SpringJoint2D reachingSpring;
@@ -81,11 +82,11 @@ public class Stretch : MonoBehaviour {
 	}
 	
 	void OnStretchStart() {
-		Debug.Log("start");
+		frontGlom.CanGlom = false;
 	}
 	
 	void OnStretchStop() {
-		Debug.Log("stop");
+		frontGlom.CanGlom = true;
 		coreGlom.UnGlom();
 	}
 }

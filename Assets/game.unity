@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375037184412d454695536b835906e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frontGlom: {fileID: 1710742901}
   core: {fileID: 827543784}
   collapsingSpring: {fileID: 1710742902}
   reachingSpring: {fileID: 694346297}
@@ -476,7 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1711d4a360b3489cbfc4878f8a02b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glomJoint: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -931,6 +931,7 @@ GameObject:
   - 58: {fileID: 1710742898}
   - 50: {fileID: 1710742900}
   - 231: {fileID: 1710742902}
+  - 114: {fileID: 1710742901}
   m_Layer: 8
   m_Name: front
   m_TagString: Player
@@ -982,6 +983,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1710742901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1710742897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1711d4a360b3489cbfc4878f8a02b6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
