@@ -12,8 +12,12 @@ public class Stretch : MonoBehaviour {
 	public bool IsStretching { get; private set; }
 	public float HowStretched { get; private set; }
 	
+	private Renderer indicatorRenderer;
+	
 	void Start () {
 		reachingSpring.enabled = false;
+		indicatorRenderer = GetComponentInChildren<Renderer>();
+		indicatorRenderer.enabled = false;
 	}
 	
 	void Update () {
@@ -28,9 +32,11 @@ public class Stretch : MonoBehaviour {
 		bool stretchJustEnded = _WasStretched && !IsStretching;
 		
 		if (stretchJustStarted) {
+			indicatorRenderer.enabled = true;
 			collapsingSpring.enabled = false;
 			reachingSpring.enabled = true;
 		} else if (stretchJustEnded) {
+			indicatorRenderer.enabled = false;
 			collapsingSpring.enabled = true;
 			reachingSpring.enabled = false;
 		}
