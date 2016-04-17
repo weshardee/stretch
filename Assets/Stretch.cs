@@ -40,8 +40,7 @@ public class Stretch : MonoBehaviour {
 		
 		IsStretching = !isCollapsing && !isNeutral;
 		if (IsStretching) {
-			Vector2 goalPosition = input * MaxStretch; 
-			transform.localPosition = goalPosition;
+			transform.position = (Vector2)core.position + input * MaxStretch;
 		}
 	}
 	
