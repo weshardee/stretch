@@ -42,7 +42,7 @@ public class Glom : MonoBehaviour {
 	private const float _PumpedRadius = 0.55f;
 	private const float _RegularRadius = 0.5f;
 	
-	void Start () {
+	void Awake() {
 		circleCollider = GetComponent<CircleCollider2D>();
 		
 		// create and configure joint
