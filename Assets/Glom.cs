@@ -39,7 +39,7 @@ public class Glom : MonoBehaviour {
 	private CircleCollider2D circleCollider;
 	
 	// other
-	private const float _PumpedRadius = 0.6f;
+	private const float _PumpedRadius = 0.55f;
 	private const float _RegularRadius = 0.5f;
 	
 	void Start () {
