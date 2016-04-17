@@ -21,7 +21,6 @@ public class Stretch : MonoBehaviour {
 		private set {
 			_IsStretching = value;
 			indicatorRenderer.enabled = value;
-			collapsingSpring.enabled = !value;
 			reachingSpring.enabled = value;
 		} 
 	}
