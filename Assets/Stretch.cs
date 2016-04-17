@@ -11,7 +11,6 @@ public class Stretch : MonoBehaviour {
 	public const float DeadZone = 0.2f;
 	public const float CollapseThreshold = 0.2f;
 
-	private bool _WasStretched = false;
 	private bool _CanStretch;
 	
 	private bool _IsStretching = false;
@@ -20,7 +19,6 @@ public class Stretch : MonoBehaviour {
 			return _IsStretching;
 		} 
 		private set {
-			_WasStretched = _IsStretching;
 			_IsStretching = value;
 			indicatorRenderer.enabled = value;
 			collapsingSpring.enabled = !value;
