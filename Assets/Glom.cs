@@ -7,7 +7,19 @@ public class Glom : MonoBehaviour {
 	public LayerMask layerMask;
 	
 	// state flags
-	public bool CanGlom = true;
+	private bool _CanGlom;
+	public bool CanGlom { 
+		get {
+			return _CanGlom; 
+		} 
+		set {
+			_CanGlom = value;
+			if (!value) {
+				UnGlom();
+			}
+		}
+	}
+	
 	public bool IsGlommed { get; private set; }
 	
 	// active glom info
@@ -55,5 +67,10 @@ public class Glom : MonoBehaviour {
 		// set the point of contact as the connected anchor point of the glomJoint
 		Vector2 point = (Vector2)coll.contacts[0].point;
 		glomJoint.connectedAnchor = point;
+	}
+	
+	void UnGlom() {
+		IsGlommed = false;
+		glomJoint.enabled = false;
 	}
 }
