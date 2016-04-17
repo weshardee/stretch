@@ -274,7 +274,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
-  CanGlom: 1
 --- !u!1 &1058496595
 GameObject:
   m_ObjectHideFlags: 0
