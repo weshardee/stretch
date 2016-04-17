@@ -86,7 +86,8 @@ public class Stretch : MonoBehaviour {
 	}
 	
 	void OnStretchStop() {
-		frontGlom.CanGlom = true;
-		coreGlom.UnGlom();
+		frontGlom.Try();
+		// coreGlom.UnGlom();
+		// frontGlom.CanGlom = true;
 	}
 }
