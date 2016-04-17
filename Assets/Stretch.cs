@@ -28,9 +28,7 @@ public class Stretch : MonoBehaviour {
 	private Renderer indicatorRenderer;
 	
 	void Start () {
-		reachingSpring.enabled = false;
 		indicatorRenderer = GetComponentInChildren<Renderer>();
-		indicatorRenderer.enabled = false;
 	}
 	
 	void Update () {
