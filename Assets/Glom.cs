@@ -20,7 +20,14 @@ public class Glom : MonoBehaviour {
 		}
 	}
 	
-	public bool IsGlommed { get; private set; }
+	public bool IsGlommed { 
+		get {
+			return glomJoint.enabled;
+		} 
+		private set {
+			glomJoint.enabled = value;
+		} 
+	}
 	
 	// active glom info
 	private Vector2 _GlomPoint;
@@ -53,17 +60,17 @@ public class Glom : MonoBehaviour {
 	}
 
 	void GlomTo(Collision2D coll) {
-		IsGlommed = true;	
-		glomJoint.enabled = true;
 		_GlomPoint = coll.contacts[0].point;
 		
 		// set the point of contact as the connected anchor point of the glomJoint
 		Vector2 point = (Vector2)coll.contacts[0].point;
 		glomJoint.connectedAnchor = point;
+
+		// set joint status
+		IsGlommed = true;	
 	}
 	
-	void UnGlom() {
+	public void UnGlom() {
 		IsGlommed = false;
-		glomJoint.enabled = false;
 	}
 }

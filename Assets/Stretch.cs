@@ -13,6 +13,7 @@ public class Stretch : MonoBehaviour {
 
 	private bool _CanStretch;
 	
+	private bool _WasStretching = false;
 	private bool _IsStretching = false;
 	public bool IsStretching { 
 		get {
@@ -22,14 +23,26 @@ public class Stretch : MonoBehaviour {
 			_IsStretching = value;
 			indicatorRenderer.enabled = value;
 			reachingSpring.enabled = value;
+			
+			// trigger start/stop behavior
+			if (_WasStretching && !value) {
+				OnStretchStop();
+			} else if (!_WasStretching && value) {
+				OnStretchStart();
+			}
+			_WasStretching = _IsStretching;
 		} 
 	}
+	
+	private Glom coreGlom;
+	
 	public float HowStretched { get; private set; }
 	
 	private Renderer indicatorRenderer;
 	
 	void Start () {
 		indicatorRenderer = GetComponentInChildren<Renderer>();
+		coreGlom = core.GetComponent<Glom>();
 	}
 	
 	void Update () {
@@ -65,5 +78,14 @@ public class Stretch : MonoBehaviour {
 		}
 		
 		return input;
+	}
+	
+	void OnStretchStart() {
+		Debug.Log("start");
+	}
+	
+	void OnStretchStop() {
+		Debug.Log("stop");
+		coreGlom.UnGlom();
 	}
 }
