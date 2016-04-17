@@ -7,43 +7,46 @@ public class Move : MonoBehaviour {
 	private float _Speed = 1f;
 	private float _MaxStretch = 1.5f;
 	private float _MaxShrink = 0.5f;
-	private float _StretchForce = 10f;
+	private float _StretchForce = 0.0001f;
 	
 	private Vector2 _BasePosition;
+	private Vector2 _GoalPosition;
 	private bool _WasStretched;
-	private bool _IsStretched;
+	private bool _IsStretching;
+	private bool _IsCollapsing;
 	private float _HowStretched;
-	private SpringJoint2D spring;
+	public SpringJoint2D collapsingSpring;
+	public SpringJoint2D reachingSpring;
 	private Rigidbody2D body;
 	
 	void Start () {
 		body = GetComponent<Rigidbody2D>();
-		spring = GetComponent<SpringJoint2D>();
+		reachingSpring.enabled = false;
 	}
 	
 	void Update () {
 		Vector2 input = GetInput();
 		float howStretched = input.sqrMagnitude;
 		
-		_WasStretched = _IsStretched;
-		_IsStretched = (howStretched > 0) && (howStretched >= _HowStretched); // check if stretch is decreasing
+		_WasStretched = _IsStretching;
+		_IsStretching = (howStretched > 0) && (howStretched >= _HowStretched); // check if stretch is decreasing
+		_IsCollapsing = (howStretched > 0) && (howStretched < _HowStretched);
 		_HowStretched = howStretched;
 		
-		bool stretchJustStarted = !_WasStretched && _IsStretched;
-		bool stretchJustEnded = _WasStretched && !_IsStretched;
+		bool stretchJustStarted = !_WasStretched && _IsStretching;
+		bool stretchJustEnded = _WasStretched && !_IsStretching;
 		
 		if (stretchJustStarted) {
-			spring.enabled = false;
+			collapsingSpring.enabled = false;
+			reachingSpring.enabled = true;
 		} else if (stretchJustEnded) {
-			spring.enabled = true;
+			collapsingSpring.enabled = true;
+			reachingSpring.enabled = false;
 		}
 		
-		if (_IsStretched) {
-			body.AddForce(input * _StretchForce, ForceMode2D.Force);		
-			// transform.localPosition = _BasePosition + input * _MaxStretch;
-			// transform.localScale = (1 - _MaxShrink * howStretched) * Vector2.one;
-		} else {
-			_BasePosition = transform.position;
+		if (_IsStretching) {
+			_GoalPosition = input * _MaxStretch; 
+			transform.localPosition = _GoalPosition;
 		}
 	}
 	
