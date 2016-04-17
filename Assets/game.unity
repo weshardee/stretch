@@ -93,9 +93,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 694346294}
-  - 114: {fileID: 694346295}
   - 50: {fileID: 694346296}
   - 231: {fileID: 694346297}
+  - 114: {fileID: 694346295}
   m_Layer: 8
   m_Name: goal
   m_TagString: Untagged
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 694346293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0753ce744a2284663805ed2112e4f3a3, type: 3}
+  m_Script: {fileID: 11500000, guid: 375037184412d454695536b835906e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   collapsingSpring: {fileID: 1710742902}
@@ -618,8 +618,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0753ce744a2284663805ed2112e4f3a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _MaxStretch: 1.5
+  _GoalPosition: {x: 0, y: 0}
+  _WasStretched: 0
+  _IsStretching: 0
+  _IsCollapsing: 0
+  _HowStretched: 0
   collapsingSpring: {fileID: 0}
   reachingSpring: {fileID: 0}
+  body: {fileID: 0}
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -650,6 +657,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375037184412d454695536b835906e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collapsingSpring: {fileID: 0}
+  reachingSpring: {fileID: 0}
 --- !u!1 &1828499353
 GameObject:
   m_ObjectHideFlags: 0
