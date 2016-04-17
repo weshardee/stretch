@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Glom : MonoBehaviour {
 	// editor components
-	public SpringJoint2D glomSpring;
+	public FixedJoint2D glomJoint;
 	public LayerMask layerMask;
 	
 	// state flags
@@ -11,6 +11,8 @@ public class Glom : MonoBehaviour {
 	public bool IsGlommed { get; private set; }
 	
 	void Start () {
+		glomJoint = gameObject.AddComponent<FixedJoint2D>();
+		glomJoint.enabled = false;
 	}
 	
 	void Update () {
@@ -32,5 +34,6 @@ public class Glom : MonoBehaviour {
 
 	void GlomTo(Collision2D coll) {
 		IsGlommed = true;	
+		glomJoint.enabled = true;
 	}
 }
