@@ -40,13 +40,6 @@ public class Glom : MonoBehaviour {
 	}
 	
 	void Update () {
-		// if (!IsGlommed && CanGlom) {
-		// 	// check for collision
-		// 	bool shouldGlom = body.IsTouchingLayers(layerMask);
-		// 	GlomTo()
-		// }
-		
-		// Debug.Log(IsGlommed);
 		if (IsGlommed) {
 			Vector2 anchorInWorldSpace = glomJoint.anchor + (Vector2)transform.position;
 			Debug.DrawLine(anchorInWorldSpace, glomJoint.connectedAnchor, Color.green);
