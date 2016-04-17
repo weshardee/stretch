@@ -7,7 +7,7 @@ public class Stretch : MonoBehaviour {
 	public SpringJoint2D collapsingSpring;
 	public SpringJoint2D reachingSpring;
 
-	public const float MaxStretch = 2f;
+	public const float MaxStretch = 3f;
 	public const float DeadZone = 0.2f;
 	public const float CollapseThreshold = 0.2f;
 

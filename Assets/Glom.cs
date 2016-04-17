@@ -23,7 +23,7 @@ public class Glom : MonoBehaviour {
 		glomJoint.distance = 0;
 		glomJoint.enableCollision = true;
 		glomJoint.enabled = false;
-		glomJoint.frequency = 3;
+		glomJoint.frequency = 4;
 		glomJoint.dampingRatio = 1;
 	}
 	
