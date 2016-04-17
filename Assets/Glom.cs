@@ -7,7 +7,7 @@ public class Glom : MonoBehaviour {
 	public LayerMask layerMask;
 	
 	// state flags
-	private bool _CanGlom;
+	private bool _CanGlom = true;
 	public bool CanGlom { 
 		get {
 			return _CanGlom; 
