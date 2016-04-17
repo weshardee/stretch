@@ -71,7 +71,6 @@ public class Glom : MonoBehaviour {
 	}
 
 	void GlomTo(Collision2D coll) {
-		Debug.Log("collide");
 		StopTry();
 		_GlomPoint = coll.contacts[0].point;
 		
@@ -92,14 +91,12 @@ public class Glom : MonoBehaviour {
 		CanGlom = true;
 		
 		// pump up the volume
-		Debug.Log("try pump");
 		_IsTrying = true;
 		circleCollider.radius = _PumpedRadius;
 	}
 	
 	public void StopTry() {
 		if (_IsTrying) {
-			Debug.Log("stop try");
 			_IsTrying = false;
 			circleCollider.radius = _RegularRadius;
 		}
