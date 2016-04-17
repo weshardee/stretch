@@ -270,6 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1711d4a360b3489cbfc4878f8a02b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  glomSpring: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -806,8 +807,8 @@ SpringJoint2D:
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 0
   m_Distance: 0.005
-  m_DampingRatio: 1
-  m_Frequency: 3
+  m_DampingRatio: 0.25
+  m_Frequency: 2
 --- !u!114 &1710742903
 MonoBehaviour:
   m_ObjectHideFlags: 0
