@@ -4,12 +4,7 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class Move : MonoBehaviour {
 
-	private float _Speed = 1f;
 	private float _MaxStretch = 1.5f;
-	private float _MaxShrink = 0.5f;
-	private float _StretchForce = 0.0001f;
-	
-	private Vector2 _BasePosition;
 	private Vector2 _GoalPosition;
 	private bool _WasStretched;
 	private bool _IsStretching;
