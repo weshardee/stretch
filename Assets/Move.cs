@@ -5,21 +5,46 @@ using UnityStandardAssets.CrossPlatformInput;
 public class Move : MonoBehaviour {
 
 	private float _Speed = 1f;
-	private float _MaxStretch = 5f;
+	private float _MaxStretch = 1.5f;
 	private float _MaxShrink = 0.5f;
+	private float _StretchForce = 10f;
+	
+	private Vector2 _BasePosition;
+	private bool _WasStretched;
+	private bool _IsStretched;
+	private float _HowStretched;
+	private SpringJoint2D spring;
+	private Rigidbody2D body;
 	
 	void Start () {
-	
+		body = GetComponent<Rigidbody2D>();
+		spring = GetComponent<SpringJoint2D>();
 	}
 	
 	void Update () {
 		Vector2 input = GetInput();
 		float howStretched = input.sqrMagnitude;
 		
-		// TODO constrain position by environment
+		_WasStretched = _IsStretched;
+		_IsStretched = (howStretched > 0) && (howStretched >= _HowStretched); // check if stretch is decreasing
+		_HowStretched = howStretched;
 		
-		transform.localPosition = input * _MaxStretch;
-		transform.localScale = (1 - _MaxShrink * howStretched) * Vector2.one;
+		bool stretchJustStarted = !_WasStretched && _IsStretched;
+		bool stretchJustEnded = _WasStretched && !_IsStretched;
+		
+		if (stretchJustStarted) {
+			spring.enabled = false;
+		} else if (stretchJustEnded) {
+			spring.enabled = true;
+		}
+		
+		if (_IsStretched) {
+			body.AddForce(input * _StretchForce, ForceMode2D.Force);		
+			// transform.localPosition = _BasePosition + input * _MaxStretch;
+			// transform.localScale = (1 - _MaxShrink * howStretched) * Vector2.one;
+		} else {
+			_BasePosition = transform.position;
+		}
 	}
 	
 	private Vector2 GetInput()

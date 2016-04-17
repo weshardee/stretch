@@ -391,6 +391,8 @@ GameObject:
   - 58: {fileID: 1710742898}
   - 50: {fileID: 1710742900}
   - 231: {fileID: 1710742902}
+  - 114: {fileID: 1710742901}
+  - 114: {fileID: 1710742903}
   m_Layer: 8
   m_Name: front
   m_TagString: Player
@@ -442,6 +444,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1710742901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1710742897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0753ce744a2284663805ed2112e4f3a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -461,6 +474,17 @@ SpringJoint2D:
   m_Distance: 0.005
   m_DampingRatio: 0
   m_Frequency: 3
+--- !u!114 &1710742903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1710742897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375037184412d454695536b835906e16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2068243872
 GameObject:
   m_ObjectHideFlags: 0
