@@ -8,8 +8,12 @@ public class Stretch : MonoBehaviour {
 	public SpringJoint2D reachingSpring;
 
 	public const float MaxStretch = 2f;
+	public const float DeadZone = 0.2f;
+	public const float CollapseThreshold = 0.2f;
 
 	private bool _WasStretched = false;
+	private bool _CanStretch;
+	
 	private bool _IsStretching = false;
 	public bool IsStretching { 
 		get {
@@ -34,13 +38,17 @@ public class Stretch : MonoBehaviour {
 	void Update () {
 		Vector2 input = GetInput();
 		float howStretched = input.sqrMagnitude;
-		bool isCollapsing = howStretched < HowStretched; // check if stretch is decreasing
-		bool isNeutral = howStretched == 0;
+		bool isCollapsing = howStretched < HowStretched - CollapseThreshold; // check if stretch is decreasing
+		bool isNeutral = howStretched < DeadZone;
 		HowStretched = howStretched;
 		
-		IsStretching = !isCollapsing && !isNeutral;
+		IsStretching = !isCollapsing && !isNeutral && _CanStretch;
 		if (IsStretching) {
 			transform.position = (Vector2)core.position + input * MaxStretch;
+		} else if (isCollapsing) {
+			_CanStretch = false;
+		} else if (isNeutral) {
+			_CanStretch = true;
 		}
 	}
 	
