@@ -4,7 +4,8 @@ using System.Collections;
 public class Glom : MonoBehaviour {
 	// editor components
 	public LayerMask layerMask;
-	
+	public Glom otherGlom;
+
 	// local components
 	private SpringJoint2D _GlomJoint;
 	
@@ -80,6 +81,7 @@ public class Glom : MonoBehaviour {
 
 		// set joint status
 		IsGlommed = true;	
+		otherGlom.UnGlom();
 	}
 	
 	public void UnGlom() {

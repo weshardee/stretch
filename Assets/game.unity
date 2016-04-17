@@ -480,6 +480,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
+  otherGlom: {fileID: 1710742901}
 --- !u!1 &1058496595
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,6 +998,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
+  otherGlom: {fileID: 827543786}
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
