@@ -18,9 +18,6 @@ public class Glom : MonoBehaviour {
 			_CanGlom = value;
 			if (!value) {
 				UnGlom();
-			} else if (otherGlom) {
-				Debug.Log("disable other glom" + otherGlom.name);
-				otherGlom.CanGlom = false;
 			}
 		}
 	}
