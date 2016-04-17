@@ -18,9 +18,13 @@ public class Glom : MonoBehaviour {
 			_CanGlom = value;
 			if (!value) {
 				UnGlom();
+			} else if (otherGlom) {
+				Debug.Log("disable other glom" + otherGlom.name);
+				otherGlom.CanGlom = false;
 			}
 		}
 	}
+	private bool _IsTrying = false;
 	
 	public bool IsGlommed { 
 		get {
@@ -35,8 +39,15 @@ public class Glom : MonoBehaviour {
 	private Vector2 _GlomPoint;
 	
 	private const float _Radius = 0.5f;
+	private CircleCollider2D circleCollider;
+	
+	// other
+	private const float _PumpedRadius = 0.6f;
+	private const float _RegularRadius = 0.5f;
 	
 	void Start () {
+		circleCollider = GetComponent<CircleCollider2D>();
+		
 		// create and configure joint
 		_GlomJoint = gameObject.AddComponent<SpringJoint2D>();
 		_GlomJoint.autoConfigureConnectedAnchor = false;
@@ -62,6 +73,8 @@ public class Glom : MonoBehaviour {
 	}
 
 	void GlomTo(Collision2D coll) {
+		Debug.Log("collide");
+		StopTry();
 		_GlomPoint = coll.contacts[0].point;
 		
 		// set the point of contact as the connected anchor point of the _GlomJoint
@@ -74,5 +87,22 @@ public class Glom : MonoBehaviour {
 	
 	public void UnGlom() {
 		IsGlommed = false;
+	}
+	
+	public void Try() {
+		CanGlom = true;
+		
+		// pump up the volume
+		Debug.Log("try pump");
+		_IsTrying = true;
+		circleCollider.radius = _PumpedRadius;
+	}
+	
+	public void StopTry() {
+		if (_IsTrying) {
+			Debug.Log("stop try");
+			_IsTrying = false;
+			circleCollider.radius = _RegularRadius;
+		}
 	}
 }
