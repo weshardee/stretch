@@ -80,7 +80,9 @@ public class Glom : MonoBehaviour {
 
 		// set joint status
 		IsGlommed = true;	
-		otherGlom.UnGlom();
+		if (otherGlom != null) {
+			otherGlom.UnGlom();
+		}
 	}
 	
 	public void UnGlom() {
