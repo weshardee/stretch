@@ -75,6 +75,7 @@ public class Player : MonoBehaviour {
 
 				// change state if input starts
 				if (GetInput() != Vector2.zero) {
+					_LastInputMagnitude = 0;
 					_State = PlayerState.Reaching;
 				}
 				break;
@@ -116,19 +117,14 @@ public class Player : MonoBehaviour {
 		if (input.sqrMagnitude > 1) {
 			input.Normalize();
 		}
-		
-		_LastInputMagnitude = input.sqrMagnitude;
-		
+				
 		return input;
 	}
 	
 	private bool HasInputStopped(Vector2 input) {
 		float inputMagnitude = input.sqrMagnitude;
 		bool hasStopped = inputMagnitude <= _LastInputMagnitude - InputReleaseThreshold;
-		_LastInputMagnitude = inputMagnitude;
-		
-		Debug.Log(_LastInputMagnitude + " " + inputMagnitude);
-		
+		_LastInputMagnitude = inputMagnitude;		
 		return hasStopped;
 	}
 }
