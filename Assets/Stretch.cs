@@ -22,12 +22,16 @@ public class Stretch : MonoBehaviour {
 	public const float StretchForce = 3f;
 	public const float DeadZone = 0.2f;
 	public const float RelaxThreshold = 0.3f;
+	public const float MaxStretch = 15f;
 
 	
 	// stretching state
 	private float _LastInputMagnitude = 0;
 	private bool _WasStretching = false;
 	private bool _IsStretching = false;
+	public float stretchDistance { get; private set; }
+	public float stretchPercent { get; private set; }
+	
 	public bool IsStretching { 
 		get {
 			return _IsStretching;
@@ -94,7 +98,8 @@ public class Stretch : MonoBehaviour {
 			Debug.DrawLine(Core.transform.position, CoreTarget.transform.position, Color.green);
 		}
 
-		float stretchDistance = (Front.position - Core.position).sqrMagnitude;
+		stretchDistance = (Front.position - Core.position).sqrMagnitude;
+		stretchPercent = stretchDistance / MaxStretch;
 		
 		// reset glom
 		if (_FrontGlom.IsGlommed && !_CoreGlom.IsGlommed && stretchDistance < DeadZone) {
