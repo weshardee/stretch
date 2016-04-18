@@ -144,7 +144,8 @@ public class Player : MonoBehaviour {
 				// 	_State = PlayerState.Loose;
 				// }
 				
-				if (_GrabTimeout < Time.time) {
+				if (_CoreBody.IsSleeping()) {
+					_CoreGlom.Swap(_FrontGlom);
 					_State = PlayerState.Loose;
 				}
 				break;

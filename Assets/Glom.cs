@@ -127,4 +127,11 @@ public class Glom : MonoBehaviour {
 		
 		return IsOn;
 	}
+	
+	public void Swap(Glom glom) {
+		if (glom.IsOn) {
+			_LastCollision = glom._lastCollision;
+			On();
+		}
+	}
 }
