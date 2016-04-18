@@ -16,14 +16,19 @@ public class Glom : MonoBehaviour {
 			return _isSticky;
 		}
 		set {
+			if (_isSticky == value) {
+				return;
+			}
 			_isSticky = value;
 			if (value) {
-				Try();
+				On();
+			} else {
+				IsOn = false;
 			}
 		}
 	}
 	
-	public bool IsGlommed { 
+	public bool IsOn { 
 		get {
 			return _GlomJoint.enabled;
 		} 
@@ -75,7 +80,7 @@ public class Glom : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (IsGlommed) {
+		if (IsOn) {
 			Vector2 anchorInWorldSpace = _GlomJoint.anchor + (Vector2)transform.position;
 			Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.green);
 		}
@@ -92,12 +97,12 @@ public class Glom : MonoBehaviour {
 	void TrackCollision(Collision2D coll) {
 		_LastCollision = coll;
 		if (IsSticky) {
-			Try();
+			On();
 		}
 	}
 
-	public bool Try() {
-		if (IsGlommed) {
+	public bool On() {
+		if (IsOn) {
 			return true;
 		}
 		
@@ -115,17 +120,11 @@ public class Glom : MonoBehaviour {
 		_GlomJoint.connectedAnchor = contactPoint.point;
 
 		// set joint status
-		IsGlommed = true;	
+		IsOn = true;	
 		if (otherGlom != null) {
-			otherGlom.UnGlom();
+			otherGlom.IsSticky = false;
 		}
 		
-		return IsGlommed;
-	}
-	
-	public void UnGlom() {
-		// Debug.Log(name + ": glom release");
-		IsSticky = false;
-		IsGlommed = false;
+		return IsOn;
 	}
 }

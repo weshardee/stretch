@@ -28,19 +28,18 @@ public class Player : MonoBehaviour {
 	private Stretch _Stretch;
 
 	// constants
-	public const float StretchForce = 3f;
+	public const float StretchForce = 13f;
 	public const float DeadZone = 0.2f;
 	public const float InputReleaseThreshold = 0.1f;
 	public const float MaxStretch = 15f;
-	public const float GrabDuration = 5f;
+	public const float GrabDuration = 1f;
+	public const float PullReleaseDistanceThreshold = 0.01f;
 	
 	// state
 	private PlayerState _State = PlayerState.Loose;
 	private float _LastInputMagnitude = 0;
 	private bool _WasStretching = false;
 	private bool _IsStretching = false;
-	public float stretchDistance { get; private set; }
-	public float stretchPercent { get; private set; }
 	private float _GrabTimeout = 0;
 	private bool _UseGravity {
 		set {
@@ -49,8 +48,8 @@ public class Player : MonoBehaviour {
 			Core.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
 		}
 	}
-	
-			
+	private bool _IsInputReducing = false;
+
 	void Awake () {
 		_Stretch = GetComponent<Stretch>();
 				
@@ -74,7 +73,7 @@ public class Player : MonoBehaviour {
 				_FrontGlom.IsSticky = false;
 
 				// change state if core gets glommed
-				if (_CoreGlom.IsGlommed) {
+				if (_CoreGlom.IsOn) {
 					_State = PlayerState.Grounded;
 				}
 				break;
@@ -100,13 +99,14 @@ public class Player : MonoBehaviour {
 				
 				// update stretch direction
 				Vector2 input = GetInput();
-				_Stretch.spread = input;
 				
 				// switch state on input release
-				if (HasInputStopped(input)) {
+				if (input == Vector2.zero) {
 					_LastInputMagnitude = 0;
 					_GrabTimeout = Time.time + GrabDuration;
 					_State = PlayerState.Grab;
+				} else {
+					_Stretch.spread = input;
 				}
 				break;
 			}
@@ -116,7 +116,7 @@ public class Player : MonoBehaviour {
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = true;
 				
-				if (_FrontGlom.IsGlommed) {
+				if (_FrontGlom.IsOn) {
 					_State = PlayerState.Pull;
 				} else if (_GrabTimeout < Time.time) {
 					_State = PlayerState.Loose;
@@ -128,6 +128,21 @@ public class Player : MonoBehaviour {
 				_Stretch.isCollapsing = true;
 				_CoreGlom.IsSticky = false;
 				_FrontGlom.IsSticky = true;
+				
+				bool underPullThreshold = _Stretch.stretchDistance < PullReleaseDistanceThreshold;
+				
+				// _CoreGlom.IsSticky = underPullThreshold;
+				
+				// if (_CoreGlom.IsOn) {
+				// 	_State = PlayerState.Grounded;
+				// }
+				// if (underPullThreshold) {
+				// 	_State = PlayerState.Loose;
+				// }
+				
+				if (_GrabTimeout < Time.time) {
+					_State = PlayerState.Loose;
+				}
 				break;
 			}
 		}
@@ -145,14 +160,15 @@ public class Player : MonoBehaviour {
 		if (input.sqrMagnitude > 1) {
 			input.Normalize();
 		}
+		
+		// store relative input state
+		float inputMagnitude = input.sqrMagnitude;
+		if (inputMagnitude < _LastInputMagnitude - InputReleaseThreshold) {
+			inputMagnitude = 0;
+			input = Vector2.zero;
+		}	
+		_LastInputMagnitude = inputMagnitude;		
 				
 		return input;
-	}
-	
-	private bool HasInputStopped(Vector2 input) {
-		float inputMagnitude = input.sqrMagnitude;
-		bool hasStopped = inputMagnitude <= _LastInputMagnitude - InputReleaseThreshold;
-		_LastInputMagnitude = inputMagnitude;		
-		return hasStopped;
 	}
 }
