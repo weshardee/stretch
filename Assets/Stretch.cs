@@ -55,7 +55,7 @@ public class Stretch : MonoBehaviour {
 			}
 			
 			// set collapse spring state
-			CollapseSpring.enabled = value;
+			// CollapseSpring.enabled = value;
 		}
 	}
 	
