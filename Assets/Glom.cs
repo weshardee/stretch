@@ -112,7 +112,7 @@ public class Glom : MonoBehaviour {
 	}
 	
 	public void UnGlom() {
-		Debug.Log(name + ": release");
+		Debug.Log(name + ": glom release");
 		IsGlommed = false;
 	}
 	
