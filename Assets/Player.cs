@@ -32,6 +32,7 @@ public class Player : MonoBehaviour {
 	public const float DeadZone = 0.2f;
 	public const float InputReleaseThreshold = 0.1f;
 	public const float MaxStretch = 15f;
+	public const float GrabDuration = 5f;
 	
 	// state
 	private PlayerState _State = PlayerState.Loose;
@@ -40,6 +41,8 @@ public class Player : MonoBehaviour {
 	private bool _IsStretching = false;
 	public float stretchDistance { get; private set; }
 	public float stretchPercent { get; private set; }
+	private float _GrabTimeout = 0;
+	
 			
 	void Awake () {
 		_Stretch = GetComponent<Stretch>();
@@ -92,6 +95,7 @@ public class Player : MonoBehaviour {
 				// switch state on input release
 				if (HasInputStopped(input)) {
 					_LastInputMagnitude = 0;
+					_GrabTimeout = Time.time + GrabDuration;
 					_State = PlayerState.Grabbing;
 				}
 				break;
@@ -100,6 +104,18 @@ public class Player : MonoBehaviour {
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
+				
+				if (_FrontGlom.IsGlommed) {
+					_State = PlayerState.CollapsingToFront;
+				} else if (_GrabTimeout < Time.time) {
+					_State = PlayerState.Loose;
+				}
+				break;
+			}
+			case PlayerState.CollapsingToFront: {
+				_Stretch.isCollapsing = true;
+				_CoreGlom.IsSticky = false;
+				_FrontGlom.IsSticky = true;
 				break;
 			}
 		}
