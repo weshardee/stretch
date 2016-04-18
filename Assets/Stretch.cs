@@ -10,12 +10,6 @@ public class Stretch : MonoBehaviour {
 	public GameObject CoreTarget;
 	public SpringJoint2D CollapseSpring;
 	
-	// local references
-	private Renderer _FrontTargetRenderer;
-	private Renderer _CoreTargetRenderer;
-	private SpringJoint2D _FrontTargetSpring;
-	private SpringJoint2D _CoreTargetSpring;
-
 	// constants
 	public const float SpreadForce = 3f;
 	public const float DeadZone = 0.2f;
@@ -78,11 +72,6 @@ public class Stretch : MonoBehaviour {
 	}
 		
 	void Awake () {
-		_FrontTargetRenderer = FrontTarget.GetComponentInChildren<Renderer>();
-		_FrontTargetSpring = FrontTarget.GetComponent<SpringJoint2D>();
-
-		_CoreTargetRenderer = CoreTarget.GetComponentInChildren<Renderer>();
-		_CoreTargetSpring = CoreTarget.GetComponent<SpringJoint2D>();
 	}
 	
 	void Update () {
