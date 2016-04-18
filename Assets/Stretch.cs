@@ -97,8 +97,7 @@ public class Stretch : MonoBehaviour {
 		float stretchDistance = (Front.position - Core.position).sqrMagnitude;
 		
 		// reset glom
-		Debug.Log(name + ": " + (stretchDistance < DeadZone));
-		if (_FrontGlom.IsGlommed && stretchDistance < DeadZone) {
+		if (_FrontGlom.IsGlommed && !_CoreGlom.IsGlommed && stretchDistance < DeadZone) {
 			_CoreGlom.CanGlom = true;
 			_CoreGlom.Pulse();
 			Debug.Log(name + ": is relaxed");

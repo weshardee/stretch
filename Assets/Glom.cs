@@ -16,10 +16,21 @@ public class Glom : MonoBehaviour {
 			return _CanGlom; 
 		} 
 		set {
+			if (_CanGlom == value) {
+				return;
+			}
 			_CanGlom = value;
 			if (!value) {
 				UnGlom();
-			}
+			} else {
+				if (Time.time < _LastCollisionExpiration) {
+					Debug.Log(name + ": was enabled and an unexpired collision was found");
+					GlomTo(_LastCollision);
+				} else {
+					Debug.Log(name + ": was enabled but last collision was expired by " + (Time.time - _LastCollisionExpiration));
+					
+				}
+			} 
 		}
 	}
 	private bool _IsPulsing = false;
@@ -30,10 +41,12 @@ public class Glom : MonoBehaviour {
 		} 
 		private set {
 			_GlomJoint.enabled = value;
-			StopPulse();
 		} 
 	}
 	
+	private Collision2D _LastCollision;
+	private float _LastCollisionExpiration;
+
 	// active glom info
 	private Vector2 _GlomPoint;
 	
@@ -45,6 +58,7 @@ public class Glom : MonoBehaviour {
 	private const float _RegularRadius = 0.5f;
 	private float _PulseEnd = 0;
 	private const float _PulseDuration = 0.1f; // in seconds 
+	private const float _CollisionExitLag = 1.5f; // in seconds
 	
 	void Awake() {
 		circleCollider = GetComponent<CircleCollider2D>();
@@ -65,21 +79,26 @@ public class Glom : MonoBehaviour {
 			Vector2 anchorInWorldSpace = _GlomJoint.anchor + (Vector2)transform.position;
 			Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.green);
 		}
-		
-		if (_IsPulsing && Time.time > _PulseEnd) {
-			StopPulse();
-		}
 	}
 	
-	void OnCollisionEnter2D(Collision2D coll){
+	void OnCollisionStay2D(Collision2D coll){
+		_LastCollision = coll;
+		_LastCollisionExpiration = Time.time + _CollisionExitLag;
+		
+		// Debug.Log(name + ": collision stay with " + coll.transform.name);
 		if (!IsGlommed && CanGlom) {
 			GlomTo(coll);
 		}
 	}
+	
+	void OnCollisionExit2D(Collision2D coll) {
+		_LastCollision = coll;
+		_LastCollisionExpiration = Time.time + _CollisionExitLag;
+	}
 
 	void GlomTo(Collision2D coll) {
 		ContactPoint2D contactPoint = coll.contacts[0];
-		Debug.Log(name + ": collision with " + coll.transform.name);
+		Debug.Log(name + ": glom to " + coll.transform.name);
 		
 		// set the point of contact as the connected anchor point of the _GlomJoint
 		Vector2 point = (Vector2)coll.contacts[0].point;
@@ -99,17 +118,6 @@ public class Glom : MonoBehaviour {
 	
 	public void Pulse() {
 		// pump up the volume
-		_IsPulsing = true;
-		_PulseEnd = Time.time + _PulseDuration;
-		circleCollider.radius = _PulseRadius;
-		Debug.Log(name + ": pulse until " + _PulseEnd);
-	}
-	
-	public void StopPulse() {
-		if (_IsPulsing) {
-			Debug.Log(name + ": stop pulse");
-			_IsPulsing = false;
-			circleCollider.radius = _RegularRadius;
-		}
+		// GlomTo(_LastCollision);
 	}
 }
