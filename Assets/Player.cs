@@ -26,6 +26,8 @@ public class Player : MonoBehaviour {
 	private Glom _FrontGlom;
 	private Glom _CoreGlom;
 	private Stretch _Stretch;
+	private Rigidbody2D _CoreBody;
+	private Rigidbody2D _FrontBody;
 
 	// constants
 	public const float StretchForce = 13f;
@@ -44,8 +46,8 @@ public class Player : MonoBehaviour {
 	private bool _UseGravity {
 		set {
 			float gravityScale = value ? 1 : 0;
-			Front.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
-			Core.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
+			_FrontBody.gravityScale = gravityScale;
+			_CoreBody.gravityScale = gravityScale;
 		}
 	}
 	private bool _IsInputReducing = false;
@@ -54,10 +56,13 @@ public class Player : MonoBehaviour {
 		_Stretch = GetComponent<Stretch>();
 				
 		_FrontGlom = Front.GetComponent<Glom>();
+		_FrontBody = Front.GetComponent<Rigidbody2D>();
 		_FrontTargetSpring = FrontTarget.GetComponent<SpringJoint2D>();
 
 		_CoreGlom = Core.GetComponent<Glom>();
+		_CoreBody = Core.GetComponent<Rigidbody2D>();
 		_CoreTargetSpring = CoreTarget.GetComponent<SpringJoint2D>();
+
 		
 		// disable front glom at start
 		_FrontGlom.IsSticky = false;
