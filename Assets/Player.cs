@@ -35,7 +35,8 @@ public class Player : MonoBehaviour {
 	public const float InputReleaseThreshold = 0.1f;
 	public const float MaxStretch = 15f;
 	public const float GrabDuration = 1f;
-	public const float PullReleaseDistanceThreshold = 0.01f;
+	public const float PullReleaseDistanceThreshold = 0.05f;
+	public const float PullReleaseVelocityThreshold = 0.05f;
 	
 	// state
 	private PlayerState _State = PlayerState.Loose;
@@ -133,18 +134,11 @@ public class Player : MonoBehaviour {
 				_CoreGlom.IsSticky = false;
 				_FrontGlom.IsSticky = true;
 				
-				bool underPullThreshold = _Stretch.stretchDistance < PullReleaseDistanceThreshold;
+				bool isFinishedPulling = 
+					_Stretch.stretchDistance < PullReleaseDistanceThreshold
+					&& _CoreBody.velocity.sqrMagnitude < PullReleaseVelocityThreshold;				
 				
-				// _CoreGlom.IsSticky = underPullThreshold;
-				
-				// if (_CoreGlom.IsOn) {
-				// 	_State = PlayerState.Grounded;
-				// }
-				// if (underPullThreshold) {
-				// 	_State = PlayerState.Loose;
-				// }
-				
-				if (_CoreBody.IsSleeping()) {
+				if (isFinishedPulling) {
 					_CoreGlom.Swap(_FrontGlom);
 					_State = PlayerState.Loose;
 				}
