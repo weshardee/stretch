@@ -41,8 +41,6 @@ public class Player : MonoBehaviour {
 	// state
 	private PlayerState _State = PlayerState.Loose;
 	private float _LastInputMagnitude = 0;
-	private bool _WasStretching = false;
-	private bool _IsStretching = false;
 	private float _GrabTimeout = 0;
 	private bool _UseGravity {
 		set {
