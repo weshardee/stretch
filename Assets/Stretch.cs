@@ -64,6 +64,9 @@ public class Stretch : MonoBehaviour {
 		_CoreGlom = Core.GetComponent<Glom>();
 		_CoreTargetRenderer = CoreTarget.GetComponentInChildren<Renderer>();
 		_CoreTargetSpring = CoreTarget.GetComponent<SpringJoint2D>();
+		
+		// disable front glom at start
+		_FrontGlom.CanGlom = false;
 	}
 	
 	void Update () {
