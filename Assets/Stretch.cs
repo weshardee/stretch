@@ -15,8 +15,6 @@ public class Stretch : MonoBehaviour {
 	private Renderer _CoreTargetRenderer;
 	private SpringJoint2D _FrontTargetSpring;
 	private SpringJoint2D _CoreTargetSpring;
-	private Glom _FrontGlom;
-	private Glom _CoreGlom;
 
 	// constants
 	public const float SpreadForce = 3f;
@@ -80,16 +78,11 @@ public class Stretch : MonoBehaviour {
 	}
 		
 	void Awake () {
-		_FrontGlom = Front.GetComponent<Glom>();
 		_FrontTargetRenderer = FrontTarget.GetComponentInChildren<Renderer>();
 		_FrontTargetSpring = FrontTarget.GetComponent<SpringJoint2D>();
 
-		_CoreGlom = Core.GetComponent<Glom>();
 		_CoreTargetRenderer = CoreTarget.GetComponentInChildren<Renderer>();
 		_CoreTargetSpring = CoreTarget.GetComponent<SpringJoint2D>();
-		
-		// disable front glom at start
-		_FrontGlom.IsSticky = false;
 	}
 	
 	void Update () {
