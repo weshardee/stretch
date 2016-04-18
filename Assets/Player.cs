@@ -5,9 +5,9 @@ using UnityStandardAssets.CrossPlatformInput;
 public enum PlayerState {
 	Loose,
 	Grounded,
-	Reaching,
-	Grabbing,
-	CollapsingToFront,
+	Reach,
+	Grab,
+	Pull,
 	CollapsingToCore,
 }
 
@@ -79,11 +79,11 @@ public class Player : MonoBehaviour {
 				// change state if input starts
 				if (GetInput() != Vector2.zero) {
 					_LastInputMagnitude = 0;
-					_State = PlayerState.Reaching;
+					_State = PlayerState.Reach;
 				}
 				break;
 			}
-			case PlayerState.Reaching: {
+			case PlayerState.Reach: {
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
@@ -96,23 +96,23 @@ public class Player : MonoBehaviour {
 				if (HasInputStopped(input)) {
 					_LastInputMagnitude = 0;
 					_GrabTimeout = Time.time + GrabDuration;
-					_State = PlayerState.Grabbing;
+					_State = PlayerState.Grab;
 				}
 				break;
 			}
-			case PlayerState.Grabbing: {
+			case PlayerState.Grab: {
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = true;
 				
 				if (_FrontGlom.IsGlommed) {
-					_State = PlayerState.CollapsingToFront;
+					_State = PlayerState.Pull;
 				} else if (_GrabTimeout < Time.time) {
 					_State = PlayerState.Loose;
 				}
 				break;
 			}
-			case PlayerState.CollapsingToFront: {
+			case PlayerState.Pull: {
 				_Stretch.isCollapsing = true;
 				_CoreGlom.IsSticky = false;
 				_FrontGlom.IsSticky = true;
