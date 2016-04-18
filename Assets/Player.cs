@@ -42,6 +42,13 @@ public class Player : MonoBehaviour {
 	public float stretchDistance { get; private set; }
 	public float stretchPercent { get; private set; }
 	private float _GrabTimeout = 0;
+	private bool _UseGravity {
+		set {
+			float gravityScale = value ? 1 : 0;
+			Front.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
+			Core.GetComponent<Rigidbody2D>().gravityScale = gravityScale;
+		}
+	}
 	
 			
 	void Awake () {
@@ -58,9 +65,10 @@ public class Player : MonoBehaviour {
 	}
 	
 	void Update () {
-		// Debug.Log(_State);
+		Debug.Log(_State);
 		switch (_State) {
 			case PlayerState.Loose: {
+				_UseGravity = true;
 				_Stretch.isCollapsing = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
@@ -72,6 +80,7 @@ public class Player : MonoBehaviour {
 				break;
 			}
 			case PlayerState.Grounded: {
+				_UseGravity = false;
 				_Stretch.isCollapsing = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
@@ -84,6 +93,7 @@ public class Player : MonoBehaviour {
 				break;
 			}
 			case PlayerState.Reach: {
+				_UseGravity = false;
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
@@ -101,6 +111,7 @@ public class Player : MonoBehaviour {
 				break;
 			}
 			case PlayerState.Grab: {
+				_UseGravity = false;
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = true;
@@ -113,6 +124,7 @@ public class Player : MonoBehaviour {
 				break;
 			}
 			case PlayerState.Pull: {
+				_UseGravity = false;
 				_Stretch.isCollapsing = true;
 				_CoreGlom.IsSticky = false;
 				_FrontGlom.IsSticky = true;
