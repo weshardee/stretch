@@ -21,7 +21,7 @@ public class Stretch : MonoBehaviour {
 	// constants
 	public const float StretchForce = 3f;
 	public const float DeadZone = 0.2f;
-	public const float CollapseThreshold = 0.1f;
+	public const float RelaxThreshold = 0.3f;
 
 	
 	// stretching state
@@ -75,7 +75,7 @@ public class Stretch : MonoBehaviour {
 		float inputMagnitude = input.sqrMagnitude;
 		
 		// setup current state based on input
-		bool isCollapsing = inputMagnitude < _LastInputMagnitude - CollapseThreshold; // check if stretch is decreasing
+		bool isCollapsing = inputMagnitude < _LastInputMagnitude - RelaxThreshold; // check if stretch is decreasing
 		bool isNeutral = inputMagnitude < DeadZone;
 		bool canStretch = _CoreGlom.IsGlommed  && !isCollapsing && !isNeutral;
 
