@@ -103,7 +103,7 @@ public class Player : MonoBehaviour {
 			case PlayerState.Grabbing: {
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
-				_FrontGlom.IsSticky = false;
+				_FrontGlom.IsSticky = true;
 				
 				if (_FrontGlom.IsGlommed) {
 					_State = PlayerState.CollapsingToFront;
