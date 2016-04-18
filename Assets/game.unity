@@ -452,7 +452,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   otherGlom: {fileID: 1710742901}
-  IsSticky: 1
 --- !u!114 &827543787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -916,7 +915,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   otherGlom: {fileID: 827543786}
-  IsSticky: 1
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -934,7 +932,7 @@ SpringJoint2D:
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 0
   m_Distance: 0.005
-  m_DampingRatio: 0.25
+  m_DampingRatio: 0.5
   m_Frequency: 2.5
 --- !u!58 &1710742903
 CircleCollider2D:
