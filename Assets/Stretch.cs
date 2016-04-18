@@ -84,7 +84,6 @@ public class Stretch : MonoBehaviour {
 		
 		// store current stretch state
 		IsStretching = canStretch;
-		Debug.Log(IsStretching);
 		if (IsStretching) {
 			Vector2 force = input * StretchForce;
 			FrontTarget.transform.position = (Vector2)Core.position + force;
