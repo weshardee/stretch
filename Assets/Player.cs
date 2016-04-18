@@ -97,7 +97,7 @@ public class Player : MonoBehaviour {
 				break;
 			}
 			case PlayerState.Grabbing: {
-				_Stretch.isHolding = true;
+				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
 				break;
