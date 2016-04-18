@@ -62,7 +62,6 @@ public class Player : MonoBehaviour {
 		_CoreGlom = Core.GetComponent<Glom>();
 		_CoreBody = Core.GetComponent<Rigidbody2D>();
 		_CoreTargetSpring = CoreTarget.GetComponent<SpringJoint2D>();
-
 		
 		// disable front glom at start
 		_FrontGlom.IsSticky = false;
