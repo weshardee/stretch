@@ -101,14 +101,14 @@ public class Glom : MonoBehaviour {
 			return true;
 		}
 		
-		Debug.Log(name + ": try to glom");
+		// Debug.Log(name + ": try to glom");
 		Collision2D coll = _LastCollision;
 		if (coll == null) {
 			return false;
 		}
 		
 		ContactPoint2D contactPoint = coll.contacts[0];
-		Debug.Log(name + ": glom to " + coll.transform.name);
+		// Debug.Log(name + ": glom to " + coll.transform.name);
 		
 		// set the point of contact as the connected anchor point of the _GlomJoint
 		Vector2 point = (Vector2)coll.contacts[0].point;
@@ -124,7 +124,7 @@ public class Glom : MonoBehaviour {
 	}
 	
 	public void UnGlom() {
-		Debug.Log(name + ": glom release");
+		// Debug.Log(name + ": glom release");
 		IsSticky = false;
 		IsGlommed = false;
 	}
