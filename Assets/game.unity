@@ -933,7 +933,7 @@ SpringJoint2D:
   m_AutoConfigureDistance: 0
   m_Distance: 0.005
   m_DampingRatio: 0.25
-  m_Frequency: 4
+  m_Frequency: 2.5
 --- !u!58 &1710742903
 CircleCollider2D:
   m_ObjectHideFlags: 0
