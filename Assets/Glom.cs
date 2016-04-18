@@ -58,7 +58,7 @@ public class Glom : MonoBehaviour {
 	private const float _RegularRadius = 0.5f;
 	private float _PulseEnd = 0;
 	private const float _PulseDuration = 0.1f; // in seconds 
-	private const float _CollisionExitLag = 1.5f; // in seconds
+	private const float _CollisionExitLag = 0f; // in seconds
 	
 	void Awake() {
 		circleCollider = GetComponent<CircleCollider2D>();
