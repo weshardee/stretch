@@ -89,6 +89,13 @@ public class Stretch : MonoBehaviour {
 			FrontTarget.transform.position = (Vector2)Core.position + force;
 			CoreTarget.transform.position = (Vector2)Front.position - force;
 		}
+
+		float stretchDistance = (Front.position - Core.position).sqrMagnitude;
+		
+		// reset glom
+		if (stretchDistance < DeadZone) {
+			_CoreGlom.CanGlom = true;
+		}
 	}
 	
 	private Vector2 GetInput()
