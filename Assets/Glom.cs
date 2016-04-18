@@ -22,7 +22,7 @@ public class Glom : MonoBehaviour {
 			}
 		}
 	}
-	private bool _IsTrying = false;
+	private bool _IsPulsing = false;
 	
 	public bool IsGlommed { 
 		get {
@@ -30,6 +30,7 @@ public class Glom : MonoBehaviour {
 		} 
 		private set {
 			_GlomJoint.enabled = value;
+			StopPulse();
 		} 
 	}
 	
@@ -40,8 +41,10 @@ public class Glom : MonoBehaviour {
 	private CircleCollider2D circleCollider;
 	
 	// other
-	private const float _PumpedRadius = 0.55f;
+	private const float _PulseRadius = 0.6f;
 	private const float _RegularRadius = 0.5f;
+	private float _PulseEnd = 0;
+	private const float _PulseDuration = 0.1f; // in seconds 
 	
 	void Awake() {
 		circleCollider = GetComponent<CircleCollider2D>();
@@ -62,6 +65,10 @@ public class Glom : MonoBehaviour {
 			Vector2 anchorInWorldSpace = _GlomJoint.anchor + (Vector2)transform.position;
 			Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.green);
 		}
+		
+		if (_IsPulsing && Time.time > _PulseEnd) {
+			StopPulse();
+		}
 	}
 	
 	void OnCollisionEnter2D(Collision2D coll){
@@ -71,12 +78,12 @@ public class Glom : MonoBehaviour {
 	}
 
 	void GlomTo(Collision2D coll) {
-		StopTry();
-		_GlomPoint = coll.contacts[0].point;
+		ContactPoint2D contactPoint = coll.contacts[0];
+		Debug.Log(name + ": collision with " + coll.transform.name);
 		
 		// set the point of contact as the connected anchor point of the _GlomJoint
 		Vector2 point = (Vector2)coll.contacts[0].point;
-		_GlomJoint.connectedAnchor = point;
+		_GlomJoint.connectedAnchor = contactPoint.point;
 
 		// set joint status
 		IsGlommed = true;	
@@ -86,20 +93,22 @@ public class Glom : MonoBehaviour {
 	}
 	
 	public void UnGlom() {
+		Debug.Log(name + ": release");
 		IsGlommed = false;
 	}
 	
-	public void Try() {
-		CanGlom = true;
-		
+	public void Pulse() {
 		// pump up the volume
-		_IsTrying = true;
-		circleCollider.radius = _PumpedRadius;
+		_IsPulsing = true;
+		_PulseEnd = Time.time + _PulseDuration;
+		circleCollider.radius = _PulseRadius;
+		Debug.Log(name + ": pulse until " + _PulseEnd);
 	}
 	
-	public void StopTry() {
-		if (_IsTrying) {
-			_IsTrying = false;
+	public void StopPulse() {
+		if (_IsPulsing) {
+			Debug.Log(name + ": stop pulse");
+			_IsPulsing = false;
 			circleCollider.radius = _RegularRadius;
 		}
 	}

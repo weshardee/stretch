@@ -21,7 +21,7 @@ public class Stretch : MonoBehaviour {
 	// constants
 	public const float StretchForce = 3f;
 	public const float DeadZone = 0.2f;
-	public const float CollapseThreshold = 0.2f;
+	public const float CollapseThreshold = 0.1f;
 
 	
 	// stretching state
@@ -47,9 +47,9 @@ public class Stretch : MonoBehaviour {
 			CollapseSpring.enabled = !value;
 			
 			// trigger start/stop behavior
-			if (_WasStretching && !value) {
-				OnStretchStop();
-			} else if (!_WasStretching && value) {
+			if (_WasStretching && !_IsStretching) {
+				OnStretchRelease();
+			} else if (!_WasStretching && IsStretching) {
 				OnStretchStart();
 			}
 			_WasStretching = _IsStretching;
@@ -88,13 +88,20 @@ public class Stretch : MonoBehaviour {
 			Vector2 force = input * StretchForce;
 			FrontTarget.transform.position = (Vector2)Core.position + force;
 			CoreTarget.transform.position = (Vector2)Front.position - force;
+			
+			// draw debug lines
+			Debug.DrawLine(Front.transform.position, FrontTarget.transform.position, Color.green);
+			Debug.DrawLine(Core.transform.position, CoreTarget.transform.position, Color.green);
 		}
 
 		float stretchDistance = (Front.position - Core.position).sqrMagnitude;
 		
 		// reset glom
-		if (stretchDistance < DeadZone) {
+		Debug.Log(name + ": " + (stretchDistance < DeadZone));
+		if (_FrontGlom.IsGlommed && stretchDistance < DeadZone) {
 			_CoreGlom.CanGlom = true;
+			_CoreGlom.Pulse();
+			Debug.Log(name + ": is relaxed");
 		}
 	}
 	
@@ -117,12 +124,16 @@ public class Stretch : MonoBehaviour {
 	}
 	
 	void OnStretchStart() {
-		// _FrontGlom.CanGlom = false;
+		Debug.Log(name + " stretch started");
 	}
 	
-	void OnStretchStop() {
-		// _FrontGlom.Try();
-		// coreGlom.UnGlom();
-		// frontGlom.CanGlom = true;
+	void OnStretchRelease() {
+		Debug.Log(name + " stretch released");
+		_FrontGlom.CanGlom = true;
+		_FrontGlom.Pulse(); // try a little extra hard to see if we hit something
+		
+		// stop everything for testing
+		// Front.GetComponent<Rigidbody2D>().isKinematic = true;
+		// Core.GetComponent<Rigidbody2D>().isKinematic = true;
 	}
 }
