@@ -10,8 +10,18 @@ public class Glom : MonoBehaviour {
 	private SpringJoint2D _GlomJoint;
 	
 	// state flags
-	public bool IsSticky = true;
-	private bool _IsPulsing = false;
+	private bool _isSticky;
+	public bool IsSticky {
+		get {
+			return _isSticky;
+		}
+		set {
+			_isSticky = value;
+			if (value) {
+				Try();
+			}
+		}
+	}
 	
 	public bool IsGlommed { 
 		get {
@@ -76,14 +86,18 @@ public class Glom : MonoBehaviour {
 	}
 
 	public bool Try() {
-		if (_LastCollisionExpiration < Time.time) {
-			return false;
-		}
-		
 		if (IsGlommed) {
 			return true;
 		}
 
+		if (_LastCollisionExpiration < Time.time) {
+			return false;
+		}
+		
+		if (_LastCollision == null) {
+			return false;
+		}
+		
 		Collision2D coll = _LastCollision;
 		ContactPoint2D contactPoint = coll.contacts[0];
 		Debug.Log(name + ": glom to " + coll.transform.name);
