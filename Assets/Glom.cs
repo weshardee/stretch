@@ -32,8 +32,20 @@ public class Glom : MonoBehaviour {
 		} 
 	}
 	
-	private Collision2D _LastCollision;
-	private float _LastCollisionExpiration;
+	private float _lastCollisionExpiration = 0;
+	private Collision2D _lastCollision;
+	private Collision2D _LastCollision {
+		get {
+			if (_lastCollisionExpiration < Time.time) {
+				return null;
+			}
+			return _lastCollision;
+		}
+		set {
+			_lastCollision = value;
+			_lastCollisionExpiration = Time.time + _CollisionExitLag;
+		}
+	}
 
 	// active glom info
 	private Vector2 _GlomPoint;
@@ -79,7 +91,6 @@ public class Glom : MonoBehaviour {
 	
 	void TrackCollision(Collision2D coll) {
 		_LastCollision = coll;
-		_LastCollisionExpiration = Time.time + _CollisionExitLag;
 		if (IsSticky) {
 			Try();
 		}
@@ -89,16 +100,13 @@ public class Glom : MonoBehaviour {
 		if (IsGlommed) {
 			return true;
 		}
-
-		if (_LastCollisionExpiration < Time.time) {
-			return false;
-		}
 		
-		if (_LastCollision == null) {
-			return false;
-		}
-		
+		Debug.Log(name + ": try to glom");
 		Collision2D coll = _LastCollision;
+		if (coll == null) {
+			return false;
+		}
+		
 		ContactPoint2D contactPoint = coll.contacts[0];
 		Debug.Log(name + ": glom to " + coll.transform.name);
 		
