@@ -355,6 +355,7 @@ GameObject:
   - 50: {fileID: 827543782}
   - 58: {fileID: 827543785}
   - 114: {fileID: 827543786}
+  - 114: {fileID: 827543787}
   m_Layer: 8
   m_Name: core
   m_TagString: Player
@@ -451,6 +452,17 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   otherGlom: {fileID: 1710742901}
+--- !u!114 &827543787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827543781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60912257c6ec64a00a748d6a35e652f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1058496595
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,6 +848,7 @@ GameObject:
   - 231: {fileID: 1710742902}
   - 114: {fileID: 1710742901}
   - 58: {fileID: 1710742903}
+  - 114: {fileID: 1710742904}
   m_Layer: 8
   m_Name: front
   m_TagString: Player
@@ -935,6 +948,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.6
+--- !u!114 &1710742904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1710742897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60912257c6ec64a00a748d6a35e652f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1828499353
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,7 +1043,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 2034844298}
-  - 114: {fileID: 2034844299}
   - 114: {fileID: 2034844300}
   m_Layer: 0
   m_Name: player
@@ -1044,19 +1067,6 @@ Transform:
   - {fileID: 1703158884}
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!114 &2034844299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2034844297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60912257c6ec64a00a748d6a35e652f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  end1: {fileID: 827543784}
-  end2: {fileID: 1710742899}
 --- !u!114 &2034844300
 MonoBehaviour:
   m_ObjectHideFlags: 0
