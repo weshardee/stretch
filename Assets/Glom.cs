@@ -10,29 +10,7 @@ public class Glom : MonoBehaviour {
 	private SpringJoint2D _GlomJoint;
 	
 	// state flags
-	private bool _CanGlom = true;
-	public bool CanGlom { 
-		get {
-			return _CanGlom; 
-		} 
-		set {
-			if (_CanGlom == value) {
-				return;
-			}
-			_CanGlom = value;
-			if (!value) {
-				UnGlom();
-			} else {
-				if (Time.time < _LastCollisionExpiration) {
-					Debug.Log(name + ": was enabled and an unexpired collision was found");
-					GlomTo(_LastCollision);
-				} else {
-					Debug.Log(name + ": was enabled but last collision was expired by " + (Time.time - _LastCollisionExpiration));
-					
-				}
-			} 
-		}
-	}
+	public bool IsSticky = true;
 	private bool _IsPulsing = false;
 	
 	public bool IsGlommed { 
@@ -81,22 +59,32 @@ public class Glom : MonoBehaviour {
 		}
 	}
 	
-	void OnCollisionStay2D(Collision2D coll){
-		_LastCollision = coll;
-		_LastCollisionExpiration = Time.time + _CollisionExitLag;
-		
-		// Debug.Log(name + ": collision stay with " + coll.transform.name);
-		if (!IsGlommed && CanGlom) {
-			GlomTo(coll);
-		}
+	void OnCollisionStay2D(Collision2D coll) {
+		TrackCollision(coll);
 	}
 	
 	void OnCollisionExit2D(Collision2D coll) {
+		TrackCollision(coll);
+	}
+	
+	void TrackCollision(Collision2D coll) {
 		_LastCollision = coll;
 		_LastCollisionExpiration = Time.time + _CollisionExitLag;
+		if (IsSticky) {
+			Try();
+		}
 	}
 
-	void GlomTo(Collision2D coll) {
+	public bool Try() {
+		if (_LastCollisionExpiration < Time.time) {
+			return false;
+		}
+		
+		if (IsGlommed) {
+			return true;
+		}
+
+		Collision2D coll = _LastCollision;
 		ContactPoint2D contactPoint = coll.contacts[0];
 		Debug.Log(name + ": glom to " + coll.transform.name);
 		
@@ -109,15 +97,13 @@ public class Glom : MonoBehaviour {
 		if (otherGlom != null) {
 			otherGlom.UnGlom();
 		}
+		
+		return IsGlommed;
 	}
 	
 	public void UnGlom() {
 		Debug.Log(name + ": glom release");
+		IsSticky = false;
 		IsGlommed = false;
-	}
-	
-	public void Pulse() {
-		// pump up the volume
-		// GlomTo(_LastCollision);
 	}
 }

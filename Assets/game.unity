@@ -452,6 +452,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   otherGlom: {fileID: 1710742901}
+  IsSticky: 1
 --- !u!114 &827543787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -915,6 +916,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   otherGlom: {fileID: 827543786}
+  IsSticky: 1
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -1044,6 +1046,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2034844298}
   - 114: {fileID: 2034844300}
+  - 114: {fileID: 2034844299}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -1067,6 +1070,22 @@ Transform:
   - {fileID: 1703158884}
   m_Father: {fileID: 0}
   m_RootOrder: 2
+--- !u!114 &2034844299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2034844297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82ec8f8adb0549bc8d8106ac12b37d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Front: {fileID: 1710742899}
+  Core: {fileID: 827543784}
+  FrontTarget: {fileID: 1703158881}
+  CoreTarget: {fileID: 687179038}
+  CollapseSpring: {fileID: 1710742902}
 --- !u!114 &2034844300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1083,3 +1102,4 @@ MonoBehaviour:
   FrontTarget: {fileID: 1703158881}
   CoreTarget: {fileID: 687179038}
   CollapseSpring: {fileID: 1710742902}
+  spread: {x: 0, y: 0}
