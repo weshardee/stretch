@@ -2,23 +2,17 @@
 using System.Collections;
 
 public class ScaleWithStretch : MonoBehaviour {
-
-	public Transform end1;
-	public Transform end2;
-	
-	private const float _ScaleAtMaxStretch = 0.7f;
+	private Stretch _stretch;
 	
 	// Use this for initialization
 	void Start () {
-		
+		_stretch = GetComponentInParent<Stretch>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		float distance = (end1.position - end2.position).sqrMagnitude;	
-		float howStretched = distance / Stretch.MaxStretch;
-		Vector2 scale = Vector2.one * Mathf.Lerp(1, _ScaleAtMaxStretch, howStretched);		
-		end1.localScale = scale;
-		end2.localScale = scale;
+		float howStretched = _stretch.stretchPercent;
+		Vector2 scale = Vector2.one * Mathf.Lerp(1, 0, howStretched);		
+		transform.localScale = scale;
 	}
 }
