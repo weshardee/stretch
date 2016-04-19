@@ -65,7 +65,6 @@ public class Glom : MonoBehaviour {
 	private const float _CollisionExitLag = 0f; // in seconds
 	
 	void Awake() {
-		
 		// create and configure joint
 		_GlomJoint = gameObject.AddComponent<SpringJoint2D>();
 		_GlomJoint.autoConfigureConnectedAnchor = false;
