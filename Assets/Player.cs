@@ -62,7 +62,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	void Update () {
-		Debug.Log(_State);
+		// Debug.Log(_State);
 		switch (_State) {
 			case PlayerState.Loose: {
 				_UseGravity = true;
