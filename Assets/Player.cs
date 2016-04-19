@@ -49,7 +49,6 @@ public class Player : MonoBehaviour {
 			_CoreBody.gravityScale = gravityScale;
 		}
 	}
-	private bool _IsInputReducing = false;
 
 	void Awake () {
 		_Stretch = GetComponent<Stretch>();
