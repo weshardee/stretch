@@ -10,32 +10,25 @@ public class Glom : MonoBehaviour {
 	private SpringJoint2D _GlomJoint;
 	
 	// state flags
-	private bool _CanGlom = true;
-	public bool CanGlom { 
+	private bool _isSticky;
+	public bool IsSticky {
 		get {
-			return _CanGlom; 
-		} 
+			return _isSticky;
+		}
 		set {
-			if (_CanGlom == value) {
+			if (_isSticky == value) {
 				return;
 			}
-			_CanGlom = value;
-			if (!value) {
-				UnGlom();
+			_isSticky = value;
+			if (value) {
+				On();
 			} else {
-				if (Time.time < _LastCollisionExpiration) {
-					Debug.Log(name + ": was enabled and an unexpired collision was found");
-					GlomTo(_LastCollision);
-				} else {
-					Debug.Log(name + ": was enabled but last collision was expired by " + (Time.time - _LastCollisionExpiration));
-					
-				}
-			} 
+				IsOn = false;
+			}
 		}
 	}
-	private bool _IsPulsing = false;
 	
-	public bool IsGlommed { 
+	public bool IsOn { 
 		get {
 			return _GlomJoint.enabled;
 		} 
@@ -44,25 +37,28 @@ public class Glom : MonoBehaviour {
 		} 
 	}
 	
-	private Collision2D _LastCollision;
-	private float _LastCollisionExpiration;
+	private float _lastCollisionExpiration = 0;
+	private Collision2D _lastCollision;
+	private Collision2D _LastCollision {
+		get {
+			if (_lastCollisionExpiration < Time.time) {
+				return null;
+			}
+			return _lastCollision;
+		}
+		set {
+			_lastCollision = value;
+			_lastCollisionExpiration = Time.time + _CollisionExitLag;
+		}
+	}
 
 	// active glom info
-	private Vector2 _GlomPoint;
-	
 	private const float _Radius = 0.5f;
-	private CircleCollider2D circleCollider;
 	
 	// other
-	private const float _PulseRadius = 0.6f;
-	private const float _RegularRadius = 0.5f;
-	private float _PulseEnd = 0;
-	private const float _PulseDuration = 0.1f; // in seconds 
-	private const float _CollisionExitLag = 1.5f; // in seconds
+	private const float _CollisionExitLag = 0f; // in seconds
 	
 	void Awake() {
-		circleCollider = GetComponent<CircleCollider2D>();
-		
 		// create and configure joint
 		_GlomJoint = gameObject.AddComponent<SpringJoint2D>();
 		_GlomJoint.autoConfigureConnectedAnchor = false;
@@ -75,49 +71,58 @@ public class Glom : MonoBehaviour {
 	}
 	
 	void Update () {
-		if (IsGlommed) {
+		if (IsOn) {
 			Vector2 anchorInWorldSpace = _GlomJoint.anchor + (Vector2)transform.position;
 			Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.green);
 		}
 	}
 	
-	void OnCollisionStay2D(Collision2D coll){
-		_LastCollision = coll;
-		_LastCollisionExpiration = Time.time + _CollisionExitLag;
-		
-		// Debug.Log(name + ": collision stay with " + coll.transform.name);
-		if (!IsGlommed && CanGlom) {
-			GlomTo(coll);
-		}
+	void OnCollisionStay2D(Collision2D coll) {
+		TrackCollision(coll);
 	}
 	
 	void OnCollisionExit2D(Collision2D coll) {
-		_LastCollision = coll;
-		_LastCollisionExpiration = Time.time + _CollisionExitLag;
+		TrackCollision(coll);
 	}
-
-	void GlomTo(Collision2D coll) {
-		ContactPoint2D contactPoint = coll.contacts[0];
-		Debug.Log(name + ": glom to " + coll.transform.name);
-		
-		// set the point of contact as the connected anchor point of the _GlomJoint
-		Vector2 point = (Vector2)coll.contacts[0].point;
-		_GlomJoint.connectedAnchor = contactPoint.point;
-
-		// set joint status
-		IsGlommed = true;	
-		if (otherGlom != null) {
-			otherGlom.UnGlom();
+	
+	void TrackCollision(Collision2D coll) {
+		_LastCollision = coll;
+		if (IsSticky) {
+			On();
 		}
 	}
-	
-	public void UnGlom() {
-		Debug.Log(name + ": release");
-		IsGlommed = false;
+
+	public bool On() {
+		if (IsOn) {
+			return true;
+		}
+		
+		// Debug.Log(name + ": try to glom");
+		Collision2D coll = _LastCollision;
+		if (coll == null) {
+			return false;
+		}
+		
+		ContactPoint2D contactPoint = coll.contacts[0];
+		// Debug.Log(name + ": glom to " + coll.transform.name);
+		
+		// set the point of contact as the connected anchor point of the _GlomJoint
+		Vector2 point = contactPoint.point;
+		_GlomJoint.connectedAnchor = point;
+
+		// set joint status
+		IsOn = true;	
+		if (otherGlom != null) {
+			otherGlom.IsSticky = false;
+		}
+		
+		return IsOn;
 	}
 	
-	public void Pulse() {
-		// pump up the volume
-		// GlomTo(_LastCollision);
+	public void Swap(Glom glom) {
+		if (glom.IsOn) {
+			_LastCollision = glom._lastCollision;
+			On();
+		}
 	}
 }
