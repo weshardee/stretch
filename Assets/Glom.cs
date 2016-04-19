@@ -4,7 +4,6 @@ using System.Collections;
 public class Glom : MonoBehaviour {
 	// editor components
 	public LayerMask layerMask;
-	public Glom otherGlom;
 
 	// local components
 	private SpringJoint2D _GlomJoint;
@@ -111,11 +110,7 @@ public class Glom : MonoBehaviour {
 		_GlomJoint.connectedAnchor = point;
 
 		// set joint status
-		IsOn = true;	
-		if (otherGlom != null) {
-			otherGlom.IsSticky = false;
-		}
-		
+		IsOn = true;		
 		return IsOn;
 	}
 	
