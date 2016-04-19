@@ -919,8 +919,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Front: {fileID: 1710742899}
   Core: {fileID: 827543784}
-  FrontTarget: {fileID: 0}
-  CoreTarget: {fileID: 0}
   CollapseSpring: {fileID: 1710742902}
 --- !u!114 &2034844300
 MonoBehaviour:
@@ -933,7 +931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375037184412d454695536b835906e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Front: {fileID: 1710742899}
-  Core: {fileID: 827543784}
+  Front: {fileID: 1710742897}
+  Core: {fileID: 827543781}
   CollapseSpring: {fileID: 1710742902}
   spread: {x: 0, y: 0}

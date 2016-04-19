@@ -16,8 +16,6 @@ public class Player : MonoBehaviour {
 	// editor references
 	public Transform Front;
 	public Transform Core;
-	public GameObject FrontTarget;
-	public GameObject CoreTarget;
 	public SpringJoint2D CollapseSpring;
 	
 	// local references
