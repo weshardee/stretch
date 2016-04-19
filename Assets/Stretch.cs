@@ -19,6 +19,8 @@ public class Stretch : MonoBehaviour {
 	private Transform CoreTransform;
     private TargetJoint2D _FrontTarget;
     private TargetJoint2D _CoreTarget;
+	private Glom _FrontGlom;
+	private Glom _CoreGlom;
 	
 	// stretching state
 	public Vector2 spread;
@@ -81,6 +83,9 @@ public class Stretch : MonoBehaviour {
 		
 		_FrontTarget = Front.AddComponent<TargetJoint2D>();
         _CoreTarget = Core.AddComponent<TargetJoint2D>();
+		
+		_FrontGlom = Front.GetComponent<Glom>();
+        _CoreGlom = Core.GetComponent<Glom>();
     }
 
     void Update () {
@@ -99,11 +104,30 @@ public class Stretch : MonoBehaviour {
 	private void Expand() {
 		isExpanding = true;
 		Vector2 force = spread * SpreadForce;
-		_FrontTarget.target = (Vector2)CoreTransform.position + force;
-        _CoreTarget.target = (Vector2)FrontTransform.position - force;
+		
+		TargetJoint2D rootTarget;
+		TargetJoint2D endTarget;
+		Transform rootTransform;
+		Transform endTransform;
+		
+		// toggle direction based on which side is glued
+		if (_CoreGlom.IsOn) {
+			rootTarget = _CoreTarget;
+			rootTransform = CoreTransform;
+			endTarget = _FrontTarget;
+			endTransform = FrontTransform;
+		} else {
+			rootTarget = _FrontTarget;
+			rootTransform = FrontTransform;
+			endTarget = _CoreTarget;
+			endTransform = CoreTransform;
+		}
+		
+		endTarget.target = (Vector2)rootTransform.position + force;
+        rootTarget.target = (Vector2)endTransform.position - force;
 
         // draw debug lines
-        Debug.DrawLine(Core.transform.position, _FrontTarget.target, Color.green);
-		//Debug.DrawLine(Core.transform.position, CoreTarget.transform.position, Color.green);
+        Debug.DrawLine(rootTarget.target, rootTransform.position, Color.green);
+        Debug.DrawLine(endTarget.target, endTransform.position, Color.green);
 	}
 }
