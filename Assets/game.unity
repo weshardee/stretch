@@ -327,7 +327,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!212 &827543783
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -398,7 +398,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
-  otherGlom: {fileID: 1710742901}
 --- !u!114 &827543787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,7 +761,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!114 &1710742901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -777,7 +776,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
-  otherGlom: {fileID: 827543786}
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
