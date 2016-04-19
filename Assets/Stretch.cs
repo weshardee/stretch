@@ -6,8 +6,6 @@ public class Stretch : MonoBehaviour {
 	// editor references
 	public Transform Front;
 	public Transform Core;
-	public GameObject FrontTarget;
-	public GameObject CoreTarget;
 	public SpringJoint2D CollapseSpring;
 	
 	// constants
@@ -15,6 +13,10 @@ public class Stretch : MonoBehaviour {
 	public const float DeadZone = 0.2f;
 	public const float RelaxThreshold = 0.1f;
 	public const float MaxStretch = 15f;
+
+    // local references
+    private TargetJoint2D _FrontTarget;
+    private TargetJoint2D _CoreTarget;
 	
 	// stretching state
 	public Vector2 spread;
@@ -64,17 +66,19 @@ public class Stretch : MonoBehaviour {
 				isCollapsing = false;
 				isHolding = false;
 			}
-			
-			// enable expand targets
-			CoreTarget.SetActive(value);
-			FrontTarget.SetActive(value);
-		} 
-	}
+
+            // enable expand targets
+            _FrontTarget.enabled = value;
+            _CoreTarget.enabled = value;
+        }
+    }
 		
 	void Awake () {
-	}
-	
-	void Update () {
+        _FrontTarget = Front.GetComponent<TargetJoint2D>();
+        _CoreTarget = Core.GetComponent<TargetJoint2D>();
+    }
+
+    void Update () {
 		UpdateStretchDetails();
 		
 		if (isExpanding) {
@@ -89,13 +93,12 @@ public class Stretch : MonoBehaviour {
 			
 	private void Expand() {
 		isExpanding = true;
-		float spreadMagnitude = spread.sqrMagnitude;
 		Vector2 force = spread * SpreadForce;
-		FrontTarget.transform.position = (Vector2)Core.position + force;
-		CoreTarget.transform.position = (Vector2)Front.position - force;
-		
-		// draw debug lines
-		Debug.DrawLine(Front.transform.position, FrontTarget.transform.position, Color.green);
-		Debug.DrawLine(Core.transform.position, CoreTarget.transform.position, Color.green);
+		_FrontTarget.target = (Vector2)Core.position + force;
+        _CoreTarget.target = (Vector2)Front.position - force;
+
+        // draw debug lines
+        Debug.DrawLine(Core.transform.position, _FrontTarget.target, Color.green);
+		//Debug.DrawLine(Core.transform.position, CoreTarget.transform.position, Color.green);
 	}
 }
