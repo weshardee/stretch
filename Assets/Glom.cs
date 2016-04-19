@@ -53,15 +53,9 @@ public class Glom : MonoBehaviour {
 	}
 
 	// active glom info
-	private Vector2 _GlomPoint;
-	
 	private const float _Radius = 0.5f;
 	
 	// other
-	private const float _PulseRadius = 0.6f;
-	private const float _RegularRadius = 0.5f;
-	private float _PulseEnd = 0;
-	private const float _PulseDuration = 0.1f; // in seconds 
 	private const float _CollisionExitLag = 0f; // in seconds
 	
 	void Awake() {
