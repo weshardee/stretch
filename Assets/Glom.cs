@@ -56,7 +56,6 @@ public class Glom : MonoBehaviour {
 	private Vector2 _GlomPoint;
 	
 	private const float _Radius = 0.5f;
-	private CircleCollider2D circleCollider;
 	
 	// other
 	private const float _PulseRadius = 0.6f;
@@ -66,7 +65,6 @@ public class Glom : MonoBehaviour {
 	private const float _CollisionExitLag = 0f; // in seconds
 	
 	void Awake() {
-		circleCollider = GetComponent<CircleCollider2D>();
 		
 		// create and configure joint
 		_GlomJoint = gameObject.AddComponent<SpringJoint2D>();
