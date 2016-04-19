@@ -4,8 +4,8 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class Stretch : MonoBehaviour {
 	// editor references
-	public Transform Front;
-	public Transform Core;
+	public GameObject Front;
+	public GameObject Core;
 	public SpringJoint2D CollapseSpring;
 	
 	// constants
@@ -15,6 +15,8 @@ public class Stretch : MonoBehaviour {
 	public const float MaxStretch = 15f;
 
     // local references
+	private Transform FrontTransform;
+	private Transform CoreTransform;
     private TargetJoint2D _FrontTarget;
     private TargetJoint2D _CoreTarget;
 	
@@ -74,8 +76,11 @@ public class Stretch : MonoBehaviour {
     }
 		
 	void Awake () {
-        _FrontTarget = Front.GetComponent<TargetJoint2D>();
-        _CoreTarget = Core.GetComponent<TargetJoint2D>();
+		FrontTransform = Front.transform;
+		CoreTransform = Core.transform;
+		
+		_FrontTarget = Front.AddComponent<TargetJoint2D>();
+        _CoreTarget = Core.AddComponent<TargetJoint2D>();
     }
 
     void Update () {
@@ -87,15 +92,15 @@ public class Stretch : MonoBehaviour {
 	}
 	
 	private void UpdateStretchDetails() {
-		stretchDistance = (Front.position - Core.position).sqrMagnitude;
+		stretchDistance = (FrontTransform.position - CoreTransform.position).sqrMagnitude;
 		stretchPercent = stretchDistance / MaxStretch;
 	}
 			
 	private void Expand() {
 		isExpanding = true;
 		Vector2 force = spread * SpreadForce;
-		_FrontTarget.target = (Vector2)Core.position + force;
-        _CoreTarget.target = (Vector2)Front.position - force;
+		_FrontTarget.target = (Vector2)CoreTransform.position + force;
+        _CoreTarget.target = (Vector2)FrontTransform.position - force;
 
         // draw debug lines
         Debug.DrawLine(Core.transform.position, _FrontTarget.target, Color.green);

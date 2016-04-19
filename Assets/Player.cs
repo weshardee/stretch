@@ -16,8 +16,6 @@ public class Player : MonoBehaviour {
 	// editor references
 	public Transform Front;
 	public Transform Core;
-	public GameObject FrontTarget;
-	public GameObject CoreTarget;
 	public SpringJoint2D CollapseSpring;
 	
 	// local references
@@ -32,7 +30,7 @@ public class Player : MonoBehaviour {
 	public const float DeadZone = 0.2f;
 	public const float InputReleaseThreshold = 0.1f;
 	public const float MaxStretch = 15f;
-	public const float GrabDuration = 1f;
+	public const float GrabDuration = 0.1f;
 	public const float PullReleaseDistanceThreshold = 0.05f;
 	public const float PullReleaseVelocityThreshold = 0.05f;
 	
@@ -62,7 +60,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	void Update () {
-		Debug.Log(_State);
+		// Debug.Log(_State);
 		switch (_State) {
 			case PlayerState.Loose: {
 				_UseGravity = true;

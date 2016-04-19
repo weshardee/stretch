@@ -291,58 +291,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d024aaa09f4080d448d16f62d1a97b0b, type: 2}
   m_IsPrefabParent: 0
---- !u!1001 &156547343
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 2034844298}
-    m_Modifications:
-    - target: {fileID: 407098, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 149608, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-      propertyPath: m_Name
-      value: front stretch target
-      objectReference: {fileID: 0}
-    - target: {fileID: 23166132, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-      propertyPath: m_ConnectedRigidBody
-      value: 
-      objectReference: {fileID: 1710742900}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-  m_IsPrefabParent: 0
---- !u!1001 &663117447
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 2034844298}
-    m_Modifications:
-    - target: {fileID: 407098, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 23166132, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-      propertyPath: m_ConnectedRigidBody
-      value: 
-      objectReference: {fileID: 827543782}
-    - target: {fileID: 149608, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-      propertyPath: m_Name
-      value: core stretch target
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-  m_IsPrefabParent: 0
---- !u!1 &687179038 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 149608, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-  m_PrefabInternal: {fileID: 663117447}
---- !u!4 &687179039 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 407098, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-  m_PrefabInternal: {fileID: 663117447}
 --- !u!1 &827543781
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +304,6 @@ GameObject:
   - 58: {fileID: 827543785}
   - 114: {fileID: 827543786}
   - 114: {fileID: 827543787}
-  - 257: {fileID: 827543788}
   m_Layer: 8
   m_Name: core
   m_TagString: Player
@@ -380,7 +327,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!212 &827543783
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -451,7 +398,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
-  otherGlom: {fileID: 1710742901}
 --- !u!114 &827543787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,24 +409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60912257c6ec64a00a748d6a35e652f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!257 &827543788
-TargetJoint2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 827543781}
-  m_Enabled: 0
-  serializedVersion: 4
-  m_EnableCollision: 1
-  m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_Anchor: {x: 0, y: 0}
-  m_Target: {x: 5, y: 5}
-  m_AutoConfigureTarget: 0
-  m_MaxForce: 10000
-  m_DampingRatio: 1
-  m_Frequency: 5
 --- !u!1 &1058496595
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,14 +697,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d024aaa09f4080d448d16f62d1a97b0b, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1703158881 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 149608, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-  m_PrefabInternal: {fileID: 156547343}
---- !u!4 &1703158884 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 407098, guid: 08807c2b77b324410822b7487dc591c3, type: 2}
-  m_PrefabInternal: {fileID: 156547343}
 --- !u!1 &1710742897
 GameObject:
   m_ObjectHideFlags: 0
@@ -790,8 +710,8 @@ GameObject:
   - 231: {fileID: 1710742902}
   - 114: {fileID: 1710742901}
   - 114: {fileID: 1710742904}
-  - 257: {fileID: 1710742903}
   - 212: {fileID: 1710742905}
+  - 233: {fileID: 1710742903}
   m_Layer: 8
   m_Name: front
   m_TagString: Player
@@ -841,7 +761,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!114 &1710742901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,7 +776,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 512
-  otherGlom: {fileID: 827543786}
 --- !u!231 &1710742902
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -876,24 +795,29 @@ SpringJoint2D:
   m_Distance: 0.005
   m_DampingRatio: 0.5
   m_Frequency: 2.5
---- !u!257 &1710742903
-TargetJoint2D:
+--- !u!233 &1710742903
+HingeJoint2D:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1710742897}
   m_Enabled: 0
   serializedVersion: 4
-  m_EnableCollision: 1
+  m_EnableCollision: 0
   m_ConnectedRigidBody: {fileID: 0}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
+  m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0}
-  m_Target: {x: 5, y: 5}
-  m_AutoConfigureTarget: 0
-  m_MaxForce: 10000
-  m_DampingRatio: 1
-  m_Frequency: 5
+  m_ConnectedAnchor: {x: -0.06, y: -2.05}
+  m_UseMotor: 0
+  m_Motor:
+    m_MotorSpeed: 0
+    m_MaximumMotorForce: 10000
+  m_UseLimits: 0
+  m_AngleLimits:
+    m_LowerAngle: 0
+    m_UpperAngle: 359
 --- !u!114 &1710742904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -964,8 +888,6 @@ Transform:
   m_Children:
   - {fileID: 827543784}
   - {fileID: 1710742899}
-  - {fileID: 687179039}
-  - {fileID: 1703158884}
   m_Father: {fileID: 0}
   m_RootOrder: 2
 --- !u!114 &2034844299
@@ -981,8 +903,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Front: {fileID: 1710742899}
   Core: {fileID: 827543784}
-  FrontTarget: {fileID: 1703158881}
-  CoreTarget: {fileID: 687179038}
   CollapseSpring: {fileID: 1710742902}
 --- !u!114 &2034844300
 MonoBehaviour:
@@ -995,7 +915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375037184412d454695536b835906e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Front: {fileID: 1710742899}
-  Core: {fileID: 827543784}
+  Front: {fileID: 1710742897}
+  Core: {fileID: 827543781}
   CollapseSpring: {fileID: 1710742902}
   spread: {x: 0, y: 0}
