@@ -130,8 +130,11 @@ public class Player : MonoBehaviour {
 					&& _CoreBody.velocity.sqrMagnitude < PullReleaseVelocityThreshold;				
 				
 				if (isFinishedPulling) {
-					_CoreGlom.Swap(_FrontGlom);
-					_State = PlayerState.Loose;
+					SwapEnds();
+					_State = PlayerState.Grounded;
+
+					// _CoreGlom.Swap(_FrontGlom);
+					// _State = PlayerState.Loose;
 				}
 				break;
 			}
@@ -160,5 +163,16 @@ public class Player : MonoBehaviour {
 		_LastInputMagnitude = inputMagnitude;		
 				
 		return input;
+	}
+	
+	private void SwapEnds() {
+		Glom tempGlom = _FrontGlom;
+		Rigidbody2D tempBody = _FrontBody;
+		
+		_FrontBody = _CoreBody;
+		_FrontGlom = _CoreGlom;
+		
+		_CoreBody = tempBody;
+		_CoreGlom = tempGlom;
 	}
 }
