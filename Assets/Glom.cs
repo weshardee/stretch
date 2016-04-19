@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Glom : MonoBehaviour {
 	// editor components
-	public LayerMask layerMask;
+	[SerializeField] private LayerMask layerMask;
 
 	// local components
 	private SpringJoint2D _GlomJoint;
