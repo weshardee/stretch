@@ -80,7 +80,6 @@ public class Stretch : MonoBehaviour {
 		CoreTransform = Core.transform;
 		
 		_FrontTarget = Front.AddComponent<TargetJoint2D>();
-		Debug.Log(_FrontTarget);
         _CoreTarget = Core.AddComponent<TargetJoint2D>();
     }
 
