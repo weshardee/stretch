@@ -356,6 +356,7 @@ GameObject:
   - 58: {fileID: 827543785}
   - 114: {fileID: 827543786}
   - 114: {fileID: 827543787}
+  - 257: {fileID: 827543788}
   m_Layer: 8
   m_Name: core
   m_TagString: Player
@@ -443,7 +444,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 827543781}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1711d4a360b3489cbfc4878f8a02b6f, type: 3}
   m_Name: 
@@ -463,6 +464,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60912257c6ec64a00a748d6a35e652f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!257 &827543788
+TargetJoint2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 827543781}
+  m_Enabled: 0
+  serializedVersion: 4
+  m_EnableCollision: 1
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_Anchor: {x: 0, y: 0}
+  m_Target: {x: 5, y: 5}
+  m_AutoConfigureTarget: 0
+  m_MaxForce: 10000
+  m_DampingRatio: 1
+  m_Frequency: 5
 --- !u!1 &1058496595
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,7 +925,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1710742897}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1711d4a360b3489cbfc4878f8a02b6f, type: 3}
   m_Name: 
@@ -1101,7 +1120,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Front: {fileID: 1710742899}
   Core: {fileID: 827543784}
-  FrontTarget: {fileID: 1703158881}
-  CoreTarget: {fileID: 687179038}
   CollapseSpring: {fileID: 1710742902}
   spread: {x: 0, y: 0}
