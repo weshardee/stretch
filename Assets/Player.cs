@@ -30,7 +30,7 @@ public class Player : MonoBehaviour {
 	public const float DeadZone = 0.2f;
 	public const float InputReleaseThreshold = 0.1f;
 	public const float MaxStretch = 15f;
-	public const float GrabDuration = 1f;
+	public const float GrabDuration = 0.1f;
 	public const float PullReleaseDistanceThreshold = 0.05f;
 	public const float PullReleaseVelocityThreshold = 0.05f;
 	
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour {
 				_UseGravity = false;
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
-				_FrontGlom.IsSticky = true;
+				_FrontGlom.IsSticky = false;
 				
 				if (_FrontGlom.IsOn) {
 					_State = PlayerState.Pull;
