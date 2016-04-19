@@ -107,8 +107,8 @@ public class Glom : MonoBehaviour {
 		// Debug.Log(name + ": glom to " + coll.transform.name);
 		
 		// set the point of contact as the connected anchor point of the _GlomJoint
-		Vector2 point = (Vector2)coll.contacts[0].point;
-		_GlomJoint.connectedAnchor = contactPoint.point;
+		Vector2 point = contactPoint.point;
+		_GlomJoint.connectedAnchor = point;
 
 		// set joint status
 		IsOn = true;	
