@@ -21,8 +21,6 @@ public class Player : MonoBehaviour {
 	public SpringJoint2D CollapseSpring;
 	
 	// local references
-	private SpringJoint2D _FrontTargetSpring;
-	private SpringJoint2D _CoreTargetSpring;
 	private Glom _FrontGlom;
 	private Glom _CoreGlom;
 	private Stretch _Stretch;
@@ -55,11 +53,9 @@ public class Player : MonoBehaviour {
 				
 		_FrontGlom = Front.GetComponent<Glom>();
 		_FrontBody = Front.GetComponent<Rigidbody2D>();
-		_FrontTargetSpring = FrontTarget.GetComponent<SpringJoint2D>();
 
 		_CoreGlom = Core.GetComponent<Glom>();
 		_CoreBody = Core.GetComponent<Rigidbody2D>();
-		_CoreTargetSpring = CoreTarget.GetComponent<SpringJoint2D>();
 		
 		// disable front glom at start
 		_FrontGlom.IsSticky = false;
