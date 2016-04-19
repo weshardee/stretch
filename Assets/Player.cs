@@ -110,7 +110,7 @@ public class Player : MonoBehaviour {
 				_UseGravity = false;
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
-				_FrontGlom.IsSticky = false;
+				_FrontGlom.IsSticky = true;
 				
 				if (_FrontGlom.IsOn) {
 					_State = PlayerState.Pull;
