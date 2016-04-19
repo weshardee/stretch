@@ -6,7 +6,7 @@ public class Glom : MonoBehaviour {
 	[SerializeField] private LayerMask layerMask;
 
 	// local components
-	private SpringJoint2D _GlomJoint;
+	private DistanceJoint2D _GlomJoint;
 	
 	// state flags
 	private bool _isSticky;
@@ -59,14 +59,14 @@ public class Glom : MonoBehaviour {
 	
 	void Awake() {
 		// create and configure joint
-		_GlomJoint = gameObject.AddComponent<SpringJoint2D>();
+		_GlomJoint = gameObject.AddComponent<DistanceJoint2D>();
+		_GlomJoint.enableCollision = true;
+		_GlomJoint.anchor = new Vector2(0, 0.5f);
 		_GlomJoint.autoConfigureConnectedAnchor = false;
 		_GlomJoint.autoConfigureDistance = false;
 		_GlomJoint.distance = 0;
 		_GlomJoint.enableCollision = true;
 		_GlomJoint.enabled = false;
-		_GlomJoint.frequency = 4;
-		_GlomJoint.dampingRatio = 1;
 	}
 	
 	void Update () {
@@ -103,11 +103,16 @@ public class Glom : MonoBehaviour {
 		}
 		
 		ContactPoint2D contactPoint = coll.contacts[0];
-		// Debug.Log(name + ": glom to " + coll.transform.name);
 		
 		// set the point of contact as the connected anchor point of the _GlomJoint
 		Vector2 point = contactPoint.point;
 		_GlomJoint.connectedAnchor = point;
+		
+		// set the anchor on the node to the direction of the contact point
+		Vector2 anchorDirection = point - (Vector2)transform.position;
+		_GlomJoint.anchor = anchorDirection.normalized * 0.5f;
+		
+		// TODO push glommed node to surface
 
 		// set joint status
 		IsOn = true;		
