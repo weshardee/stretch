@@ -157,6 +157,6 @@ public class Stretch : MonoBehaviour {
 
         // draw debug lines
         Debug.DrawLine(rootTarget.target, rootTransform.position, Color.green);
-        Debug.DrawLine(endTarget.target, endTransform.position, Color.green);
+        Debug.DrawLine(endTarget.target, rootTransform.position, Color.green);
 	}
 }
