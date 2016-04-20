@@ -109,7 +109,7 @@ public class Stretch : MonoBehaviour {
 		TargetJoint2D endTarget;
 		Transform rootTransform;
 		Transform endTransform;
-		
+
 		// toggle direction based on which side is glued
 		if (_CoreGlom.IsOn) {
 			rootTarget = _CoreTarget;
