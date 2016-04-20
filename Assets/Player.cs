@@ -88,7 +88,6 @@ public class Player : MonoBehaviour {
 			}
 			case PlayerState.Reach: {
 				_UseGravity = false;
-				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
 
@@ -101,7 +100,6 @@ public class Player : MonoBehaviour {
 			}
 			case PlayerState.Grab: {
 				_UseGravity = false;
-				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = true;
 				
@@ -134,7 +132,7 @@ public class Player : MonoBehaviour {
 	private void ApplyInput() {
 		// update stretch direction
 		Vector2 input = GetInput();
-		_Stretch.spread = input;
+		_Stretch.Expand(input);
 	}
 
 	private void Grab() {

@@ -117,10 +117,6 @@ public class Stretch : MonoBehaviour {
 
     void Update () {
 		UpdateStretchDetails();
-		
-		if (isExpanding) {
-			Expand();
-		}
 	}
 	
 	private void UpdateStretchDetails() {
@@ -128,9 +124,9 @@ public class Stretch : MonoBehaviour {
 		stretchPercent = stretchDistance / MaxStretch;
 	}
 			
-	private void Expand() {
+	public void Expand(Vector2 direction) {
 		isExpanding = true;
-		Vector2 force = spread.normalized * SpreadDistance;
+		Vector2 distance = direction.normalized * SpreadDistance;
 		
 		SpringJoint2D rootTarget;
 		SpringJoint2D endTarget;
@@ -159,15 +155,15 @@ public class Stretch : MonoBehaviour {
 		// set slider angle
 		endSlider.enabled = false;
 		rootSlider.enabled = true;
-		rootSlider.angle = Vector2.Angle(Vector2.right, spread);
-		if (spread.y < 0) {
+		rootSlider.angle = Vector2.Angle(Vector2.right, direction);
+		if (direction.y < 0) {
 			rootSlider.angle = rootSlider.angle * -1;
 		}
 		
 		// TODO this could probably be managed with a single slider
 		
 		// set stretch targets
-		endTarget.connectedAnchor = (Vector2)rootTransform.position + force;
+		endTarget.connectedAnchor = (Vector2)rootTransform.position + distance;
         rootTarget.connectedAnchor = (Vector2)rootTransform.position;
 
         // draw debug lines
