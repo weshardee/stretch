@@ -72,7 +72,6 @@ public class Glom : MonoBehaviour {
 	void Update () {
 		if (IsOn) {
 			Vector2 anchor = transform.TransformVector(_GlomJoint.anchor) + transform.position;
-			Debug.Log(anchor);
 			Debug.DrawLine(anchor, transform.position, Color.blue);
 			// Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.blue);
 		}
