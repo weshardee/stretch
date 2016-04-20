@@ -19,6 +19,10 @@ public class Stretch : MonoBehaviour {
 	private Transform CoreTransform;
     private TargetJoint2D _FrontTarget;
     private TargetJoint2D _CoreTarget;
+	private Glom _FrontGlom;
+	private Glom _CoreGlom;
+	private SliderJoint2D FrontSlider;
+	private SliderJoint2D CoreSlider;
 	
 	// stretching state
 	public Vector2 spread;
@@ -53,7 +57,7 @@ public class Stretch : MonoBehaviour {
 			}
 			
 			// set collapse spring state
-			// CollapseSpring.enabled = value;
+			CollapseSpring.enabled = value;
 		}
 	}
 	
@@ -81,6 +85,22 @@ public class Stretch : MonoBehaviour {
 		
 		_FrontTarget = Front.AddComponent<TargetJoint2D>();
         _CoreTarget = Core.AddComponent<TargetJoint2D>();
+		
+		_FrontGlom = Front.GetComponent<Glom>();
+        _CoreGlom = Core.GetComponent<Glom>();
+		
+		// set up sliders
+		FrontSlider = Front.AddComponent<SliderJoint2D>();
+		CoreSlider = Core.AddComponent<SliderJoint2D>();
+		
+		FrontSlider.connectedBody = Core.GetComponent<Rigidbody2D>();
+		CoreSlider.connectedBody = Front.GetComponent<Rigidbody2D>();
+		
+		FrontSlider.enabled = false;
+		CoreSlider.enabled = false;
+		
+		FrontSlider.autoConfigureAngle = false;
+		CoreSlider.autoConfigureAngle = false;
     }
 
     void Update () {
@@ -98,12 +118,48 @@ public class Stretch : MonoBehaviour {
 			
 	private void Expand() {
 		isExpanding = true;
-		Vector2 force = spread * SpreadForce;
-		_FrontTarget.target = (Vector2)CoreTransform.position + force;
-        _CoreTarget.target = (Vector2)FrontTransform.position - force;
+		Vector2 force = spread.normalized * SpreadForce;
+		
+		TargetJoint2D rootTarget;
+		TargetJoint2D endTarget;
+		Transform rootTransform;
+		Transform endTransform;
+		SliderJoint2D rootSlider;
+		SliderJoint2D endSlider;
+
+		// toggle direction based on which side is glued
+		if (_CoreGlom.IsOn) {
+			rootTarget = _CoreTarget;
+			rootTransform = CoreTransform;
+			rootSlider = CoreSlider;
+			endTarget = _FrontTarget;
+			endTransform = FrontTransform;
+			endSlider = FrontSlider;
+		} else {
+			rootTarget = _FrontTarget;
+			rootTransform = FrontTransform;
+			rootSlider = FrontSlider;
+			endTarget = _CoreTarget;
+			endTransform = CoreTransform;
+			endSlider = CoreSlider;
+		}
+		
+		// set slider angle
+		endSlider.enabled = false;
+		rootSlider.enabled = true;
+		rootSlider.angle = Vector2.Angle(Vector2.right, spread);
+		if (spread.y < 0) {
+			rootSlider.angle = rootSlider.angle * -1;
+		}
+		
+		// TODO this could probably be managed with a single slider
+		
+		// set stretch targets
+		endTarget.target = (Vector2)rootTransform.position + force;
+        rootTarget.target = (Vector2)rootTransform.position;
 
         // draw debug lines
-        Debug.DrawLine(Core.transform.position, _FrontTarget.target, Color.green);
-		//Debug.DrawLine(Core.transform.position, CoreTarget.transform.position, Color.green);
+        Debug.DrawLine(rootTarget.target, rootTransform.position, Color.green);
+        Debug.DrawLine(endTarget.target, rootTransform.position, Color.green);
 	}
 }
