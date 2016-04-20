@@ -129,9 +129,6 @@ public class Player : MonoBehaviour {
 				if (isFinishedPulling) {
 					SwapEnds();
 					_State = PlayerState.Grounded;
-
-					// _CoreGlom.Swap(_FrontGlom);
-					// _State = PlayerState.Loose;
 				}
 				break;
 			}
