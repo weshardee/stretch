@@ -156,7 +156,7 @@ public class Stretch : MonoBehaviour {
 		
 		// set stretch targets
 		endTarget.target = (Vector2)rootTransform.position + force;
-        rootTarget.target = (Vector2)endTransform.position - force;
+        rootTarget.target = (Vector2)rootTransform.position;
 
         // draw debug lines
         Debug.DrawLine(rootTarget.target, rootTransform.position, Color.green);
