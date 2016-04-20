@@ -148,6 +148,9 @@ public class Stretch : MonoBehaviour {
 		endSlider.enabled = false;
 		rootSlider.enabled = true;
 		rootSlider.angle = Vector2.Angle(Vector2.right, spread);
+		if (spread.y < 0) {
+			rootSlider.angle = rootSlider.angle * -1;
+		}
 		
 		// TODO this could probably be managed with a single slider
 		
