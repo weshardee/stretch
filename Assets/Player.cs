@@ -91,17 +91,11 @@ public class Player : MonoBehaviour {
 				_Stretch.isExpanding = true;
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = false;
+
+				ApplyInput();
 				
-				// update stretch direction
-				Vector2 input = GetInput();
-				
-				// switch state on input release
-				if (input == Vector2.zero) {
-					_LastInputMagnitude = 0;
-					_GrabTimeout = Time.time + GrabDuration;
-					_State = PlayerState.Grab;
-				} else {
-					_Stretch.spread = input;
+				if (_FrontBody.IsSleeping()) {
+					Grab();
 				}
 				break;
 			}
@@ -111,6 +105,8 @@ public class Player : MonoBehaviour {
 				_CoreGlom.IsSticky = true;
 				_FrontGlom.IsSticky = true;
 				
+				ApplyInput();
+
 				if (_FrontGlom.IsOn) {
 					_State = PlayerState.Pull;
 				} else if (_GrabTimeout < Time.time) {
@@ -135,6 +131,17 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
+	private void ApplyInput() {
+		// update stretch direction
+		Vector2 input = GetInput();
+		_Stretch.spread = input;
+	}
+
+	private void Grab() {
+		_GrabTimeout = Time.time + GrabDuration;
+		_State = PlayerState.Grab;		
+	}
+	
 	private Vector2 GetInput() {
 		// Read input
 		float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
@@ -147,15 +154,7 @@ public class Player : MonoBehaviour {
 		if (input.sqrMagnitude > 1) {
 			input.Normalize();
 		}
-		
-		// store relative input state
-		float inputMagnitude = input.sqrMagnitude;
-		if (inputMagnitude < _LastInputMagnitude - InputReleaseThreshold) {
-			inputMagnitude = 0;
-			input = Vector2.zero;
-		}	
-		_LastInputMagnitude = inputMagnitude;		
-				
+						
 		return input;
 	}
 	
