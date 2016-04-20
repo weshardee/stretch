@@ -98,6 +98,9 @@ public class Stretch : MonoBehaviour {
 		
 		FrontSlider.enabled = false;
 		CoreSlider.enabled = false;
+		
+		FrontSlider.autoConfigureAngle = false;
+		CoreSlider.autoConfigureAngle = false;
     }
 
     void Update () {
@@ -144,7 +147,7 @@ public class Stretch : MonoBehaviour {
 		// set slider angle
 		endSlider.enabled = false;
 		rootSlider.enabled = true;
-		rootSlider.angle = Vector2.Angle(Vector2.zero, force);
+		rootSlider.angle = Vector2.Angle(Vector2.right, spread);
 		
 		// TODO this could probably be managed with a single slider
 		
