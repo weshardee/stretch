@@ -11,7 +11,6 @@ public class Stretch : MonoBehaviour {
 	// constants
 	public const float SpreadForce = 3f;
 	public const float DeadZone = 0.2f;
-	public const float RelaxThreshold = 0.1f;
 	public const float MaxStretch = 15f;
 
     // local references
