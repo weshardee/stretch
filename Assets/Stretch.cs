@@ -17,8 +17,8 @@ public class Stretch : MonoBehaviour {
     // local references
 	private Transform FrontTransform;
 	private Transform CoreTransform;
-    private TargetJoint2D _FrontTarget;
-    private TargetJoint2D _CoreTarget;
+    private SpringJoint2D _FrontTarget;
+    private SpringJoint2D _CoreTarget;
 	private Glom _FrontGlom;
 	private Glom _CoreGlom;
 	private SliderJoint2D FrontSlider;
@@ -83,8 +83,8 @@ public class Stretch : MonoBehaviour {
 		FrontTransform = Front.transform;
 		CoreTransform = Core.transform;
 		
-		_FrontTarget = Front.AddComponent<TargetJoint2D>();
-        _CoreTarget = Core.AddComponent<TargetJoint2D>();
+		_FrontTarget = Front.AddComponent<SpringJoint2D>();
+        _CoreTarget = Core.AddComponent<SpringJoint2D>();
 		
 		_FrontGlom = Front.GetComponent<Glom>();
         _CoreGlom = Core.GetComponent<Glom>();
@@ -101,7 +101,20 @@ public class Stretch : MonoBehaviour {
 		
 		FrontSlider.autoConfigureAngle = false;
 		CoreSlider.autoConfigureAngle = false;
+		
+		// configure targets
+		ConfigureTarget(_FrontTarget);
+		ConfigureTarget(_CoreTarget);
     }
+	
+	void ConfigureTarget(SpringJoint2D target) {
+		target.autoConfigureDistance = false;
+		target.distance = 0;
+		target.dampingRatio = 1;
+		target.enableCollision = true;
+		target.enabled = false;
+		target.frequency = 2.5f;
+	}
 
     void Update () {
 		UpdateStretchDetails();
@@ -120,8 +133,8 @@ public class Stretch : MonoBehaviour {
 		isExpanding = true;
 		Vector2 force = spread.normalized * SpreadForce;
 		
-		TargetJoint2D rootTarget;
-		TargetJoint2D endTarget;
+		SpringJoint2D rootTarget;
+		SpringJoint2D endTarget;
 		Transform rootTransform;
 		Transform endTransform;
 		SliderJoint2D rootSlider;
@@ -155,11 +168,11 @@ public class Stretch : MonoBehaviour {
 		// TODO this could probably be managed with a single slider
 		
 		// set stretch targets
-		endTarget.target = (Vector2)rootTransform.position + force;
-        rootTarget.target = (Vector2)rootTransform.position;
+		endTarget.connectedAnchor = (Vector2)rootTransform.position + force;
+        rootTarget.connectedAnchor = (Vector2)rootTransform.position;
 
         // draw debug lines
-        Debug.DrawLine(rootTarget.target, rootTransform.position, Color.green);
-        Debug.DrawLine(endTarget.target, rootTransform.position, Color.green);
+        Debug.DrawLine(rootTarget.connectedAnchor, rootTransform.position, Color.green);
+        Debug.DrawLine(endTarget.connectedAnchor, rootTransform.position, Color.green);
 	}
 }
