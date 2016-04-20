@@ -9,7 +9,7 @@ public class Stretch : MonoBehaviour {
 	public SpringJoint2D CollapseSpring;
 	
 	// constants
-	public const float SpreadForce = 3f;
+	public const float SpreadDistance = 2f;
 	public const float DeadZone = 0.2f;
 	public const float MaxStretch = 15f;
 
@@ -130,7 +130,7 @@ public class Stretch : MonoBehaviour {
 			
 	private void Expand() {
 		isExpanding = true;
-		Vector2 force = spread.normalized * SpreadForce;
+		Vector2 force = spread.normalized * SpreadDistance;
 		
 		SpringJoint2D rootTarget;
 		SpringJoint2D endTarget;
