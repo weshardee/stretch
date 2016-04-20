@@ -115,7 +115,7 @@ public class Stretch : MonoBehaviour {
 			
 	private void Expand() {
 		isExpanding = true;
-		Vector2 force = spread * SpreadForce;
+		Vector2 force = spread.normalized * SpreadForce;
 		
 		TargetJoint2D rootTarget;
 		TargetJoint2D endTarget;
