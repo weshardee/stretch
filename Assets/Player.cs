@@ -12,12 +12,12 @@ public enum PlayerState {
 }
 
 public class Player : MonoBehaviour {
-    
+
     // editor references
     public Transform Front;
     public Transform Core;
     public SpringJoint2D CollapseSpring;
-    
+
     // local references
     private Glom _FrontGlom;
     private Glom _CoreGlom;
@@ -33,7 +33,7 @@ public class Player : MonoBehaviour {
     public const float GrabDuration = 0.1f;
     public const float ReachDuration = 40f;
     public const float PullReleaseDistanceThreshold = 0.05f;
-    
+
     // state
     private Vector2 reachDirection;
     private PlayerState _State = PlayerState.Loose;
@@ -50,17 +50,17 @@ public class Player : MonoBehaviour {
 
     void Awake () {
         _Stretch = GetComponent<Stretch>();
-                
+
         _FrontGlom = Front.GetComponent<Glom>();
         _FrontBody = Front.GetComponent<Rigidbody2D>();
 
         _CoreGlom = Core.GetComponent<Glom>();
         _CoreBody = Core.GetComponent<Rigidbody2D>();
-        
+
         // disable front glom at start
         _FrontGlom.IsSticky = false;
     }
-    
+
     void Update () {
         // Debug.Log(_State);
         switch (_State) {
@@ -95,7 +95,7 @@ public class Player : MonoBehaviour {
                 _FrontGlom.IsSticky = false;
 
                 _Stretch.Expand(reachDirection);
-                
+
                 if (_ReachTimeout < Time.time || _FrontBody.IsSleeping()) {
                     Grab();
                 }
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour {
                 _UseGravity = false;
                 _CoreGlom.IsSticky = true;
                 _FrontGlom.IsSticky = true;
-                
+
                 if (_FrontGlom.IsOn) {
                     _State = PlayerState.Pull;
                 } else if (_GrabTimeout < Time.time) {
@@ -118,9 +118,9 @@ public class Player : MonoBehaviour {
                 _Stretch.isCollapsing = true;
                 _CoreGlom.IsSticky = false;
                 _FrontGlom.IsSticky = true;
-                
-                bool isFinishedPulling = _Stretch.stretchDistance < PullReleaseDistanceThreshold;	
-                
+
+                bool isFinishedPulling = _Stretch.stretchDistance < PullReleaseDistanceThreshold;
+
                 if (isFinishedPulling) {
                     SwapEnds();
                     _State = PlayerState.Grounded;
@@ -129,17 +129,17 @@ public class Player : MonoBehaviour {
             }
         }
     }
-    
+
     private void Reach() {
         _ReachTimeout = Time.time + ReachDuration;
-        _State = PlayerState.Grab;		
+        _State = PlayerState.Grab;
     }
-    
+
     private void Grab() {
         _GrabTimeout = Time.time + GrabDuration;
-        _State = PlayerState.Grab;		
+        _State = PlayerState.Grab;
     }
-    
+
     private Vector2 GetInput() {
         // Read input
         float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
@@ -152,17 +152,17 @@ public class Player : MonoBehaviour {
         if (input.sqrMagnitude > 1) {
             input.Normalize();
         }
-                        
+
         return input;
     }
-    
+
     private void SwapEnds() {
         Glom tempGlom = _FrontGlom;
         Rigidbody2D tempBody = _FrontBody;
-        
+
         _FrontBody = _CoreBody;
         _FrontGlom = _CoreGlom;
-        
+
         _CoreBody = tempBody;
         _CoreGlom = tempGlom;
     }
