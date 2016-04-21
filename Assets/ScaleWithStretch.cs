@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ScaleWithStretch : MonoBehaviour {
     private Stretch _stretch;
