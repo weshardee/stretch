@@ -4,7 +4,7 @@ public class Stretch : MonoBehaviour {
     // editor references
     public GameObject head;
     public GameObject core;
-    public SpringJoint2D collapseSpring;
+    private SpringJoint2D spring;
 
     // constants
     public const float SpreadDistance = 2f;
@@ -12,10 +12,10 @@ public class Stretch : MonoBehaviour {
     public const float MaxStretch = 15f;
 
     // local references
+    private Rigidbody2D headBody;
+    private Rigidbody2D coreBody;
     private Transform headTransform;
     private Transform coreTransform;
-    private SpringJoint2D headTarget;
-    private SpringJoint2D coreTarget;
     private Glom coreGlom;
     private SliderJoint2D headSlider;
     private SliderJoint2D coreSlider;
@@ -26,20 +26,6 @@ public class Stretch : MonoBehaviour {
     public float stretchPercent { get; private set; }
 
     // states
-    private bool _isHolding = false;
-    public bool isHolding {
-        get {
-            return _isHolding;
-        }
-        set {
-            _isHolding = value;
-            if (value) {
-                isExpanding = false;
-                isCollapsing = false;
-            }
-        }
-    }
-
     private bool _isCollapsing = true;
     public bool isCollapsing {
         get {
@@ -47,49 +33,24 @@ public class Stretch : MonoBehaviour {
         }
         set {
             _isCollapsing = value;
-            if (value) {
-                isExpanding = false;
-                isHolding = false;
-            }
-
-            // set collapse spring state
-            collapseSpring.enabled = value;
-        }
-    }
-
-    private bool _isExpanding = false;
-    public bool isExpanding {
-        get {
-            return _isExpanding;
-        }
-        set {
-            _isExpanding = value;
-            if (value) {
-                isCollapsing = false;
-                isHolding = false;
-            }
-
-            // enable expand targets
-            headTarget.enabled = value;
-            coreTarget.enabled = value;
+            spring.distance = value ? 0 : SpreadDistance;
         }
     }
 
     void Awake () {
         headTransform = head.transform;
         coreTransform = core.transform;
-
-        headTarget = head.AddComponent<SpringJoint2D>();
-        coreTarget = core.AddComponent<SpringJoint2D>();
-
         coreGlom = core.GetComponent<Glom>();
+
+        headBody = head.GetComponent<Rigidbody2D>();
+        coreBody = core.GetComponent<Rigidbody2D>();
 
         // set up sliders
         headSlider = head.AddComponent<SliderJoint2D>();
         coreSlider = core.AddComponent<SliderJoint2D>();
 
-        headSlider.connectedBody = core.GetComponent<Rigidbody2D>();
-        coreSlider.connectedBody = head.GetComponent<Rigidbody2D>();
+        headSlider.connectedBody = coreBody;
+        coreSlider.connectedBody = headBody;
 
         headSlider.enabled = false;
         coreSlider.enabled = false;
@@ -97,18 +58,8 @@ public class Stretch : MonoBehaviour {
         headSlider.autoConfigureAngle = false;
         coreSlider.autoConfigureAngle = false;
 
-        // configure targets
-        ConfigureTarget(headTarget);
-        ConfigureTarget(coreTarget);
-    }
-
-    void ConfigureTarget(SpringJoint2D target) {
-        target.autoConfigureDistance = false;
-        target.distance = 0;
-        target.dampingRatio = 1;
-        target.enableCollision = true;
-        target.enabled = false;
-        target.frequency = 2.5f;
+        // set up spring
+        spring = core.GetComponent<SpringJoint2D>();
     }
 
     void Update () {
@@ -121,31 +72,28 @@ public class Stretch : MonoBehaviour {
     }
 
     public void Expand(Vector2 direction) {
-        isExpanding = true;
-        Vector2 distance = direction.normalized * SpreadDistance;
+        direction.Normalize();
 
-        SpringJoint2D rootTarget;
-        SpringJoint2D endTarget;
+        // toggle direction based on which side is glued
         Transform rootTransform;
         SliderJoint2D rootSlider;
         SliderJoint2D endSlider;
+        Rigidbody2D endBody;
 
-        // toggle direction based on which side is glued
         if (coreGlom.isOn) {
-            rootTarget = coreTarget;
             rootTransform = coreTransform;
             rootSlider = coreSlider;
-            endTarget = headTarget;
             endSlider = headSlider;
+            endBody = headBody;
         } else {
-            rootTarget = headTarget;
             rootTransform = headTransform;
             rootSlider = headSlider;
-            endTarget = coreTarget;
             endSlider = coreSlider;
+            endBody = coreBody;
         }
 
         // set slider angle
+        // TODO this could probably be managed with a single slider
         endSlider.enabled = false;
         rootSlider.enabled = true;
         rootSlider.angle = Vector2.Angle(Vector2.right, direction);
@@ -153,14 +101,10 @@ public class Stretch : MonoBehaviour {
             rootSlider.angle = rootSlider.angle * -1;
         }
 
-        // TODO this could probably be managed with a single slider
+        // update collapsing state and spring distance
+        isCollapsing = false;
 
-        // set stretch targets
-        endTarget.connectedAnchor = (Vector2)rootTransform.position + distance;
-        rootTarget.connectedAnchor = (Vector2)rootTransform.position;
-
-        // draw debug lines
-        Debug.DrawLine(rootTarget.connectedAnchor, rootTransform.position, Color.green);
-        Debug.DrawLine(endTarget.connectedAnchor, rootTransform.position, Color.green);
+        // give a little nudge to get the spring going
+        endBody.AddForce(direction, ForceMode2D.Impulse);
     }
 }
