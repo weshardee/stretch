@@ -116,14 +116,16 @@ public class Player : MonoBehaviour
 
         // disable front glom at start
         headGlom.isSticky = false;
+    }
 
-        // set initial state
+    void Start() {
+        // set initial state after components have awakened
         state = PlayerState.Loose;
     }
 
     void Update()
     {
-        // Debug.Log(_State);
+        // Debug.Log(state);
         switch (state)
         {
             case PlayerState.Loose:
