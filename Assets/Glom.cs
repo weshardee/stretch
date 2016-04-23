@@ -1,50 +1,66 @@
 ﻿using UnityEngine;
 
-public class Glom : MonoBehaviour {
+public class Glom : MonoBehaviour
+{
     // editor components
-    [SerializeField] private LayerMask layerMask;
+    [SerializeField]
+    private LayerMask layerMask;
 
     // local components
     private DistanceJoint2D glomJoint;
 
     // state flags
     private bool _isSticky;
-    public bool isSticky {
-        get {
+    public bool isSticky
+    {
+        get
+        {
             return _isSticky;
         }
-        set {
-            if (_isSticky == value) {
+        set
+        {
+            if (_isSticky == value)
+            {
                 return;
             }
             _isSticky = value;
-            if (value) {
+            if (value)
+            {
                 On();
-            } else {
+            }
+            else
+            {
                 isOn = false;
             }
         }
     }
 
-    public bool isOn {
-        get {
+    public bool isOn
+    {
+        get
+        {
             return glomJoint.enabled;
         }
-        private set {
+        private set
+        {
             glomJoint.enabled = value;
         }
     }
 
     private float _lastCollisionExpiration = 0;
     private Collision2D _lastCollision;
-    private Collision2D lastCollision {
-        get {
-            if (_lastCollisionExpiration < Time.time) {
+    private Collision2D lastCollision
+    {
+        get
+        {
+            if (_lastCollisionExpiration < Time.time)
+            {
                 return null;
             }
             return _lastCollision;
         }
-        set {
+        set
+        {
             _lastCollision = value;
             _lastCollisionExpiration = Time.time + CollisionExitLag;
         }
@@ -56,7 +72,8 @@ public class Glom : MonoBehaviour {
     // other
     private const float CollisionExitLag = 0f; // in seconds
 
-    void Awake() {
+    void Awake()
+    {
         // create and configure joint
         glomJoint = gameObject.AddComponent<DistanceJoint2D>();
         glomJoint.enableCollision = true;
@@ -68,37 +85,46 @@ public class Glom : MonoBehaviour {
         glomJoint.enabled = false;
     }
 
-    void Update () {
-        if (isOn) {
+    void Update()
+    {
+        if (isOn)
+        {
             Vector2 anchor = transform.TransformVector(glomJoint.anchor) + transform.position;
             Debug.DrawLine(anchor, transform.position, Color.blue);
             // Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.blue);
         }
     }
 
-    void OnCollisionStay2D(Collision2D coll) {
+    void OnCollisionStay2D(Collision2D coll)
+    {
         TrackCollision(coll);
     }
 
-    void OnCollisionExit2D(Collision2D coll) {
+    void OnCollisionExit2D(Collision2D coll)
+    {
         TrackCollision(coll);
     }
 
-    void TrackCollision(Collision2D coll) {
+    void TrackCollision(Collision2D coll)
+    {
         lastCollision = coll;
-        if (isSticky) {
+        if (isSticky)
+        {
             On();
         }
     }
 
-    public bool On() {
-        if (isOn) {
+    public bool On()
+    {
+        if (isOn)
+        {
             return true;
         }
 
         // Debug.Log(name + ": try to glom");
         Collision2D coll = lastCollision;
-        if (coll == null) {
+        if (coll == null)
+        {
             return false;
         }
 

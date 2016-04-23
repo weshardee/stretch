@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class Stretch : MonoBehaviour {
+public class Stretch : MonoBehaviour
+{
     // editor references
     public GameObject head;
     public GameObject core;
@@ -27,17 +28,21 @@ public class Stretch : MonoBehaviour {
 
     // states
     private bool _isCollapsing = true;
-    public bool isCollapsing {
-        get {
+    public bool isCollapsing
+    {
+        get
+        {
             return _isCollapsing;
         }
-        set {
+        set
+        {
             _isCollapsing = value;
             spring.distance = value ? 0 : SpreadDistance;
         }
     }
 
-    void Awake () {
+    void Awake()
+    {
         headTransform = head.transform;
         coreTransform = core.transform;
         coreGlom = core.GetComponent<Glom>();
@@ -62,27 +67,33 @@ public class Stretch : MonoBehaviour {
         spring = core.GetComponent<SpringJoint2D>();
     }
 
-    void FixedUpdate () {
+    void FixedUpdate()
+    {
         UpdateStretchDetails();
         coreSlider.angle = angle;
     }
 
-    private void UpdateStretchDetails() {
+    private void UpdateStretchDetails()
+    {
         stretchDistance = (headTransform.position - coreTransform.position).sqrMagnitude;
         stretchPercent = stretchDistance / MaxStretch;
     }
 
-    public void Expand(Vector2 direction) {
+    public void Expand(Vector2 direction)
+    {
         direction.Normalize();
 
         // toggle direction based on which side is glued
         Rigidbody2D endBody;
         Rigidbody2D rootBody;
 
-        if (coreGlom.isOn) {
+        if (coreGlom.isOn)
+        {
             endBody = headBody;
             rootBody = coreBody;
-        } else {
+        }
+        else
+        {
             endBody = coreBody;
             rootBody = headBody;
         }
@@ -90,10 +101,12 @@ public class Stretch : MonoBehaviour {
         // set slider angle
         coreSlider.enabled = true;
         angle = Vector2.Angle(Vector2.right, direction);
-        if (direction.y < 0) {
+        if (direction.y < 0)
+        {
             angle = angle * -1;
         }
-        if (coreGlom.isOn) {
+        if (coreGlom.isOn)
+        {
             angle -= 180;
         }
         coreSlider.angle = angle;
