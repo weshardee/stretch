@@ -118,7 +118,8 @@ public class Player : MonoBehaviour
         headGlom.isSticky = false;
     }
 
-    void Start() {
+    void Start()
+    {
         // set initial state after components have awakened
         state = PlayerState.Loose;
     }
@@ -160,10 +161,10 @@ public class Player : MonoBehaviour
                 {
                     state = PlayerState.Pull;
                 }
-                    else if (grabTimeout < Time.time)
-                    {
-                        state = PlayerState.Relax;
-                    }
+                else if (grabTimeout < Time.time)
+                {
+                    state = PlayerState.Relax;
+                }
                 break;
             case PlayerState.Pull:
                 bool isFinishedPulling = stretch.stretchDistance < PullReleaseDistanceThreshold;
