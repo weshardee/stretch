@@ -152,7 +152,10 @@ public class Player : MonoBehaviour
                 }
                 break;
             case PlayerState.Reach:
-                if (reachTimeout < Time.time || headBody.IsSleeping())
+                if (
+                    reachTimeout < Time.time
+                    || headBody.IsSleeping()
+                )
                 {
                     state = PlayerState.Grab;
                 }
