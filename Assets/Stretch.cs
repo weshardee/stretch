@@ -2,9 +2,9 @@
 
 public class Stretch : MonoBehaviour {
     // editor references
-    public GameObject Front;
-    public GameObject Core;
-    public SpringJoint2D CollapseSpring;
+    public GameObject head;
+    public GameObject core;
+    public SpringJoint2D collapseSpring;
 
     // constants
     public const float SpreadDistance = 2f;
@@ -12,14 +12,13 @@ public class Stretch : MonoBehaviour {
     public const float MaxStretch = 15f;
 
     // local references
-    private Transform FrontTransform;
-    private Transform CoreTransform;
-    private SpringJoint2D _FrontTarget;
-    private SpringJoint2D _CoreTarget;
-    private Glom _FrontGlom;
-    private Glom _CoreGlom;
-    private SliderJoint2D FrontSlider;
-    private SliderJoint2D CoreSlider;
+    private Transform headTransform;
+    private Transform coreTransform;
+    private SpringJoint2D headTarget;
+    private SpringJoint2D coreTarget;
+    private Glom coreGlom;
+    private SliderJoint2D headSlider;
+    private SliderJoint2D coreSlider;
 
     // stretching state
     public Vector2 spread;
@@ -54,7 +53,7 @@ public class Stretch : MonoBehaviour {
             }
 
             // set collapse spring state
-            CollapseSpring.enabled = value;
+            collapseSpring.enabled = value;
         }
     }
 
@@ -71,37 +70,36 @@ public class Stretch : MonoBehaviour {
             }
 
             // enable expand targets
-            _FrontTarget.enabled = value;
-            _CoreTarget.enabled = value;
+            headTarget.enabled = value;
+            coreTarget.enabled = value;
         }
     }
 
     void Awake () {
-        FrontTransform = Front.transform;
-        CoreTransform = Core.transform;
+        headTransform = head.transform;
+        coreTransform = core.transform;
 
-        _FrontTarget = Front.AddComponent<SpringJoint2D>();
-        _CoreTarget = Core.AddComponent<SpringJoint2D>();
+        headTarget = head.AddComponent<SpringJoint2D>();
+        coreTarget = core.AddComponent<SpringJoint2D>();
 
-        _FrontGlom = Front.GetComponent<Glom>();
-        _CoreGlom = Core.GetComponent<Glom>();
+        coreGlom = core.GetComponent<Glom>();
 
         // set up sliders
-        FrontSlider = Front.AddComponent<SliderJoint2D>();
-        CoreSlider = Core.AddComponent<SliderJoint2D>();
+        headSlider = head.AddComponent<SliderJoint2D>();
+        coreSlider = core.AddComponent<SliderJoint2D>();
 
-        FrontSlider.connectedBody = Core.GetComponent<Rigidbody2D>();
-        CoreSlider.connectedBody = Front.GetComponent<Rigidbody2D>();
+        headSlider.connectedBody = core.GetComponent<Rigidbody2D>();
+        coreSlider.connectedBody = head.GetComponent<Rigidbody2D>();
 
-        FrontSlider.enabled = false;
-        CoreSlider.enabled = false;
+        headSlider.enabled = false;
+        coreSlider.enabled = false;
 
-        FrontSlider.autoConfigureAngle = false;
-        CoreSlider.autoConfigureAngle = false;
+        headSlider.autoConfigureAngle = false;
+        coreSlider.autoConfigureAngle = false;
 
         // configure targets
-        ConfigureTarget(_FrontTarget);
-        ConfigureTarget(_CoreTarget);
+        ConfigureTarget(headTarget);
+        ConfigureTarget(coreTarget);
     }
 
     void ConfigureTarget(SpringJoint2D target) {
@@ -118,7 +116,7 @@ public class Stretch : MonoBehaviour {
     }
 
     private void UpdateStretchDetails() {
-        stretchDistance = (FrontTransform.position - CoreTransform.position).sqrMagnitude;
+        stretchDistance = (headTransform.position - coreTransform.position).sqrMagnitude;
         stretchPercent = stretchDistance / MaxStretch;
     }
 
@@ -129,25 +127,22 @@ public class Stretch : MonoBehaviour {
         SpringJoint2D rootTarget;
         SpringJoint2D endTarget;
         Transform rootTransform;
-        Transform endTransform;
         SliderJoint2D rootSlider;
         SliderJoint2D endSlider;
 
         // toggle direction based on which side is glued
-        if (_CoreGlom.IsOn) {
-            rootTarget = _CoreTarget;
-            rootTransform = CoreTransform;
-            rootSlider = CoreSlider;
-            endTarget = _FrontTarget;
-            endTransform = FrontTransform;
-            endSlider = FrontSlider;
+        if (coreGlom.isOn) {
+            rootTarget = coreTarget;
+            rootTransform = coreTransform;
+            rootSlider = coreSlider;
+            endTarget = headTarget;
+            endSlider = headSlider;
         } else {
-            rootTarget = _FrontTarget;
-            rootTransform = FrontTransform;
-            rootSlider = FrontSlider;
-            endTarget = _CoreTarget;
-            endTransform = CoreTransform;
-            endSlider = CoreSlider;
+            rootTarget = headTarget;
+            rootTransform = headTransform;
+            rootSlider = headSlider;
+            endTarget = coreTarget;
+            endSlider = coreSlider;
         }
 
         // set slider angle

@@ -5,11 +5,11 @@ public class Glom : MonoBehaviour {
     [SerializeField] private LayerMask layerMask;
 
     // local components
-    private DistanceJoint2D _GlomJoint;
+    private DistanceJoint2D glomJoint;
 
     // state flags
     private bool _isSticky;
-    public bool IsSticky {
+    public bool isSticky {
         get {
             return _isSticky;
         }
@@ -21,23 +21,23 @@ public class Glom : MonoBehaviour {
             if (value) {
                 On();
             } else {
-                IsOn = false;
+                isOn = false;
             }
         }
     }
 
-    public bool IsOn {
+    public bool isOn {
         get {
-            return _GlomJoint.enabled;
+            return glomJoint.enabled;
         }
         private set {
-            _GlomJoint.enabled = value;
+            glomJoint.enabled = value;
         }
     }
 
     private float _lastCollisionExpiration = 0;
     private Collision2D _lastCollision;
-    private Collision2D _LastCollision {
+    private Collision2D lastCollision {
         get {
             if (_lastCollisionExpiration < Time.time) {
                 return null;
@@ -46,31 +46,31 @@ public class Glom : MonoBehaviour {
         }
         set {
             _lastCollision = value;
-            _lastCollisionExpiration = Time.time + _CollisionExitLag;
+            _lastCollisionExpiration = Time.time + CollisionExitLag;
         }
     }
 
     // active glom info
-    private const float _Radius = 0.5f;
+    private const float Radius = 0.5f;
 
     // other
-    private const float _CollisionExitLag = 0f; // in seconds
+    private const float CollisionExitLag = 0f; // in seconds
 
     void Awake() {
         // create and configure joint
-        _GlomJoint = gameObject.AddComponent<DistanceJoint2D>();
-        _GlomJoint.enableCollision = true;
-        _GlomJoint.anchor = new Vector2(0, 0.5f);
-        _GlomJoint.autoConfigureConnectedAnchor = false;
-        _GlomJoint.autoConfigureDistance = false;
-        _GlomJoint.distance = 0;
-        _GlomJoint.enableCollision = true;
-        _GlomJoint.enabled = false;
+        glomJoint = gameObject.AddComponent<DistanceJoint2D>();
+        glomJoint.enableCollision = true;
+        glomJoint.anchor = new Vector2(0, 0.5f);
+        glomJoint.autoConfigureConnectedAnchor = false;
+        glomJoint.autoConfigureDistance = false;
+        glomJoint.distance = 0;
+        glomJoint.enableCollision = true;
+        glomJoint.enabled = false;
     }
 
     void Update () {
-        if (IsOn) {
-            Vector2 anchor = transform.TransformVector(_GlomJoint.anchor) + transform.position;
+        if (isOn) {
+            Vector2 anchor = transform.TransformVector(glomJoint.anchor) + transform.position;
             Debug.DrawLine(anchor, transform.position, Color.blue);
             // Debug.DrawLine(anchorInWorldSpace, _GlomJoint.connectedAnchor, Color.blue);
         }
@@ -85,19 +85,19 @@ public class Glom : MonoBehaviour {
     }
 
     void TrackCollision(Collision2D coll) {
-        _LastCollision = coll;
-        if (IsSticky) {
+        lastCollision = coll;
+        if (isSticky) {
             On();
         }
     }
 
     public bool On() {
-        if (IsOn) {
+        if (isOn) {
             return true;
         }
 
         // Debug.Log(name + ": try to glom");
-        Collision2D coll = _LastCollision;
+        Collision2D coll = lastCollision;
         if (coll == null) {
             return false;
         }
@@ -106,23 +106,16 @@ public class Glom : MonoBehaviour {
 
         // set the point of contact as the connected anchor point of the _GlomJoint
         Vector2 point = contactPoint.point;
-        _GlomJoint.connectedAnchor = point;
+        glomJoint.connectedAnchor = point;
 
         // set the anchor on the node to the direction of the contact point
         Vector2 anchorDirection = point - (Vector2)transform.position;
-        _GlomJoint.anchor = anchorDirection.normalized * 0.5f;
+        glomJoint.anchor = anchorDirection.normalized * 0.5f;
 
         // TODO push glommed node to surface
 
         // set joint status
-        IsOn = true;
-        return IsOn;
-    }
-
-    public void Swap(Glom glom) {
-        if (glom.IsOn) {
-            _LastCollision = glom._lastCollision;
-            On();
-        }
+        isOn = true;
+        return isOn;
     }
 }

@@ -712,7 +712,7 @@ GameObject:
   - 114: {fileID: 1710742904}
   - 212: {fileID: 1710742905}
   m_Layer: 8
-  m_Name: front
+  m_Name: head
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -877,9 +877,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b82ec8f8adb0549bc8d8106ac12b37d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Front: {fileID: 1710742899}
-  Core: {fileID: 827543784}
-  CollapseSpring: {fileID: 1710742902}
+  head: {fileID: 1710742899}
+  core: {fileID: 827543784}
+  collapseSpring: {fileID: 0}
 --- !u!114 &2034844300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375037184412d454695536b835906e16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Front: {fileID: 1710742897}
-  Core: {fileID: 827543781}
-  CollapseSpring: {fileID: 1710742902}
+  head: {fileID: 1710742897}
+  core: {fileID: 827543781}
+  collapseSpring: {fileID: 1710742902}
   spread: {x: 0, y: 0}

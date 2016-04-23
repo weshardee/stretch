@@ -13,16 +13,16 @@ public enum PlayerState {
 public class Player : MonoBehaviour {
 
     // editor references
-    public Transform Front;
-    public Transform Core;
-    public SpringJoint2D CollapseSpring;
+    public Transform head;
+    public Transform core;
+    public SpringJoint2D collapseSpring;
 
     // local references
-    private Glom _FrontGlom;
-    private Glom _CoreGlom;
-    private Stretch _Stretch;
-    private Rigidbody2D _CoreBody;
-    private Rigidbody2D _FrontBody;
+    private Glom headGlom;
+    private Glom coreGlom;
+    private Stretch stretch;
+    private Rigidbody2D coreBody;
+    private Rigidbody2D headBody;
 
     // constants
     public const float StretchForce = 13f;
@@ -35,51 +35,50 @@ public class Player : MonoBehaviour {
 
     // state
     private Vector2 reachDirection;
-    private PlayerState _State = PlayerState.Loose;
-    private float _LastInputMagnitude = 0;
-    private float _GrabTimeout = 0;
-    private float _ReachTimeout = 0;
-    private bool _UseGravity {
+    private PlayerState state = PlayerState.Loose;
+    private float grabTimeout = 0;
+    private float reachTimeout = 0;
+    private bool useGravity {
         set {
             float gravityScale = value ? 1 : 0;
-            _FrontBody.gravityScale = gravityScale;
-            _CoreBody.gravityScale = gravityScale;
+            headBody.gravityScale = gravityScale;
+            coreBody.gravityScale = gravityScale;
         }
     }
 
     void Awake () {
-        _Stretch = GetComponent<Stretch>();
+        stretch = GetComponent<Stretch>();
 
-        _FrontGlom = Front.GetComponent<Glom>();
-        _FrontBody = Front.GetComponent<Rigidbody2D>();
+        headGlom = head.GetComponent<Glom>();
+        headBody = head.GetComponent<Rigidbody2D>();
 
-        _CoreGlom = Core.GetComponent<Glom>();
-        _CoreBody = Core.GetComponent<Rigidbody2D>();
+        coreGlom = core.GetComponent<Glom>();
+        coreBody = core.GetComponent<Rigidbody2D>();
 
         // disable front glom at start
-        _FrontGlom.IsSticky = false;
+        headGlom.isSticky = false;
     }
 
     void Update () {
         // Debug.Log(_State);
-        switch (_State) {
+        switch (state) {
             case PlayerState.Loose: {
-                _UseGravity = true;
-                _Stretch.isCollapsing = true;
-                _CoreGlom.IsSticky = true;
-                _FrontGlom.IsSticky = false;
+                useGravity = true;
+                stretch.isCollapsing = true;
+                coreGlom.isSticky = true;
+                headGlom.isSticky = false;
 
                 // change state if core gets glommed
-                if (_CoreGlom.IsOn) {
-                    _State = PlayerState.Grounded;
+                if (coreGlom.isOn) {
+                    state = PlayerState.Grounded;
                 }
                 break;
             }
             case PlayerState.Grounded: {
-                _UseGravity = false;
-                _Stretch.isCollapsing = true;
-                _CoreGlom.IsSticky = true;
-                _FrontGlom.IsSticky = false;
+                useGravity = false;
+                stretch.isCollapsing = true;
+                coreGlom.isSticky = true;
+                headGlom.isSticky = false;
 
                 // change state if input starts
                 reachDirection = GetInput();
@@ -89,40 +88,40 @@ public class Player : MonoBehaviour {
                 break;
             }
             case PlayerState.Reach: {
-                _UseGravity = false;
-                _CoreGlom.IsSticky = true;
-                _FrontGlom.IsSticky = false;
+                useGravity = false;
+                coreGlom.isSticky = true;
+                headGlom.isSticky = false;
 
-                _Stretch.Expand(reachDirection);
+                stretch.Expand(reachDirection);
 
-                if (_ReachTimeout < Time.time || _FrontBody.IsSleeping()) {
+                if (reachTimeout < Time.time || headBody.IsSleeping()) {
                     Grab();
                 }
                 break;
             }
             case PlayerState.Grab: {
-                _UseGravity = false;
-                _CoreGlom.IsSticky = true;
-                _FrontGlom.IsSticky = true;
+                useGravity = false;
+                coreGlom.isSticky = true;
+                headGlom.isSticky = true;
 
-                if (_FrontGlom.IsOn) {
-                    _State = PlayerState.Pull;
-                } else if (_GrabTimeout < Time.time) {
-                    _State = PlayerState.Loose;
+                if (headGlom.isOn) {
+                    state = PlayerState.Pull;
+                } else if (grabTimeout < Time.time) {
+                    state = PlayerState.Loose;
                 }
                 break;
             }
             case PlayerState.Pull: {
-                _UseGravity = false;
-                _Stretch.isCollapsing = true;
-                _CoreGlom.IsSticky = false;
-                _FrontGlom.IsSticky = true;
+                useGravity = false;
+                stretch.isCollapsing = true;
+                coreGlom.isSticky = false;
+                headGlom.isSticky = true;
 
-                bool isFinishedPulling = _Stretch.stretchDistance < PullReleaseDistanceThreshold;
+                bool isFinishedPulling = stretch.stretchDistance < PullReleaseDistanceThreshold;
 
                 if (isFinishedPulling) {
                     SwapEnds();
-                    _State = PlayerState.Grounded;
+                    state = PlayerState.Grounded;
                 }
                 break;
             }
@@ -130,13 +129,13 @@ public class Player : MonoBehaviour {
     }
 
     private void Reach() {
-        _ReachTimeout = Time.time + ReachDuration;
-        _State = PlayerState.Grab;
+        reachTimeout = Time.time + ReachDuration;
+        state = PlayerState.Grab;
     }
 
     private void Grab() {
-        _GrabTimeout = Time.time + GrabDuration;
-        _State = PlayerState.Grab;
+        grabTimeout = Time.time + GrabDuration;
+        state = PlayerState.Grab;
     }
 
     private Vector2 GetInput() {
@@ -156,13 +155,13 @@ public class Player : MonoBehaviour {
     }
 
     private void SwapEnds() {
-        Glom tempGlom = _FrontGlom;
-        Rigidbody2D tempBody = _FrontBody;
+        Glom tempGlom = headGlom;
+        Rigidbody2D tempBody = headBody;
 
-        _FrontBody = _CoreBody;
-        _FrontGlom = _CoreGlom;
+        headBody = coreBody;
+        headGlom = coreGlom;
 
-        _CoreBody = tempBody;
-        _CoreGlom = tempGlom;
+        coreBody = tempBody;
+        coreGlom = tempGlom;
     }
 }
