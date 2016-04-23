@@ -8,7 +8,7 @@ public class Stretch : MonoBehaviour
     private SpringJoint2D spring;
 
     // constants
-    public const float SpreadDistance = 2f;
+    public const float SpreadDistance = 1.5f;
     public const float DeadZone = 0.2f;
     public const float MaxStretch = 15f;
 
