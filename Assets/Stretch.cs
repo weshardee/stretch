@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class Stretch : MonoBehaviour {
+public class Stretch : MonoBehaviour
+{
     // editor references
     public GameObject head;
     public GameObject core;
@@ -27,13 +28,17 @@ public class Stretch : MonoBehaviour {
 
     // states
     private bool _isHolding = false;
-    public bool isHolding {
-        get {
+    public bool isHolding
+    {
+        get
+        {
             return _isHolding;
         }
-        set {
+        set
+        {
             _isHolding = value;
-            if (value) {
+            if (value)
+            {
                 isExpanding = false;
                 isCollapsing = false;
             }
@@ -41,13 +46,17 @@ public class Stretch : MonoBehaviour {
     }
 
     private bool _isCollapsing = true;
-    public bool isCollapsing {
-        get {
+    public bool isCollapsing
+    {
+        get
+        {
             return _isCollapsing;
         }
-        set {
+        set
+        {
             _isCollapsing = value;
-            if (value) {
+            if (value)
+            {
                 isExpanding = false;
                 isHolding = false;
             }
@@ -58,14 +67,18 @@ public class Stretch : MonoBehaviour {
     }
 
     private bool _isExpanding = false;
-    public bool isExpanding {
-        get {
+    public bool isExpanding
+    {
+        get
+        {
             return _isExpanding;
         }
-        set {
+        set
+        {
             _isExpanding = value;
             if (value) {
-                isCollapsing = false;
+                isColl
+           apsing = false;
                 isHolding = false;
             }
 
@@ -105,6 +118,7 @@ public class Stretch : MonoBehaviour {
     void ConfigureTarget(SpringJoint2D target) {
         target.autoConfigureDistance = false;
         target.distance = 0;
+
         target.dampingRatio = 1;
         target.enableCollision = true;
         target.enabled = false;
@@ -113,16 +127,19 @@ public class Stretch : MonoBehaviour {
 
     void Update () {
         UpdateStretchDetails();
-    }
+    }()
+
 
     private void UpdateStretchDetails() {
         stretchDistance = (headTransform.position - coreTransform.position).sqrMagnitude;
-        stretchPercent = stretchDistance / MaxStretch;
+        stretchPercent = stretchDistanc
+   e / MaxStretch;
     }
 
     public void Expand(Vector2 direction) {
         isExpanding = true;
-        Vector2 distance = direction.normalized * SpreadDistance;
+        Vector2 distance = direction.norm
+   alized * SpreadDistance;
 
         SpringJoint2D rootTarget;
         SpringJoint2D endTarget;
@@ -133,13 +150,16 @@ public class Stretch : MonoBehaviour {
         // toggle direction based on which side is glued
         if (coreGlom.isOn) {
             rootTarget = coreTarget;
-            rootTransform = coreTransform;
+            rootTransform
+       = coreTransform;
             rootSlider = coreSlider;
             endTarget = headTarget;
             endSlider = headSlider;
         } else {
             rootTarget = headTarget;
-            rootTransform = headTransform;
+
+        else
+       otTransform = headTransform;
             rootSlider = headSlider;
             endTarget = coreTarget;
             endSlider = coreSlider;
@@ -152,6 +172,7 @@ public class Stretch : MonoBehaviour {
         if (direction.y < 0) {
             rootSlider.angle = rootSlider.angle * -1;
         }
+
 
         // TODO this could probably be managed with a single slider
 
