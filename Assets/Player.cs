@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     public const float InputReleaseThreshold = 0.1f;
     public const float MaxStretch = 15f;
     public const float GrabDuration = 0.1f;
-    public const float ReachDuration = 40f;
+    public const float ReachDuration = 0.5f;
     public const float PullReleaseDistanceThreshold = 0.05f;
 
     // state
