@@ -19,7 +19,7 @@ public class Stretch : MonoBehaviour
     private Transform coreTransform;
     private Glom coreGlom;
     private SliderJoint2D headSlider;
-    private SliderJoint2D coreSlider;
+    private SliderJoint2D slider;
 
     // stretching state
     public float stretchDistance { get; private set; }
@@ -43,25 +43,18 @@ public class Stretch : MonoBehaviour
 
     void Awake()
     {
+        // cache references
         headTransform = head.transform;
         coreTransform = core.transform;
         coreGlom = core.GetComponent<Glom>();
-
         headBody = head.GetComponent<Rigidbody2D>();
         coreBody = core.GetComponent<Rigidbody2D>();
 
-        // set up sliders
-        headSlider = head.AddComponent<SliderJoint2D>();
-        coreSlider = core.AddComponent<SliderJoint2D>();
-
-        headSlider.connectedBody = coreBody;
-        coreSlider.connectedBody = headBody;
-
-        headSlider.enabled = false;
-        coreSlider.enabled = false;
-
-        headSlider.autoConfigureAngle = false;
-        coreSlider.autoConfigureAngle = false;
+        // set up slider
+        slider = core.AddComponent<SliderJoint2D>();
+        slider.connectedBody = headBody;
+        slider.enabled = true;
+        slider.autoConfigureAngle = false;
 
         // set up spring
         spring = core.GetComponent<SpringJoint2D>();
@@ -70,7 +63,7 @@ public class Stretch : MonoBehaviour
     void FixedUpdate()
     {
         UpdateStretchDetails();
-        coreSlider.angle = angle;
+        slider.angle = angle;
     }
 
     private void UpdateStretchDetails()
@@ -99,7 +92,6 @@ public class Stretch : MonoBehaviour
         }
 
         // set slider angle
-        coreSlider.enabled = true;
         angle = Vector2.Angle(Vector2.right, direction);
         if (direction.y < 0)
         {
@@ -109,13 +101,14 @@ public class Stretch : MonoBehaviour
         {
             angle -= 180;
         }
-        coreSlider.angle = angle;
+        slider.angle = angle;
 
         // update collapsing state and spring distance
         isCollapsing = false;
 
-        // give a little nudge to get the spring going
-        endBody.position = rootBody.position;
+        // make sure the end starts off in the right direction
+        // to prevent spring weirdness
+        endBody.position = rootBody.position + direction * 0.01f;
         endBody.AddForce(direction, ForceMode2D.Force);
     }
 }
