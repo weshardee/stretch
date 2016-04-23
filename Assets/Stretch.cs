@@ -24,6 +24,7 @@ public class Stretch : MonoBehaviour {
     public Vector2 spread;
     public float stretchDistance { get; private set; }
     public float stretchPercent { get; private set; }
+    public float angle { get; private set; }
 
     // states
     private bool _isCollapsing = true;
@@ -62,8 +63,9 @@ public class Stretch : MonoBehaviour {
         spring = core.GetComponent<SpringJoint2D>();
     }
 
-    void Update () {
+    void FixedUpdate () {
         UpdateStretchDetails();
+        coreSlider.angle = angle;
     }
 
     private void UpdateStretchDetails() {
@@ -77,34 +79,38 @@ public class Stretch : MonoBehaviour {
         // toggle direction based on which side is glued
         Transform rootTransform;
         SliderJoint2D rootSlider;
-        SliderJoint2D endSlider;
         Rigidbody2D endBody;
+        Rigidbody2D rootBody;
 
         if (coreGlom.isOn) {
             rootTransform = coreTransform;
             rootSlider = coreSlider;
-            endSlider = headSlider;
             endBody = headBody;
+            rootBody = coreBody;
         } else {
             rootTransform = headTransform;
-            rootSlider = headSlider;
-            endSlider = coreSlider;
+            rootSlider = coreSlider;
             endBody = coreBody;
+            rootBody = headBody;
         }
 
         // set slider angle
         // TODO this could probably be managed with a single slider
-        endSlider.enabled = false;
         rootSlider.enabled = true;
-        rootSlider.angle = Vector2.Angle(Vector2.right, direction);
+        angle = Vector2.Angle(Vector2.right, direction);
         if (direction.y < 0) {
-            rootSlider.angle = rootSlider.angle * -1;
+            angle = angle * -1;
         }
+        if (coreGlom.isOn) {
+            angle -= 180;
+        }
+        rootSlider.angle = angle;
 
         // update collapsing state and spring distance
         isCollapsing = false;
 
         // give a little nudge to get the spring going
-        endBody.AddForce(direction, ForceMode2D.Impulse);
+        endBody.position = rootBody.position;
+        endBody.AddForce(direction, ForceMode2D.Force);
     }
 }
