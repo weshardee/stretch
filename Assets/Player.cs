@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
         state = PlayerState.Loose;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         // Debug.Log(state);
         switch (state)
