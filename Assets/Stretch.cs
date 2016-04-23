@@ -21,7 +21,6 @@ public class Stretch : MonoBehaviour {
     private SliderJoint2D coreSlider;
 
     // stretching state
-    public Vector2 spread;
     public float stretchDistance { get; private set; }
     public float stretchPercent { get; private set; }
     public float angle { get; private set; }
@@ -77,26 +76,19 @@ public class Stretch : MonoBehaviour {
         direction.Normalize();
 
         // toggle direction based on which side is glued
-        Transform rootTransform;
-        SliderJoint2D rootSlider;
         Rigidbody2D endBody;
         Rigidbody2D rootBody;
 
         if (coreGlom.isOn) {
-            rootTransform = coreTransform;
-            rootSlider = coreSlider;
             endBody = headBody;
             rootBody = coreBody;
         } else {
-            rootTransform = headTransform;
-            rootSlider = coreSlider;
             endBody = coreBody;
             rootBody = headBody;
         }
 
         // set slider angle
-        // TODO this could probably be managed with a single slider
-        rootSlider.enabled = true;
+        coreSlider.enabled = true;
         angle = Vector2.Angle(Vector2.right, direction);
         if (direction.y < 0) {
             angle = angle * -1;
@@ -104,7 +96,7 @@ public class Stretch : MonoBehaviour {
         if (coreGlom.isOn) {
             angle -= 180;
         }
-        rootSlider.angle = angle;
+        coreSlider.angle = angle;
 
         // update collapsing state and spring distance
         isCollapsing = false;
