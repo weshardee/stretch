@@ -1,165 +1,114 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityStandardAssets.CrossPlatformInput;
 
-public class Stretch : MonoBehaviour {
-	// editor references
-	public GameObject Front;
-	public GameObject Core;
-	public SpringJoint2D CollapseSpring;
-	
-	// constants
-	public const float SpreadForce = 3f;
-	public const float DeadZone = 0.2f;
-	public const float RelaxThreshold = 0.1f;
-	public const float MaxStretch = 15f;
+public class Stretch : MonoBehaviour
+{
+    // editor references
+    public GameObject head;
+    public GameObject core;
+    private SpringJoint2D spring;
+
+    // constants
+    public const float SpreadDistance = 1.5f;
+    public const float DeadZone = 0.2f;
+    public const float MaxStretch = 15f;
 
     // local references
-	private Transform FrontTransform;
-	private Transform CoreTransform;
-    private TargetJoint2D _FrontTarget;
-    private TargetJoint2D _CoreTarget;
-	private Glom _FrontGlom;
-	private Glom _CoreGlom;
-	private SliderJoint2D FrontSlider;
-	private SliderJoint2D CoreSlider;
-	
-	// stretching state
-	public Vector2 spread;
-	public float stretchDistance { get; private set; }
-	public float stretchPercent { get; private set; }
-	
-	// states
-	private bool _isHolding = false;
-	public bool isHolding {
-		get {
-			return _isHolding;
-		}
-		set {
-			_isHolding = value;
-			if (value) {
-				isExpanding = false;
-				isCollapsing = false;
-			}
-		}
-	}
-	
-	private bool _isCollapsing = true;
-	public bool isCollapsing {
-		get {
-			return _isCollapsing;
-		}
-		set {
-			_isCollapsing = value;
-			if (value) {
-				isExpanding = false;
-				isHolding = false;
-			}
-			
-			// set collapse spring state
-			CollapseSpring.enabled = value;
-		}
-	}
-	
-	private bool _isExpanding = false;
-	public bool isExpanding { 
-		get {
-			return _isExpanding;
-		} 
-		set {
-			_isExpanding = value;
-			if (value) {
-				isCollapsing = false;
-				isHolding = false;
-			}
+    private Rigidbody2D headBody;
+    private Rigidbody2D coreBody;
+    private Transform headTransform;
+    private Transform coreTransform;
+    private Glom coreGlom;
+    private SliderJoint2D headSlider;
+    private SliderJoint2D slider;
 
-            // enable expand targets
-            _FrontTarget.enabled = value;
-            _CoreTarget.enabled = value;
+    // stretching state
+    public float stretchDistance { get; private set; }
+    public float stretchPercent { get; private set; }
+    public float angle { get; private set; }
+
+    // states
+    private bool _isCollapsing = true;
+    public bool isCollapsing
+    {
+        get
+        {
+            return _isCollapsing;
+        }
+        set
+        {
+            _isCollapsing = value;
+            spring.distance = value ? 0 : SpreadDistance;
         }
     }
-		
-	void Awake () {
-		FrontTransform = Front.transform;
-		CoreTransform = Core.transform;
-		
-		_FrontTarget = Front.AddComponent<TargetJoint2D>();
-        _CoreTarget = Core.AddComponent<TargetJoint2D>();
-		
-		_FrontGlom = Front.GetComponent<Glom>();
-        _CoreGlom = Core.GetComponent<Glom>();
-		
-		// set up sliders
-		FrontSlider = Front.AddComponent<SliderJoint2D>();
-		CoreSlider = Core.AddComponent<SliderJoint2D>();
-		
-		FrontSlider.connectedBody = Core.GetComponent<Rigidbody2D>();
-		CoreSlider.connectedBody = Front.GetComponent<Rigidbody2D>();
-		
-		FrontSlider.enabled = false;
-		CoreSlider.enabled = false;
-		
-		FrontSlider.autoConfigureAngle = false;
-		CoreSlider.autoConfigureAngle = false;
+
+    void Awake()
+    {
+        // cache references
+        headTransform = head.transform;
+        coreTransform = core.transform;
+        coreGlom = core.GetComponent<Glom>();
+        headBody = head.GetComponent<Rigidbody2D>();
+        coreBody = core.GetComponent<Rigidbody2D>();
+
+        // set up slider
+        slider = core.AddComponent<SliderJoint2D>();
+        slider.connectedBody = headBody;
+        slider.enabled = true;
+        slider.autoConfigureAngle = false;
+
+        // set up spring
+        spring = core.GetComponent<SpringJoint2D>();
     }
 
-    void Update () {
-		UpdateStretchDetails();
-		
-		if (isExpanding) {
-			Expand();
-		}
-	}
-	
-	private void UpdateStretchDetails() {
-		stretchDistance = (FrontTransform.position - CoreTransform.position).sqrMagnitude;
-		stretchPercent = stretchDistance / MaxStretch;
-	}
-			
-	private void Expand() {
-		isExpanding = true;
-		Vector2 force = spread.normalized * SpreadForce;
-		
-		TargetJoint2D rootTarget;
-		TargetJoint2D endTarget;
-		Transform rootTransform;
-		Transform endTransform;
-		SliderJoint2D rootSlider;
-		SliderJoint2D endSlider;
+    void FixedUpdate()
+    {
+        UpdateStretchDetails();
+        slider.angle = angle;
+    }
 
-		// toggle direction based on which side is glued
-		if (_CoreGlom.IsOn) {
-			rootTarget = _CoreTarget;
-			rootTransform = CoreTransform;
-			rootSlider = CoreSlider;
-			endTarget = _FrontTarget;
-			endTransform = FrontTransform;
-			endSlider = FrontSlider;
-		} else {
-			rootTarget = _FrontTarget;
-			rootTransform = FrontTransform;
-			rootSlider = FrontSlider;
-			endTarget = _CoreTarget;
-			endTransform = CoreTransform;
-			endSlider = CoreSlider;
-		}
-		
-		// set slider angle
-		endSlider.enabled = false;
-		rootSlider.enabled = true;
-		rootSlider.angle = Vector2.Angle(Vector2.right, spread);
-		if (spread.y < 0) {
-			rootSlider.angle = rootSlider.angle * -1;
-		}
-		
-		// TODO this could probably be managed with a single slider
-		
-		// set stretch targets
-		endTarget.target = (Vector2)rootTransform.position + force;
-        rootTarget.target = (Vector2)rootTransform.position;
+    private void UpdateStretchDetails()
+    {
+        stretchDistance = (headTransform.position - coreTransform.position).sqrMagnitude;
+        stretchPercent = stretchDistance / MaxStretch;
+    }
 
-        // draw debug lines
-        Debug.DrawLine(rootTarget.target, rootTransform.position, Color.green);
-        Debug.DrawLine(endTarget.target, rootTransform.position, Color.green);
-	}
+    public void Expand(Vector2 direction)
+    {
+        direction.Normalize();
+
+        // toggle direction based on which side is glued
+        Rigidbody2D endBody;
+        Rigidbody2D rootBody;
+
+        if (coreGlom.isOn)
+        {
+            endBody = headBody;
+            rootBody = coreBody;
+        }
+        else
+        {
+            endBody = coreBody;
+            rootBody = headBody;
+        }
+
+        // set slider angle
+        angle = Vector2.Angle(Vector2.right, direction);
+        if (direction.y < 0)
+        {
+            angle = angle * -1;
+        }
+        if (coreGlom.isOn)
+        {
+            angle -= 180;
+        }
+        slider.angle = angle;
+
+        // update collapsing state and spring distance
+        isCollapsing = false;
+
+        // make sure the end starts off in the right direction
+        // to prevent spring weirdness
+        endBody.position = rootBody.position + direction * 0.01f;
+        endBody.AddForce(direction, ForceMode2D.Force);
+    }
 }

@@ -18,3 +18,5 @@ sysinfo.txt
 
 # Hidden files
 .DS_Store
+Stretch.sln.iml
+.idea
