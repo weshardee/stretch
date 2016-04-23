@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     public const float GrabDuration = 0.1f;
     public const float ReachDuration = 0.5f;
     public const float PullReleaseDistanceThreshold = 0.05f;
+    public const float RelaxThreshold = 0.1f;
 
     // state
     private Vector2 reachDirection;
@@ -164,6 +165,11 @@ public class Player : MonoBehaviour
                 else if (grabTimeout < Time.time)
                 {
                     state = PlayerState.Relax;
+                }
+                break;
+            case PlayerState.Relax:
+                if (stretch.stretchDistance < RelaxThreshold) {
+                    state = PlayerState.Grounded;
                 }
                 break;
             case PlayerState.Pull:
