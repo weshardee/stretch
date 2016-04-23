@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-public enum PlayerState {
+public enum PlayerState
+{
     Loose,
     Grounded,
     Reach,
     Grab,
     Pull,
-    CollapsingToCore,
+    Relax,
 }
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 
     // editor references
     public Transform head;
@@ -35,18 +37,75 @@ public class Player : MonoBehaviour {
 
     // state
     private Vector2 reachDirection;
-    private PlayerState state = PlayerState.Loose;
     private float grabTimeout = 0;
     private float reachTimeout = 0;
-    private bool useGravity {
-        set {
+    private bool useGravity
+    {
+        set
+        {
             float gravityScale = value ? 1 : 0;
             headBody.gravityScale = gravityScale;
             coreBody.gravityScale = gravityScale;
         }
     }
 
-    void Awake () {
+    // main state
+    private PlayerState _state;
+    private PlayerState state
+    {
+        get
+        {
+            return _state;
+        }
+        set
+        {
+            _state = value;
+            Debug.Log(value);
+            switch (value)
+            {
+                case PlayerState.Loose:
+                    useGravity = true;
+                    stretch.isCollapsing = true;
+                    coreGlom.isSticky = true;
+                    headGlom.isSticky = false;
+                    break;
+                case PlayerState.Grounded:
+                    useGravity = false;
+                    stretch.isCollapsing = true;
+                    coreGlom.isSticky = true;
+                    headGlom.isSticky = false;
+                    break;
+                case PlayerState.Reach:
+                    useGravity = false;
+                    coreGlom.isSticky = true;
+                    headGlom.isSticky = false;
+                    stretch.Expand(reachDirection);
+                    reachTimeout = Time.time + ReachDuration;
+                    break;
+                case PlayerState.Grab:
+                    useGravity = false;
+                    coreGlom.isSticky = true;
+                    headGlom.isSticky = true;
+                    grabTimeout = Time.time + GrabDuration;
+                    break;
+                case PlayerState.Pull:
+                    useGravity = false;
+                    stretch.isCollapsing = true;
+                    coreGlom.isSticky = false;
+                    headGlom.isSticky = true;
+                    break;
+                case PlayerState.Relax:
+                    useGravity = true;
+                    stretch.isCollapsing = true;
+                    coreGlom.isSticky = true;
+                    headGlom.isSticky = false;
+                    break;
+            }
+        }
+    }
+
+    void Awake()
+    {
         stretch = GetComponent<Stretch>();
 
         headGlom = head.GetComponent<Glom>();
@@ -57,88 +116,70 @@ public class Player : MonoBehaviour {
 
         // disable front glom at start
         headGlom.isSticky = false;
+
+        // set initial state
+        state = PlayerState.Loose;
     }
 
-    void Update () {
+    void Update()
+    {
         // Debug.Log(_State);
-        switch (state) {
-            case PlayerState.Loose: {
-                useGravity = true;
-                stretch.isCollapsing = true;
-                coreGlom.isSticky = true;
-                headGlom.isSticky = false;
-
+        switch (state)
+        {
+            case PlayerState.Loose:
                 // change state if core gets glommed
-                if (coreGlom.isOn) {
+                if (coreGlom.isOn)
+                {
                     state = PlayerState.Grounded;
                 }
                 break;
-            }
-            case PlayerState.Grounded: {
-                useGravity = false;
-                stretch.isCollapsing = true;
-                coreGlom.isSticky = true;
-                headGlom.isSticky = false;
+            case PlayerState.Grounded:
+                if (!coreGlom.isOn)
+                {
+                    state = PlayerState.Loose;
+                    break;
+                }
 
                 // change state if input starts
                 reachDirection = GetInput();
-                if (reachDirection != Vector2.zero) {
-                    Reach();
+                if (reachDirection != Vector2.zero)
+                {
+                    state = PlayerState.Reach;
                 }
                 break;
-            }
-            case PlayerState.Reach: {
-                useGravity = false;
-                coreGlom.isSticky = true;
-                headGlom.isSticky = false;
-
-                stretch.Expand(reachDirection);
-
-                if (reachTimeout < Time.time || headBody.IsSleeping()) {
-                    Grab();
+            case PlayerState.Reach:
+                if (reachTimeout < Time.time || headBody.IsSleeping())
+                {
+                    state = PlayerState.Grab;
                 }
                 break;
-            }
-            case PlayerState.Grab: {
-                useGravity = false;
-                coreGlom.isSticky = true;
-                headGlom.isSticky = true;
-
-                if (headGlom.isOn) {
+            case PlayerState.Grab:
+                if (headGlom.isOn)
+                {
                     state = PlayerState.Pull;
-                } else if (grabTimeout < Time.time) {
-                    state = PlayerState.Loose;
                 }
+                    else if (grabTimeout < Time.time)
+                    {
+                        state = PlayerState.Relax;
+                    }
                 break;
-            }
-            case PlayerState.Pull: {
-                useGravity = false;
-                stretch.isCollapsing = true;
-                coreGlom.isSticky = false;
-                headGlom.isSticky = true;
-
+            case PlayerState.Pull:
                 bool isFinishedPulling = stretch.stretchDistance < PullReleaseDistanceThreshold;
-
-                if (isFinishedPulling) {
+                if (isFinishedPulling)
+                {
                     SwapEnds();
                     state = PlayerState.Grounded;
                 }
                 break;
-            }
+            default:
+                state = PlayerState.Loose;
+                break;
         }
     }
 
-    private void Reach() {
-        reachTimeout = Time.time + ReachDuration;
-        state = PlayerState.Grab;
-    }
 
-    private void Grab() {
-        grabTimeout = Time.time + GrabDuration;
-        state = PlayerState.Grab;
-    }
-
-    private Vector2 GetInput() {
+    private Vector2 GetInput()
+    {
         // Read input
         float horizontal = CrossPlatformInputManager.GetAxis("Horizontal");
         float vertical = CrossPlatformInputManager.GetAxis("Vertical");
@@ -147,14 +188,16 @@ public class Player : MonoBehaviour {
         Vector2 input = new Vector2(horizontal, vertical);
 
         // normalize input if it exceeds 1 in combined length:
-        if (input.sqrMagnitude > 1) {
+        if (input.sqrMagnitude > 1)
+        {
             input.Normalize();
         }
 
         return input;
     }
 
-    private void SwapEnds() {
+    private void SwapEnds()
+    {
         Glom tempGlom = headGlom;
         Rigidbody2D tempBody = headBody;
 
