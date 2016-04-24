@@ -72,8 +72,11 @@ public class VoxelGrid : MonoBehaviour {
         Vector2 offset = transform.position;
         Voxel v = voxels[x, y];
         Vector3 globalPosition = (offset + v.position);
+        Vector3 globalXEdge = (offset + v.xEdgePosition);
+        Vector3 globalYEdge = (offset + v.yEdgePosition);
 
-        Debug.DrawLine(globalPosition, Vector2.zero, Color.red, 10f);
+        Debug.DrawLine(globalPosition, globalXEdge, Color.red);
+        Debug.DrawLine(globalPosition, globalYEdge, Color.red);
     }
 
     void Refresh() {
