@@ -11,7 +11,7 @@ public class VoxelMap : MonoBehaviour {
     [SerializeField]
     private int voxelResolution;
 
-    bool[] chunks;
+    VoxelGrid[] chunks;
 
     private float halfSize;
     private float voxelSize;
@@ -24,7 +24,7 @@ public class VoxelMap : MonoBehaviour {
         chunkSize = size / chunkResolution;
         voxelSize = chunkSize / voxelResolution;
 
-        chunks = new bool[size * size];
+        chunks = new VoxelGrid[size * size];
 
         // initialize voxels
         for (int i = 0, y = 0; y < size; y++) {
@@ -43,7 +43,15 @@ public class VoxelMap : MonoBehaviour {
     }
 
     void Update () {
-
+        bool isLeftMouse = Input.GetMouseButton(0);
+        bool isRightMouse = Input.GetMouseButton(1);
+        if (isLeftMouse || isRightMouse) {
+            Vector3 mouseClickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D clickedCollider = Physics2D.OverlapPoint(mouseClickPoint);
+            if (clickedCollider = box) {
+                SetVoxel(mouseClickPoint - transform.position + Vector3.one * halfSize, isLeftMouse);
+            }
+        }
     }
 
     void CreateChunk(int i, int x, int y) {
@@ -52,5 +60,14 @@ public class VoxelMap : MonoBehaviour {
         chunk.transform.localPosition = new Vector2(x * chunkSize - halfSize, y * chunkSize - halfSize);
 
         chunk.Initialize(chunkResolution, chunkSize);
+    }
+
+    void SetVoxel(Vector2 point, bool state) {
+        int chunkX = (int)(point.x / size * chunkResolution);
+        int chunkY = (int)(point.y / size * chunkResolution);
+        Debug.Log(new Vector2(chunkX, chunkY));
+
+        VoxelGrid chunk = chunks[chunkY * size + chunkX];
+        Vector2 pointInChunk = point - (Vector2)chunk.gameObject.transform.localPosition;
     }
 }
