@@ -32,8 +32,8 @@ public class VoxelGrid : MonoBehaviour {
 
     public void Awake () {
         // calc sizes
-        int voxelsX = (int)(Mathf.Ceil(width) * resolution);
-        int voxelsY = (int)(Mathf.Ceil(height) * resolution);
+        int voxelsX = (int)(Mathf.Ceil(width) * resolution) + 1;
+        int voxelsY = (int)(Mathf.Ceil(height) * resolution) + 1;
         voxelSize = 1f / resolution;
 
         // initialize voxels
@@ -145,8 +145,8 @@ public class VoxelGrid : MonoBehaviour {
         GameObject o = Instantiate(voxelPrefab) as GameObject;
         o.transform.parent = transform;
 
-        float localX = (x + 0.5f) * voxelSize;
-        float localY = (y + 0.5f) * voxelSize;
+        float localX = x * voxelSize;
+        float localY = y * voxelSize;
         o.transform.localPosition = new Vector3(localX, localY, Z);
         o.transform.localScale = Vector2.one * voxelSize * 0.1f;
 
@@ -177,6 +177,7 @@ public class VoxelGrid : MonoBehaviour {
     }
 
     public void SetVoxelAt(Vector2 point, bool state) {
+        point = point + Vector2.one * voxelSize / 2;
         int x = (int)(point.x * resolution);
         int y = (int)(point.y * resolution);
         SetVoxel(x, y, state);
