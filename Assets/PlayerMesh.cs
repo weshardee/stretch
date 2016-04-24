@@ -10,7 +10,6 @@ public class PlayerMesh : MonoBehaviour {
     private const float EndRadius = 0.5f;
     private Transform end1;
     private Transform end2;
-    private Color BoundsColor = Color.red;
     private Color InsideColor = Color.green;
     private Color OutsideColor = Color.red;
     private const int Resolution = 10;
