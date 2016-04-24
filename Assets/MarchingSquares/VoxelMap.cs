@@ -17,6 +17,8 @@ public class VoxelMap : MonoBehaviour {
     private float voxelSize;
     private float chunkSize;
 
+    private BoxCollider2D box;
+
     void Awake () {
         halfSize = size / 2;
         chunkSize = size / chunkResolution;
@@ -30,6 +32,10 @@ public class VoxelMap : MonoBehaviour {
                 CreateChunk(i, x, y);
             }
         }
+
+        // initialize clickability
+        box = gameObject.AddComponent<BoxCollider2D>();
+        box.size = Vector2.one * size;
     }
 
     void Start() {
