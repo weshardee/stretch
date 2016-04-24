@@ -117,6 +117,9 @@ public class VoxelGrid : MonoBehaviour {
         v.state = state;
         v.mat.color = state ? ColorOn : ColorOff;
 
+        // set back to the grid
+        voxels[x, y] = v;
+
         // queue refresh
         needsUpdate = true;
     }
