@@ -7,13 +7,19 @@ public class VoxelGrid : MonoBehaviour {
     private float size;
 
     bool[,] voxels;
+    Material[,] mats;
     private float voxelSize;
     private const float VoxelGutter = 0.02f;
+
+    private static Color ColorOn = Color.black;
+    private static Color ColorOff = Color.white;
+
 
     public void Initialize (int resolution, float size) {
         this.resolution = resolution;
         this.size = size;
         voxels = new bool[resolution, resolution];
+        mats = new Material[resolution, resolution];
         voxelSize = size / resolution;
 
         // initialize voxels
@@ -37,10 +43,12 @@ public class VoxelGrid : MonoBehaviour {
         v.transform.parent = transform;
         v.transform.localPosition = new Vector2((x + 0.5f) * voxelSize, (y + 0.5f) * voxelSize);
         v.transform.localScale = Vector2.one * (voxelSize - VoxelGutter);
-        voxels[x, y] = false;
+        mats[x, y] = v.GetComponent<Renderer>().material;
+        SetVoxel(x, y, false);
     }
 
     public void SetVoxel(int x, int y, bool state) {
         voxels[x, y] = state;
+        mats[x, y].color = state ? ColorOn : ColorOff;
     }
 }
