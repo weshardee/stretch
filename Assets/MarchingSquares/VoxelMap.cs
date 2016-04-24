@@ -11,7 +11,7 @@ public class VoxelMap : MonoBehaviour {
     [SerializeField]
     private int voxelResolution;
 
-    VoxelGrid[] chunks;
+    VoxelGrid[,] chunks;
 
     private float halfSize;
     private float voxelSize;
@@ -24,12 +24,12 @@ public class VoxelMap : MonoBehaviour {
         chunkSize = size / chunkResolution;
         voxelSize = chunkSize / voxelResolution;
 
-        chunks = new VoxelGrid[size * size];
+        chunks = new VoxelGrid[size, size];
 
         // initialize voxels
         for (int i = 0, y = 0; y < size; y++) {
             for (int x = 0; x < size; x++, i++) {
-                CreateChunk(i, x, y);
+                CreateChunk(x, y);
             }
         }
 
@@ -54,12 +54,13 @@ public class VoxelMap : MonoBehaviour {
         }
     }
 
-    void CreateChunk(int i, int x, int y) {
+    void CreateChunk(int x, int y) {
         VoxelGrid chunk = Instantiate(voxelGridPrefab) as VoxelGrid;
         chunk.transform.parent = transform;
         chunk.transform.localPosition = new Vector2(x * chunkSize - halfSize, y * chunkSize - halfSize);
 
         chunk.Initialize(voxelResolution, chunkSize);
+        chunks[x, y] = chunk;
     }
 
     void SetVoxel(Vector2 point, bool state) {
