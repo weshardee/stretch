@@ -38,4 +38,8 @@ public class VoxelGrid : MonoBehaviour {
         v.transform.localPosition = new Vector2((x + 0.5f) * voxelSize, (y + 0.5f) * voxelSize);
         v.transform.localScale = Vector2.one * (voxelSize - VoxelGutter);
     }
+
+    public void SetVoxel(int x, int y, bool state) {
+        voxels[y * resolution + x] = state;
+    }
 }
