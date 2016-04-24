@@ -23,7 +23,7 @@ public class VoxelGrid : MonoBehaviour {
     }
 
     struct Voxel {
-        public bool state;
+        public float value;
         public Vector2 position;
         public Vector2 xEdgePosition;
         public Vector2 yEdgePosition;
@@ -48,6 +48,7 @@ public class VoxelGrid : MonoBehaviour {
     private List<Vector3> vertices;
     private List<int> triangles;
     private bool needsUpdate = false;
+    [Range(0, 1)]public float threshold = 0.5f;
 
     public void Awake () {
         // calc sizes
@@ -120,6 +121,7 @@ public class VoxelGrid : MonoBehaviour {
                 Voxel se = voxels[x + 1, y + 0]; // (1, 0)
                 Voxel ne = voxels[x + 1, y + 1]; // (1, 1)
                 Voxel nw = voxels[x + 0, y + 1]; // (0, 1)
+
                 TriangulateCell(sw, nw, ne, se);
             }
         }
@@ -130,13 +132,13 @@ public class VoxelGrid : MonoBehaviour {
 
     void TriangulateCell(Voxel a, Voxel b, Voxel c, Voxel d) {
         // expected shape:
-        // [d, c]
-        // [a, b]
+        // [b, c]
+        // [a, d]
 
-        int maskA = a.state ? 1 << 3 : 0; // (0, 0)
-        int maskB = b.state ? 1 << 2 : 0; // (1, 0)
-        int maskC = c.state ? 1 << 1 : 0; // (1, 1)
-        int maskD = d.state ? 1 << 0 : 0; // (0, 1)
+        int maskA = a.value > threshold ? 1 << 3 : 0; // (0, 0)
+        int maskB = b.value > threshold ? 1 << 2 : 0; // (1, 0)
+        int maskC = c.value > threshold ? 1 << 1 : 0; // (1, 1)
+        int maskD = d.value > threshold ? 1 << 0 : 0; // (0, 1)
         int finalMask = maskA | maskB | maskC | maskD;
 
         if (finalMask == 0) {
@@ -263,13 +265,18 @@ public class VoxelGrid : MonoBehaviour {
         v.yEdgePosition = v.position + Vector2.up * halfVoxelSize;
 
         voxels[x, y] = v;
-        SetVoxel(x, y, false);
+        SetVoxel(x, y, 0);
     }
 
-    public void SetVoxel(int x, int y, bool state) {
+    public void SetVoxel(int x, int y, float value) {
+        // clamp value
+        value = value > 1 ? 1 : value;
+        value = value < 0 ? 0 : value;
+
+        // store that value
         Voxel v = voxels[x, y];
-        v.state = state;
-        v.mat.color = state ? ColorOn : ColorOff;
+        v.value = value;
+        v.mat.color = Color.Lerp(ColorOn, ColorOff, value);
 
         // set back to the grid
         voxels[x, y] = v;
@@ -278,10 +285,21 @@ public class VoxelGrid : MonoBehaviour {
         needsUpdate = true;
     }
 
-    public void SetVoxelAt(Vector2 point, bool state) {
+    public void SetVoxelAt(Vector2 point, float value) {
+        int x, y;
+        PointToGridCoord(point, out x, out y);
+        SetVoxel(x, y, value);
+    }
+
+    public float GetValueAt(Vector2 point) {
+        int x, y;
+        PointToGridCoord(point, out x, out y);
+        return voxels[x, y].value;
+    }
+
+    private void PointToGridCoord(Vector2 point, out int x, out int y) {
         point = point + Vector2.one * voxelSize / 2;
-        int x = (int)(point.x * resolution);
-        int y = (int)(point.y * resolution);
-        SetVoxel(x, y, state);
+        x = (int)(point.x * resolution);
+        y = (int)(point.y * resolution);
     }
 }

@@ -2,6 +2,7 @@
 
 public class VoxelClickInput : MonoBehaviour {
     VoxelGrid grid;
+    const float ClickForce = 0.05f;
 
     private BoxCollider2D box;
 
@@ -18,7 +19,7 @@ public class VoxelClickInput : MonoBehaviour {
 
     }
 
-    void Update () {
+    void FixedUpdate () {
         bool isLeftMouse = Input.GetMouseButton(0);
         bool isRightMouse = Input.GetMouseButton(1);
 
@@ -27,7 +28,13 @@ public class VoxelClickInput : MonoBehaviour {
             Collider2D clickedCollider = Physics2D.OverlapPoint(mouseClickPoint);
             if (clickedCollider == box) {
                 Vector2 localPoint = mouseClickPoint - transform.position;
-                grid.SetVoxelAt(localPoint, isLeftMouse);
+                float value = grid.GetValueAt(localPoint);
+                if (isLeftMouse) {
+                    value += ClickForce;
+                } else {
+                    value -= ClickForce;
+                }
+                grid.SetVoxelAt(localPoint, value);
             }
         }
     }
