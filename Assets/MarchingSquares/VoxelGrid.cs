@@ -23,6 +23,7 @@ public class VoxelGrid : MonoBehaviour {
                 CreateVoxel(i, x, y);
             }
         }
+        Refresh();
     }
 
     void Start() {
@@ -31,6 +32,19 @@ public class VoxelGrid : MonoBehaviour {
 
     void Update () {
 
+    }
+
+    void Refresh() {
+        RefreshVoxelColors();
+    }
+
+    void RefreshVoxelColors() {
+        for (int x = 0; x < mats.GetLength(0); x++) {
+            for (int y = 0; y < mats.GetLength(1); y++) {
+                bool state = voxels[x, y];
+                mats[x, y].color = state ? ColorOn : ColorOff;
+            }
+        }
     }
 
     void CreateVoxel(int i, int x, int y) {
@@ -48,5 +62,6 @@ public class VoxelGrid : MonoBehaviour {
     public void SetVoxel(int x, int y, bool state) {
         voxels[x, y] = state;
         mats[x, y].color = state ? ColorOn : ColorOff;
+        Refresh();
     }
 }
