@@ -59,7 +59,7 @@ public class VoxelMap : MonoBehaviour {
         chunk.transform.parent = transform;
         chunk.transform.localPosition = new Vector2(x * chunkSize - halfSize, y * chunkSize - halfSize);
 
-        chunk.Initialize(chunkResolution, chunkSize);
+        chunk.Initialize(voxelResolution, chunkSize);
     }
 
     void SetVoxel(Vector2 point, bool state) {
