@@ -27,7 +27,6 @@ public class VoxelClickInput : MonoBehaviour {
             Collider2D clickedCollider = Physics2D.OverlapPoint(mouseClickPoint);
             if (clickedCollider == box) {
                 Vector2 localPoint = mouseClickPoint - transform.position;
-                print(localPoint);
                 grid.SetVoxelAt(localPoint, isLeftMouse);
             }
         }
