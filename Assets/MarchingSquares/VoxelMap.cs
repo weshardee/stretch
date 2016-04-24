@@ -66,9 +66,14 @@ public class VoxelMap : MonoBehaviour {
     void SetVoxel(Vector2 point, bool state) {
         int chunkX = (int)(point.x / size * chunkResolution);
         int chunkY = (int)(point.y / size * chunkResolution);
-        Debug.Log(new Vector2(chunkX, chunkY));
 
-        VoxelGrid chunk = chunks[chunkY * size + chunkX];
-        Vector2 pointInChunk = point - (Vector2)chunk.gameObject.transform.localPosition;
+        VoxelGrid chunk = chunks[chunkX, chunkY];
+
+        Vector2 pointInChunk = point - (Vector2)chunk.gameObject.transform.localPosition - Vector2.one * halfSize;
+
+        int voxelX = (int)(pointInChunk.x / voxelSize );
+        int voxelY = (int)(pointInChunk.y / voxelSize );
+
+        Debug.Log("voxel" + new Vector2(voxelX, voxelY) + " in chunk" + new Vector2(chunkX, chunkY));
     }
 }
