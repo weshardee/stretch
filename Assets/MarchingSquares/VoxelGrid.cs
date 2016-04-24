@@ -6,14 +6,14 @@ public class VoxelGrid : MonoBehaviour {
     private int resolution;
     private float size;
 
-    bool[] voxels;
+    bool[,] voxels;
     private float voxelSize;
     private const float VoxelGutter = 0.02f;
 
     public void Initialize (int resolution, float size) {
         this.resolution = resolution;
         this.size = size;
-        voxels = new bool[resolution * resolution];
+        voxels = new bool[resolution, resolution];
         voxelSize = size / resolution;
 
         // initialize voxels
@@ -37,9 +37,10 @@ public class VoxelGrid : MonoBehaviour {
         v.transform.parent = transform;
         v.transform.localPosition = new Vector2((x + 0.5f) * voxelSize, (y + 0.5f) * voxelSize);
         v.transform.localScale = Vector2.one * (voxelSize - VoxelGutter);
+        voxels[x, y] = false;
     }
 
     public void SetVoxel(int x, int y, bool state) {
-        voxels[y * resolution + x] = state;
+        voxels[x, y] = state;
     }
 }
