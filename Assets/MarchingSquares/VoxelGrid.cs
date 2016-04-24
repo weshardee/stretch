@@ -135,8 +135,6 @@ public class VoxelGrid : MonoBehaviour {
         int maskD = d.state ? 1 << 3 : 0; // (1, 1)
         int finalMask = maskA | maskB | maskC | maskD;
 
-        string binary = Convert.ToString(finalMask, 2);
-        print(binary);
         if (finalMask == 0) {
             return;
         }
