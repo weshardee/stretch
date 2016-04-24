@@ -112,7 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7f1303e1e30498fbba4480c3be51df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: 0
+  voxelPrefab: {fileID: 453354, guid: 6ea1ba4cddd0d49ce95a6b352152c4cb, type: 2}
+  resolution: 10
 --- !u!4 &471809701
 Transform:
   m_ObjectHideFlags: 0
@@ -120,7 +121,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 471809699}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5597594, y: -1.9507926, z: 0.22187163}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1027241658}
