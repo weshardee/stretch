@@ -95,7 +95,7 @@ GameObject:
   - 4: {fileID: 471809701}
   - 114: {fileID: 471809700}
   m_Layer: 0
-  m_Name: grid
+  m_Name: Voxel Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,11 +109,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 471809699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7f1303e1e30498fbba4480c3be51df, type: 3}
+  m_Script: {fileID: 11500000, guid: 0174b7b9f004245439936a090eb8086f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  voxelPrefab: {fileID: 189576, guid: 6ea1ba4cddd0d49ce95a6b352152c4cb, type: 2}
-  resolution: 10
+  voxelGridPrefab: {fileID: 11411328, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+  size: 2
+  chunkResolution: 2
+  voxelResolution: 1
 --- !u!4 &471809701
 Transform:
   m_ObjectHideFlags: 0
@@ -126,6 +128,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!1001 &1577618137
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 428976, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1684626483
 GameObject:
   m_ObjectHideFlags: 0
