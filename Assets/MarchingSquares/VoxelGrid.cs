@@ -9,11 +9,10 @@ public class VoxelGrid : MonoBehaviour {
     bool[,] voxels;
     Material[,] mats;
     private float voxelSize;
-    private const float VoxelGutter = 0.02f;
 
     private static Color ColorOn = Color.black;
     private static Color ColorOff = Color.white;
-
+    private const float Z = -1f;
 
     public void Initialize (int resolution, float size) {
         this.resolution = resolution;
@@ -41,8 +40,11 @@ public class VoxelGrid : MonoBehaviour {
     void CreateVoxel(int i, int x, int y) {
         GameObject v = Instantiate(voxelPrefab) as GameObject;
         v.transform.parent = transform;
-        v.transform.localPosition = new Vector2((x + 0.5f) * voxelSize, (y + 0.5f) * voxelSize);
-        v.transform.localScale = Vector2.one * (voxelSize - VoxelGutter);
+
+        float localX = (x + 0.5f) * voxelSize;
+        float localY = (y + 0.5f) * voxelSize;
+        v.transform.localPosition = new Vector3(localX, localY, Z);
+        v.transform.localScale = Vector2.one * voxelSize * 0.1f;
         mats[x, y] = v.GetComponent<Renderer>().material;
         SetVoxel(x, y, false);
     }
