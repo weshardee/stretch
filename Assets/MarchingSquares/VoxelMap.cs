@@ -48,7 +48,7 @@ public class VoxelMap : MonoBehaviour {
         if (isLeftMouse || isRightMouse) {
             Vector3 mouseClickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Collider2D clickedCollider = Physics2D.OverlapPoint(mouseClickPoint);
-            if (clickedCollider = box) {
+            if (clickedCollider == box) {
                 SetVoxel(mouseClickPoint - transform.position + Vector3.one * halfSize, isLeftMouse);
             }
         }
