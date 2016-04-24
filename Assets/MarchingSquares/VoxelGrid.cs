@@ -2,10 +2,18 @@
 using UnityEngine;
 
 public class VoxelGrid : MonoBehaviour {
+    struct Voxel {
+        public bool state;
+        public Vector2 position;
+        public Vector2 xEdgePosition;
+        public Vector2 yEdgePosition;
+        public Material mat;
+    }
+
     [SerializeField]
     private GameObject voxelPrefab;
 
-    bool[,] voxels;
+    Voxel[,] voxels;
     Material[,] mats;
     private float voxelSize;
 
@@ -18,7 +26,7 @@ public class VoxelGrid : MonoBehaviour {
     private List<int> triangles;
 
     public void Initialize (int resolution, float size) {
-        voxels = new bool[resolution, resolution];
+        voxels = new Voxel[resolution, resolution];
         mats = new Material[resolution, resolution];
         voxelSize = size / resolution;
 
@@ -35,7 +43,7 @@ public class VoxelGrid : MonoBehaviour {
         mesh.name = "VoxelGrid Mesh";
         vertices = new List<Vector3>();
         triangles = new List<int>();
-        Refresh();
+        // Refresh();
     }
 
     void Start() {
@@ -47,39 +55,31 @@ public class VoxelGrid : MonoBehaviour {
     }
 
     void Refresh() {
-        mesh.SetVertices(vertices);
-        Triangulate();
-        RefreshVoxelColors();
+        // mesh.SetVertices(vertices);
+        // Triangulate();
     }
 
     void Triangulate() {
         // mesh.SetTriangles(triangles);
     }
 
-    void RefreshVoxelColors() {
-        for (int x = 0; x < mats.GetLength(0); x++) {
-            for (int y = 0; y < mats.GetLength(1); y++) {
-                bool state = voxels[x, y];
-                mats[x, y].color = state ? ColorOn : ColorOff;
-            }
-        }
-    }
-
     void CreateVoxel(int i, int x, int y) {
-        GameObject v = Instantiate(voxelPrefab) as GameObject;
-        v.transform.parent = transform;
+        GameObject o = Instantiate(voxelPrefab) as GameObject;
+        o.transform.parent = transform;
 
         float localX = (x + 0.5f) * voxelSize;
         float localY = (y + 0.5f) * voxelSize;
-        v.transform.localPosition = new Vector3(localX, localY, Z);
-        v.transform.localScale = Vector2.one * voxelSize * 0.1f;
-        mats[x, y] = v.GetComponent<Renderer>().material;
+        o.transform.localPosition = new Vector3(localX, localY, Z);
+        o.transform.localScale = Vector2.one * voxelSize * 0.1f;
+
+        voxels[x, y].mat = o.GetComponent<Renderer>().material;
         SetVoxel(x, y, false);
     }
 
     public void SetVoxel(int x, int y, bool state) {
-        voxels[x, y] = state;
-        mats[x, y].color = state ? ColorOn : ColorOff;
+        Voxel v = voxels[x, y];
+        v.state = state;
+        v.mat.color = state ? ColorOn : ColorOff;
         Refresh();
     }
 }
