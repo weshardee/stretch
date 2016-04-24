@@ -139,11 +139,15 @@ public class VoxelGrid : MonoBehaviour {
             return;
         }
 
-        // TODO eliminate this offset crap
-        Vector2 offset = transform.position;
-        Vector2 bottomLeft = a.position;
-        Vector2 bottomMiddle = a.xEdgePosition;
-        Vector2 leftMiddle = a.yEdgePosition;
+        // TODO maybe only make the ones I need?
+        Vector2 corner00 = a.position;
+        Vector2 corner01 = b.position;
+        Vector2 corner10 = c.position;
+        Vector2 corner11 = d.position;
+        Vector2 edgeL = a.yEdgePosition;
+        Vector2 edgeT = c.xEdgePosition;
+        Vector2 edgeB = a.xEdgePosition;
+        Vector2 edgeR = b.yEdgePosition;
 
         if (a.state) {
             AddTriangle(bottomLeft, leftMiddle, bottomMiddle);
