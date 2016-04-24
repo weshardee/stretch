@@ -149,8 +149,47 @@ public class VoxelGrid : MonoBehaviour {
         Vector2 edgeB = a.xEdgePosition;
         Vector2 edgeR = b.yEdgePosition;
 
-        if (a.state) {
-            AddTriangle(bottomLeft, leftMiddle, bottomMiddle);
+        MarchStates state = (MarchStates)finalMask;
+        switch (state)
+        {
+            case MarchStates.BottomLeft:
+                AddTriangle(corner00, edgeL, edgeB);
+                break;
+            case MarchStates.BottomRight:
+                AddTriangle(corner01, edgeB, edgeR);
+                break;
+            case MarchStates.TopLeft:
+                AddTriangle(corner10, edgeT, edgeL);
+                break;
+            case MarchStates.TopRight:
+                AddTriangle(corner11, edgeR, edgeT);
+                break;
+            case MarchStates.BottomHalf:
+                AddQuad(corner00, corner01, edgeR, edgeL);
+                break;
+            case MarchStates.LeftHalf:
+                AddTriangle(corner00, edgeL, edgeR);
+                AddTriangle(corner00, edgeR, corner01);
+                break;
+            case MarchStates.DiagUp:
+                break;
+            case MarchStates.AllButBottomLeft:
+                break;
+            case MarchStates.DiagDown:
+                break;
+            case MarchStates.TopHalf:
+                break;
+            case MarchStates.AllButBottomRight:
+                break;
+            case MarchStates.RightHalf:
+                break;
+            case MarchStates.AllButTopLeft:
+                break;
+            case MarchStates.AllButTopRight:
+                break;
+            case MarchStates.Filled:
+                break;
+
         }
     }
 
@@ -163,6 +202,11 @@ public class VoxelGrid : MonoBehaviour {
         triangles.Add(i);
         triangles.Add(i + 1);
         triangles.Add(i + 2);
+    }
+
+    void AddQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d) {
+        AddTriangle(a, b, c);
+        AddTriangle(a, c, d);
     }
 
     void CreateVoxel(int x, int y) {
