@@ -3,8 +3,6 @@
 public class VoxelGrid : MonoBehaviour {
     [SerializeField]
     private GameObject voxelPrefab;
-    private int resolution;
-    private float size;
 
     bool[,] voxels;
     Material[,] mats;
@@ -15,8 +13,6 @@ public class VoxelGrid : MonoBehaviour {
     private const float Z = -1f;
 
     public void Initialize (int resolution, float size) {
-        this.resolution = resolution;
-        this.size = size;
         voxels = new bool[resolution, resolution];
         mats = new Material[resolution, resolution];
         voxelSize = size / resolution;
