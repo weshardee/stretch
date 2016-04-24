@@ -11,13 +11,11 @@ public class VoxelGrid : MonoBehaviour {
     private const float VoxelGutter = 0.02f;
 
     public void Initialize (int resolution, float size) {
-        Debug.Log(resolution);
         this.resolution = resolution;
         this.size = size;
         voxels = new bool[resolution * resolution];
         voxelSize = size / resolution;
 
-        Debug.Log(voxels.Length);
         // initialize voxels
         for (int i = 0, y = 0; y < resolution; y++) {
             for (int x = 0; x < resolution; x++, i++) {
