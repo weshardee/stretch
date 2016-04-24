@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class VoxelGrid : MonoBehaviour {
     enum MarchStates {
-        Empty,
-        BottomLeft,
-        BottomRight,
-        BottomHalf,
-        TopLeft,
-        LeftHalf,
-        DiagUp,
-        AllButBottomLeft,
-        TopRight,
-        DiagDown,
-        TopHalf,
-        AllButBottomRight,
-        RightHalf,
-        AllButTopLeft,
-        AllButTopRight,
-        Filled
+        Empty, // 0000
+        D, // 0001
+        C, // 0010
+        CD, // 0011
+        B, // 0100
+        BD, // 0101
+        BC, // 0110
+        BCD, // 0111
+        A, // 1000
+        DA, // 1001
+        AC, // 1010
+        ACD, // 1011
+        AB, // 1100
+        ABD, // 1101
+        ABC, // 1110
+        Filled // 1111
     }
 
     struct Voxel {
@@ -116,11 +116,11 @@ public class VoxelGrid : MonoBehaviour {
 
         for (int x = 0; x < cellsX; x++) {
             for (int y = 0; y < cellsX; y++) {
-                Voxel a = voxels[x, y]; // (0, 0)
-                Voxel b = voxels[x + 1, y]; // (1, 0)
-                Voxel c = voxels[x, y + 1]; // (0, 1)
-                Voxel d = voxels[x + 1, y + 1]; // (1, 1)
-                TriangulateCell(a, b, c, d);
+                Voxel sw = voxels[x + 0, y + 0]; // (0, 0)
+                Voxel se = voxels[x + 1, y + 0]; // (1, 0)
+                Voxel ne = voxels[x + 1, y + 1]; // (1, 1)
+                Voxel nw = voxels[x + 0, y + 1]; // (0, 1)
+                TriangulateCell(sw, nw, ne, se);
             }
         }
 
@@ -129,10 +129,14 @@ public class VoxelGrid : MonoBehaviour {
     }
 
     void TriangulateCell(Voxel a, Voxel b, Voxel c, Voxel d) {
-        int maskA = a.state ? 1 << 0 : 0; // (0, 0)
-        int maskB = b.state ? 1 << 1 : 0; // (1, 0)
-        int maskC = c.state ? 1 << 2 : 0; // (0, 1)
-        int maskD = d.state ? 1 << 3 : 0; // (1, 1)
+        // expected shape:
+        // [d, c]
+        // [a, b]
+
+        int maskA = a.state ? 1 << 3 : 0; // (0, 0)
+        int maskB = b.state ? 1 << 2 : 0; // (1, 0)
+        int maskC = c.state ? 1 << 1 : 0; // (1, 1)
+        int maskD = d.state ? 1 << 0 : 0; // (0, 1)
         int finalMask = maskA | maskB | maskC | maskD;
 
         if (finalMask == 0) {
@@ -140,56 +144,80 @@ public class VoxelGrid : MonoBehaviour {
         }
 
         // TODO maybe only make the ones I need?
-        Vector2 corner00 = a.position;
-        Vector2 corner01 = b.position;
-        Vector2 corner10 = c.position;
-        Vector2 corner11 = d.position;
-        Vector2 edgeL = a.yEdgePosition;
-        Vector2 edgeT = c.xEdgePosition;
-        Vector2 edgeB = a.xEdgePosition;
-        Vector2 edgeR = b.yEdgePosition;
+        Vector2 cornerA = a.position;
+        Vector2 cornerB = b.position;
+        Vector2 cornerC = c.position;
+        Vector2 cornerD = d.position;
+        Vector2 edgeAB = a.yEdgePosition;
+        Vector2 edgeBC = b.xEdgePosition;
+        Vector2 edgeCD = d.yEdgePosition;
+        Vector2 edgeDA = a.xEdgePosition;
 
         MarchStates state = (MarchStates)finalMask;
         switch (state)
         {
-            case MarchStates.BottomLeft:
-                AddTriangle(corner00, edgeL, edgeB);
-                break;
-            case MarchStates.BottomRight:
-                AddTriangle(corner01, edgeB, edgeR);
-                break;
-            case MarchStates.TopLeft:
-                AddTriangle(corner10, edgeT, edgeL);
-                break;
-            case MarchStates.TopRight:
-                AddTriangle(corner11, edgeR, edgeT);
-                break;
-            case MarchStates.BottomHalf:
-                AddQuad(corner00, corner01, edgeR, edgeL);
-                break;
-            case MarchStates.LeftHalf:
-                AddTriangle(corner00, edgeL, edgeR);
-                AddTriangle(corner00, edgeR, corner01);
-                break;
-            case MarchStates.DiagUp:
-                break;
-            case MarchStates.AllButBottomLeft:
-                break;
-            case MarchStates.DiagDown:
-                break;
-            case MarchStates.TopHalf:
-                break;
-            case MarchStates.AllButBottomRight:
-                break;
-            case MarchStates.RightHalf:
-                break;
-            case MarchStates.AllButTopLeft:
-                break;
-            case MarchStates.AllButTopRight:
-                break;
             case MarchStates.Filled:
+                print(MarchStates.Filled);
+                AddQuad(cornerA, cornerB, cornerC, cornerD);
                 break;
-
+            case MarchStates.A:
+                print(MarchStates.A);
+                AddTriangle(cornerA, edgeAB, edgeDA);
+                break;
+            case MarchStates.B:
+                print(MarchStates.B);
+                AddTriangle(cornerB, edgeBC, edgeAB);
+                break;
+            case MarchStates.D:
+                print(MarchStates.D);
+                AddTriangle(cornerD, edgeDA, edgeCD);
+                break;
+            case MarchStates.C:
+                print(MarchStates.C);
+                AddTriangle(cornerC, edgeCD, edgeBC);
+                break;
+            case MarchStates.AB:
+                print(MarchStates.AB);
+                AddQuad(cornerA, cornerB, edgeBC, edgeDA);
+                break;
+            case MarchStates.DA:
+                print(MarchStates.DA);
+                AddQuad(cornerD, cornerA, edgeAB, edgeCD);
+                break;
+            case MarchStates.CD:
+                print(MarchStates.CD);
+                AddQuad(cornerC, cornerD, edgeDA, edgeBC);
+                break;
+            case MarchStates.BC:
+                print(MarchStates.BC);
+                AddQuad(cornerB, cornerC, edgeCD, edgeAB);
+                break;
+            case MarchStates.AC:
+                print(MarchStates.AC);
+                AddTriangle(cornerA, edgeAB, edgeDA);
+                AddTriangle(cornerC, edgeCD, edgeBC);
+                break;
+            case MarchStates.BD:
+                print(MarchStates.BD);
+                AddTriangle(cornerB, edgeBC, edgeAB);
+                AddTriangle(cornerD, edgeDA, edgeCD);
+                break;
+            case MarchStates.BCD:
+                print(MarchStates.BCD);
+                AddPentagon(cornerC, cornerD, edgeDA, edgeAB, cornerB);
+                break;
+            case MarchStates.ACD:
+                print(MarchStates.ACD);
+                AddPentagon(cornerD, cornerA, edgeAB, edgeBC, cornerC);
+                break;
+            case MarchStates.ABC:
+                print(MarchStates.ABC);
+                AddPentagon(cornerB, cornerC, edgeCD, edgeDA, cornerA);
+                break;
+            case MarchStates.ABD:
+                print(MarchStates.ABD);
+                AddPentagon(cornerA, cornerB, edgeBC, edgeCD, cornerD);
+                break;
         }
     }
 
@@ -207,6 +235,12 @@ public class VoxelGrid : MonoBehaviour {
     void AddQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d) {
         AddTriangle(a, b, c);
         AddTriangle(a, c, d);
+    }
+
+    void AddPentagon(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 e) {
+        AddTriangle(a, b, c);
+        AddTriangle(a, c, d);
+        AddTriangle(a, d, e);
     }
 
     void CreateVoxel(int x, int y) {

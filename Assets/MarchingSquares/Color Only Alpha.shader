@@ -8,7 +8,7 @@
     Category
     {
         ZWrite Off
-        Cull Off
+        // Cull Off
         Tags {"Queue" = "Transparent" }
         Blend SrcAlpha OneMinusSrcAlpha
         SubShader
