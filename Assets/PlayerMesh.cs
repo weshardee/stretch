@@ -35,8 +35,8 @@ public class PlayerMesh : MonoBehaviour {
         // TODO use scale to tighten the buffer
         Vector2 corner1 = Vector2.Max(pos1 + buffer, pos2 + buffer);
         Vector2 corner2 = Vector2.Min(pos1 - buffer, pos2 - buffer);
-        Vector2 corner3 = new Vector2(corner1.x, corner2.y);
-        Vector2 corner4 = new Vector2(corner2.x, corner1.y);
+        // Vector2 corner3 = new Vector2(corner1.x, corner2.y);
+        // Vector2 corner4 = new Vector2(corner2.x, corner1.y);
 
         float width = corner1.x - corner2.x;
         float height = corner1.y - corner2.y;
