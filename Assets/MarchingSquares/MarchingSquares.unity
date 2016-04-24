@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   voxelPrefab: {fileID: 189576, guid: 6ea1ba4cddd0d49ce95a6b352152c4cb, type: 2}
-  resolution: 1
+  resolution: 3
   width: 1
   height: 1
 --- !u!4 &471809701
