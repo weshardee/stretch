@@ -20,8 +20,8 @@ public class VoxelGrid : MonoBehaviour {
     Material[,] mats;
     private float voxelSize;
 
-    private static Color ColorOn = Color.black;
-    private static Color ColorOff = Color.white;
+    private static Color ColorOff = Color.black;
+    private static Color ColorOn = Color.white;
     private const float Z = -1f;
 
     private Mesh mesh;
