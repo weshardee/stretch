@@ -137,6 +137,9 @@ public class VoxelGrid : MonoBehaviour {
 
         string binary = Convert.ToString(finalMask, 2);
         print(binary);
+        if (finalMask == 0) {
+            return;
+        }
 
         // TODO eliminate this offset crap
         Vector2 offset = transform.position;
