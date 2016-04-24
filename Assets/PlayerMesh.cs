@@ -13,7 +13,9 @@ public class PlayerMesh : MonoBehaviour {
     private Color BoundsColor = Color.red;
     private Color InsideColor = Color.green;
     private Color OutsideColor = Color.red;
-    private const int Resolution = 2;
+    private const int Resolution = 10;
+    private const float InfluenceThreshold = 0.99f;
+    private const float InfluenceZeroRadius = 1f;
 
     void Start () {
         stretch = GetComponent<Stretch>();
@@ -59,9 +61,13 @@ public class PlayerMesh : MonoBehaviour {
                 // save it to the grid
                 grid[x, y] = gridPoint;
 
+
                 // TODO some math to figure the state of the gridpoint
                 // calculate the weight from each end
-                gridPoint.value = true;
+                float pow1 = CalcInfluence(end1, gridPoint.position);
+                float pow2 = CalcInfluence(end2, gridPoint.position);
+                gridPoint.value = pow1 + pow2 >= InfluenceThreshold;
+                if (x == 0 && y == 0) Debug.Log(pow1 + pow2);
 
                 // draw debug grid
                 if (y > 0) DrawDebugGridLine(gridPoint, grid[x, y - 1]);
@@ -77,5 +83,18 @@ public class PlayerMesh : MonoBehaviour {
 
     Vector2 WorldPositionFromGridCoordsVector(int x, int y, Vector2 offset) {
         return new Vector2(x, y) / Resolution + offset;
+    }
+
+    float CalcInfluence(Transform end, Vector2 point) {
+        float r = (point - (Vector2)end.position).sqrMagnitude;
+        if (r > InfluenceZeroRadius) {
+            return 0;
+        }
+
+        // adjust radius by a factor
+        r /= InfluenceZeroRadius;
+
+        float power = r * r * r * (r * (r * 6 - 15) + 10); // http://www.geisswerks.com/ryan/BLOBS/blobs.html
+        return 1 - power;
     }
 }
