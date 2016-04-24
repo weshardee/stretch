@@ -3,6 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class VoxelGrid : MonoBehaviour {
+    enum MarchStates {
+        Empty,
+        BottomLeft,
+        BottomRight,
+        BottomHalf,
+        TopLeft,
+        LeftHalf,
+        DiagUp,
+        AllButBottomLeft,
+        TopRight,
+        DiagDown,
+        TopHalf,
+        AllButBottomRight,
+        RightHalf,
+        AllButTopLeft,
+        AllButTopRight,
+        Filled
+    }
+
     struct Voxel {
         public bool state;
         public Vector2 position;
