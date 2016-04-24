@@ -27,6 +27,7 @@ public class VoxelGrid : MonoBehaviour {
     private Mesh mesh;
     private List<Vector3> vertices;
     private List<int> triangles;
+    private bool needsUpdate = false;
 
     public void Awake () {
         // calc sizes
@@ -61,6 +62,10 @@ public class VoxelGrid : MonoBehaviour {
                 DrawVoxelDebug(x, y);
             }
         }
+
+        if (needsUpdate) {
+            Refresh();
+        }
     }
 
     void DrawVoxelDebug(int x, int y) {
@@ -74,6 +79,7 @@ public class VoxelGrid : MonoBehaviour {
     void Refresh() {
         // mesh.SetVertices(vertices);
         // Triangulate();
+        needsUpdate = false;
     }
 
     void Triangulate() {
@@ -89,14 +95,17 @@ public class VoxelGrid : MonoBehaviour {
         o.transform.localPosition = new Vector3(localX, localY, Z);
         o.transform.localScale = Vector2.one * voxelSize * 0.1f;
 
-        // set initial voxel positions
+        // set voxel material
         Voxel v = voxels[x, y];
-        v.position = o.transform.localPosition;
-        print(v.position);
-        v.xEdgePosition = v.position + Vector2.right * voxelSize / 2f;
-        v.yEdgePosition = v.position + Vector2.up * voxelSize / 2f;
+        v.mat = o.GetComponent<Renderer>().material;
 
-        voxels[x, y].mat = o.GetComponent<Renderer>().material;
+        // set initial voxel positions
+        float halfVoxelSize = voxelSize / 2f;
+        v.position = o.transform.localPosition;
+        v.xEdgePosition = v.position + Vector2.right * halfVoxelSize;
+        v.yEdgePosition = v.position + Vector2.up * halfVoxelSize;
+
+        voxels[x, y] = v;
         SetVoxel(x, y, false);
     }
 
@@ -104,7 +113,9 @@ public class VoxelGrid : MonoBehaviour {
         Voxel v = voxels[x, y];
         v.state = state;
         v.mat.color = state ? ColorOn : ColorOff;
-        Refresh();
+
+        // queue refresh
+        needsUpdate = true;
     }
 
     public void SetVoxelAt(Vector2 point, bool state) {
