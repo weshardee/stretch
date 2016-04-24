@@ -105,8 +105,8 @@ public class VoxelGrid : MonoBehaviour {
             }
         }
 
-        mesh.SetVertices(vertices);
-        // mesh.SetTriangles(triangles);
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
     }
 
     void TriangulateCell(Voxel a, Voxel b, Voxel c, Voxel d) {
@@ -117,7 +117,28 @@ public class VoxelGrid : MonoBehaviour {
         int finalMask = maskA | maskB | maskC | maskD;
 
         string binary = Convert.ToString(finalMask, 2);
-        print(maskA);
+        print(binary);
+
+        // TODO eliminate this offset crap
+        Vector2 offset = transform.position;
+        Vector2 bottomLeft = a.position;
+        Vector2 bottomMiddle = a.xEdgePosition;
+        Vector2 leftMiddle = a.yEdgePosition;
+
+        if (a.state) {
+            AddTriangle(bottomLeft, leftMiddle, bottomMiddle);
+        }
+    }
+
+    void AddTriangle(Vector3 a, Vector3 b, Vector3 c) {
+        // TODO check if vertex exists and use that one if it does
+        int i = vertices.Count;
+        vertices.Add(a);
+        vertices.Add(b);
+        vertices.Add(c);
+        triangles.Add(i);
+        triangles.Add(i + 1);
+        triangles.Add(i + 2);
     }
 
     void CreateVoxel(int x, int y) {

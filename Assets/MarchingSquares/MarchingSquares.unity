@@ -95,6 +95,8 @@ GameObject:
   - 4: {fileID: 471809701}
   - 114: {fileID: 471809700}
   - 33: {fileID: 471809702}
+  - 114: {fileID: 471809703}
+  - 23: {fileID: 471809704}
   m_Layer: 0
   m_Name: VoxelGrid
   m_TagString: Untagged
@@ -115,8 +117,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   voxelPrefab: {fileID: 189576, guid: 6ea1ba4cddd0d49ce95a6b352152c4cb, type: 2}
   resolution: 1
-  width: 1
-  height: 1
+  width: 2
+  height: 2
 --- !u!4 &471809701
 Transform:
   m_ObjectHideFlags: 0
@@ -124,7 +126,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 471809699}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -136,6 +138,43 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 471809699}
   m_Mesh: {fileID: 0}
+--- !u!114 &471809703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 471809699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9585c166f7c024952a3547abb9827200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!23 &471809704
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 471809699}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_Materials:
+  - {fileID: 2100000, guid: f9920baf6eb34450387feca88f8f1116, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 1
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!1 &1684626483
 GameObject:
   m_ObjectHideFlags: 0
