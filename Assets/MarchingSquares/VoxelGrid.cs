@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class VoxelGrid : MonoBehaviour {
     [SerializeField]
@@ -12,6 +13,10 @@ public class VoxelGrid : MonoBehaviour {
     private static Color ColorOff = Color.white;
     private const float Z = -1f;
 
+    private Mesh mesh;
+    private List<Vector3> vertices;
+    private List<int> triangles;
+
     public void Initialize (int resolution, float size) {
         voxels = new bool[resolution, resolution];
         mats = new Material[resolution, resolution];
@@ -23,6 +28,13 @@ public class VoxelGrid : MonoBehaviour {
                 CreateVoxel(i, x, y);
             }
         }
+
+        // make the mesh
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+        mesh.name = "VoxelGrid Mesh";
+        vertices = new List<Vector3>();
+        triangles = new List<int>();
         Refresh();
     }
 
@@ -35,7 +47,13 @@ public class VoxelGrid : MonoBehaviour {
     }
 
     void Refresh() {
+        mesh.SetVertices(vertices);
+        Triangulate();
         RefreshVoxelColors();
+    }
+
+    void Triangulate() {
+        // mesh.SetTriangles(triangles);
     }
 
     void RefreshVoxelColors() {
