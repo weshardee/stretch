@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         set
         {
             _state = value;
-            Debug.Log(value);
+            // Debug.Log(value);
             switch (value)
             {
                 case PlayerState.Loose:
