@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VoxelGrid : MonoBehaviour {
@@ -49,7 +50,9 @@ public class VoxelGrid : MonoBehaviour {
         mesh.name = "VoxelGrid Mesh";
         vertices = new List<Vector3>();
         triangles = new List<int>();
-        // Refresh();
+
+        // initialize mesh
+        Refresh();
     }
 
     void Start() {
@@ -80,13 +83,41 @@ public class VoxelGrid : MonoBehaviour {
     }
 
     void Refresh() {
-        // mesh.SetVertices(vertices);
-        // Triangulate();
+        Triangulate();
         needsUpdate = false;
     }
 
     void Triangulate() {
+        triangles.Clear();
+        vertices.Clear();
+        mesh.Clear();
+
+        int cellsX = voxels.GetLength(0) - 1;
+        int cellsY = voxels.GetLength(1) - 1;
+
+        for (int x = 0; x < cellsX; x++) {
+            for (int y = 0; y < cellsX; y++) {
+                Voxel a = voxels[x, y]; // (0, 0)
+                Voxel b = voxels[x + 1, y]; // (1, 0)
+                Voxel c = voxels[x, y + 1]; // (0, 1)
+                Voxel d = voxels[x + 1, y + 1]; // (1, 1)
+                TriangulateCell(a, b, c, d);
+            }
+        }
+
+        mesh.SetVertices(vertices);
         // mesh.SetTriangles(triangles);
+    }
+
+    void TriangulateCell(Voxel a, Voxel b, Voxel c, Voxel d) {
+        int maskA = a.state ? 1 << 0 : 0; // (0, 0)
+        int maskB = b.state ? 1 << 1 : 0; // (1, 0)
+        int maskC = c.state ? 1 << 2 : 0; // (0, 1)
+        int maskD = d.state ? 1 << 3 : 0; // (1, 1)
+        int finalMask = maskA | maskB | maskC | maskD;
+
+        string binary = Convert.ToString(finalMask, 2);
+        print(maskA);
     }
 
     void CreateVoxel(int x, int y) {
