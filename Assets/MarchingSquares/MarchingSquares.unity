@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 8
   m_AmbientMode: 3
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -115,7 +115,7 @@ MonoBehaviour:
   voxelGridPrefab: {fileID: 11411328, guid: e0a43e4bbd36141aabf7cdb8b3756188, type: 2}
   size: 2
   chunkResolution: 2
-  voxelResolution: 1
+  voxelResolution: 3
 --- !u!4 &471809701
 Transform:
   m_ObjectHideFlags: 0
