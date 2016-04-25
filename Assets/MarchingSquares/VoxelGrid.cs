@@ -152,8 +152,8 @@ public class VoxelGrid : MonoBehaviour {
     Vector2 LerpEdge(Voxel a, Voxel b) {
         // only lerp if there's an edge
         if (a.value < threshold == b.value < threshold) {
-            if (b.value > a.value) return b.position;
-            else return a.position;
+            if (a.xEdgePosition.y == b.xEdgePosition.y) return a.xEdgePosition;
+            else return a.yEdgePosition;
         }
 
         float lerp = (threshold - a.value) / (b.value - a.value);
