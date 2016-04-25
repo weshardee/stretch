@@ -159,65 +159,50 @@ public class VoxelGrid : MonoBehaviour {
         switch (state)
         {
             case MarchStates.Filled:
-                print(MarchStates.Filled);
                 AddQuad(cornerA, cornerB, cornerC, cornerD);
                 break;
             case MarchStates.A:
-                print(MarchStates.A);
                 AddTriangle(cornerA, edgeAB, edgeDA);
                 break;
             case MarchStates.B:
-                print(MarchStates.B);
                 AddTriangle(cornerB, edgeBC, edgeAB);
                 break;
             case MarchStates.D:
-                print(MarchStates.D);
                 AddTriangle(cornerD, edgeDA, edgeCD);
                 break;
             case MarchStates.C:
-                print(MarchStates.C);
                 AddTriangle(cornerC, edgeCD, edgeBC);
                 break;
             case MarchStates.AB:
-                print(MarchStates.AB);
                 AddQuad(cornerA, cornerB, edgeBC, edgeDA);
                 break;
             case MarchStates.DA:
-                print(MarchStates.DA);
                 AddQuad(cornerD, cornerA, edgeAB, edgeCD);
                 break;
             case MarchStates.CD:
-                print(MarchStates.CD);
                 AddQuad(cornerC, cornerD, edgeDA, edgeBC);
                 break;
             case MarchStates.BC:
-                print(MarchStates.BC);
                 AddQuad(cornerB, cornerC, edgeCD, edgeAB);
                 break;
             case MarchStates.AC:
-                print(MarchStates.AC);
                 AddTriangle(cornerA, edgeAB, edgeDA);
                 AddTriangle(cornerC, edgeCD, edgeBC);
                 break;
             case MarchStates.BD:
-                print(MarchStates.BD);
                 AddTriangle(cornerB, edgeBC, edgeAB);
                 AddTriangle(cornerD, edgeDA, edgeCD);
                 break;
             case MarchStates.BCD:
-                print(MarchStates.BCD);
                 AddPentagon(cornerC, cornerD, edgeDA, edgeAB, cornerB);
                 break;
             case MarchStates.ACD:
-                print(MarchStates.ACD);
                 AddPentagon(cornerD, cornerA, edgeAB, edgeBC, cornerC);
                 break;
             case MarchStates.ABC:
-                print(MarchStates.ABC);
                 AddPentagon(cornerB, cornerC, edgeCD, edgeDA, cornerA);
                 break;
             case MarchStates.ABD:
-                print(MarchStates.ABD);
                 AddPentagon(cornerA, cornerB, edgeBC, edgeCD, cornerD);
                 break;
         }
