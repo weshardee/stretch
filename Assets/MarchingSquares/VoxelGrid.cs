@@ -217,12 +217,12 @@ public class VoxelGrid : MonoBehaviour {
                 AddQuad(cornerB, cornerC, edgeCD, edgeAB);
                 break;
             case MarchStates.AC:
-                AddTriangle(cornerA, edgeAB, edgeDA);
-                AddTriangle(cornerC, edgeCD, edgeBC);
+                AddPentagon(cornerA, edgeAB, edgeBC, cornerC, edgeCD);
+                AddTriangle(cornerA, edgeCD, edgeDA);
                 break;
             case MarchStates.BD:
-                AddTriangle(cornerB, edgeBC, edgeAB);
-                AddTriangle(cornerD, edgeDA, edgeCD);
+                AddPentagon(cornerB, edgeBC, edgeCD, cornerD, edgeDA);
+                AddTriangle(cornerB, edgeDA, edgeAB);
                 break;
             case MarchStates.BCD:
                 AddPentagon(cornerC, cornerD, edgeDA, edgeAB, cornerB);
