@@ -86,7 +86,7 @@ public class VoxelGrid : MonoBehaviour {
             }
         }
 
-        if (needsUpdate) {
+        if (true) {
             Refresh();
         }
     }
@@ -98,8 +98,8 @@ public class VoxelGrid : MonoBehaviour {
         Vector3 globalXEdge = (offset + v.xEdgePosition);
         Vector3 globalYEdge = (offset + v.yEdgePosition);
 
-        Debug.DrawLine(globalPosition, globalXEdge, Color.red);
-        Debug.DrawLine(globalPosition, globalYEdge, Color.red);
+        if (v.xEdgePosition != Vector2.zero) Debug.DrawLine(globalPosition, globalXEdge, Color.red);
+        if (v.yEdgePosition != Vector2.zero) Debug.DrawLine(globalPosition, globalYEdge, Color.red);
     }
 
     void Refresh() {
@@ -122,12 +122,43 @@ public class VoxelGrid : MonoBehaviour {
                 Voxel ne = voxels[x + 1, y + 1]; // (1, 1)
                 Voxel nw = voxels[x + 0, y + 1]; // (0, 1)
 
+                // Interpolate edges
+                InterpolateEdges(x, y);
                 TriangulateCell(sw, nw, ne, se);
             }
         }
 
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangles.ToArray();
+    }
+
+    void InterpolateEdges(int x, int y) {
+        Voxel sw = voxels[x + 0, y + 0]; // (0, 0)
+        Voxel se = voxels[x + 1, y + 0]; // (1, 0)
+        Voxel ne = voxels[x + 1, y + 1]; // (1, 1)
+        Voxel nw = voxels[x + 0, y + 1]; // (0, 1)
+
+        if (x == 0) sw.xEdgePosition = LerpEdge(sw, se);
+        if (y == 0) sw.yEdgePosition = LerpEdge(sw, nw);
+        nw.xEdgePosition = LerpEdge(nw, ne);
+        se.yEdgePosition = LerpEdge(se, ne);
+
+        voxels[x + 0, y + 0] = sw; // (0, 0)
+        voxels[x + 1, y + 0] = se; // (1, 0)
+        voxels[x + 1, y + 1] = ne; // (1, 1)
+        voxels[x + 0, y + 1] = nw; // (0, 1)
+    }
+
+    Vector2 LerpEdge(Voxel a, Voxel b) {
+        // only lerp if there's an edge
+        if (a.value < threshold == b.value < threshold) {
+            if (b.value > a.value) return b.position;
+            else return a.position;
+        }
+
+        float lerp = (threshold - a.value) / (b.value - a.value);
+
+        return Vector2.Lerp(a.position, b.position, lerp);
     }
 
     void TriangulateCell(Voxel a, Voxel b, Voxel c, Voxel d) {
