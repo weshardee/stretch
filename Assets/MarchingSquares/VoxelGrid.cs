@@ -138,8 +138,8 @@ public class VoxelGrid : MonoBehaviour {
         Voxel ne = voxels[x + 1, y + 1]; // (1, 1)
         Voxel nw = voxels[x + 0, y + 1]; // (0, 1)
 
-        if (x == 0) sw.xEdgePosition = LerpEdge(sw, se);
-        if (y == 0) sw.yEdgePosition = LerpEdge(sw, nw);
+        if (y == 0) sw.xEdgePosition = LerpEdge(sw, se);
+        if (x == 0) sw.yEdgePosition = LerpEdge(sw, nw);
         nw.xEdgePosition = LerpEdge(nw, ne);
         se.yEdgePosition = LerpEdge(se, ne);
 
