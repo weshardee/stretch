@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-public class PlayerMesh : MonoBehaviour {
-    struct GridPoint {
+public class PlayerMesh : MonoBehaviour
+{
+    struct GridPoint
+    {
         public bool value;
         public Vector2 position;
     }
@@ -12,81 +14,106 @@ public class PlayerMesh : MonoBehaviour {
     private Transform end2;
     private Color InsideColor = Color.green;
     private Color OutsideColor = Color.red;
-    private const int Resolution = 10;
+    private float resolution = 10f;
     private const float InfluenceThreshold = 0.99f;
     private const float InfluenceZeroRadius = 1f;
+    private VoxelGrid grid;
+    private float[,] weights;
+    private Vector2[,] points;
+    private float threshold;
 
-    void Start () {
+    void Start()
+    {
+        // cache components
+        grid = GetComponent<VoxelGrid>();
         stretch = GetComponent<Stretch>();
         end1 = stretch.head.transform;
         end2 = stretch.core.transform;
+
+        // cache properties
+        resolution = grid.resolution;
+        threshold = grid.threshold;
     }
 
-	// Update is called once per frame
-	void Update () {
-        // TODO draw a debug cube around the area to iterate over
+    // Update is called once per frame
+    void Update()
+    {
         float currentDistance = stretch.stretchDistance;
 
         Vector2 pos1 = end1.position;
         Vector2 pos2 = end2.position;
         Vector2 buffer = Vector2.one * EndRadius;
 
-        // calculate bounds
+        // calculate bounds; use node radius as a buffer
         // TODO use scale to tighten the buffer
-        Vector2 corner1 = Vector2.Max(pos1 + buffer, pos2 + buffer);
-        Vector2 corner2 = Vector2.Min(pos1 - buffer, pos2 - buffer);
-        // Vector2 corner3 = new Vector2(corner1.x, corner2.y);
-        // Vector2 corner4 = new Vector2(corner2.x, corner1.y);
+        Vector2 corner1 = Vector2.Max(pos1 + buffer, pos2 + buffer); // upper right
+        Vector2 corner2 = Vector2.Min(pos1 - buffer, pos2 - buffer); // bottom left
 
         float width = corner1.x - corner2.x;
         float height = corner1.y - corner2.y;
-        int gridWidth = (int)(width * Resolution) + 1;
-        int gridHeight = (int)(height * Resolution) + 1;
-
-        // draw debug bounds
-        // Debug.DrawLine(corner1, corner3, BoundsColor);
-        // Debug.DrawLine(corner1, corner4, BoundsColor);
-        // Debug.DrawLine(corner2, corner3, BoundsColor);
-        // Debug.DrawLine(corner2, corner4, BoundsColor);
+        int gridWidth = (int)(width * resolution) + 1;
+        int gridHeight = (int)(height * resolution) + 1;
 
         // calculate a grid of in/out positions
-        GridPoint[,] grid = new GridPoint[gridWidth,gridHeight];
-        for (int x = 0; x < grid.GetLength(0); x++) {
-            for (int y = 0; y < grid.GetLength(1); y++) {
+        weights = new float[gridWidth, gridHeight];
+        points = new Vector2[gridWidth, gridHeight];
+
+        for (int x = 0; x < weights.GetLength(0); x++)
+        {
+            for (int y = 0; y < weights.GetLength(1); y++)
+            {
                 // instantiate the current grid point
-                GridPoint gridPoint = new GridPoint();
-                gridPoint.position = WorldPositionFromGridCoordsVector(x, y, corner2);
-
-                // save it to the grid
-                grid[x, y] = gridPoint;
-
+                Vector2 point = WorldPositionFromGridCoordsVector(x, y, corner2);
+                points[x, y] = point;
 
                 // TODO some math to figure the state of the gridpoint
                 // calculate the weight from each end
-                float pow1 = CalcInfluence(end1, gridPoint.position);
-                float pow2 = CalcInfluence(end2, gridPoint.position);
-                gridPoint.value = pow1 + pow2 >= InfluenceThreshold;
-                if (x == 0 && y == 0) Debug.Log(pow1 + pow2);
+                float pow1 = CalcInfluence(end1, point);
+                float pow2 = CalcInfluence(end2, point);
 
-                // draw debug grid
-                if (y > 0) DrawDebugGridLine(gridPoint, grid[x, y - 1]);
-                if (x > 0) DrawDebugGridLine(gridPoint, grid[x - 1, y]);
+                // save it to the grid
+                weights[x, y] = pow1 + pow2;
+            }
+        }
+
+        // grid.Use(weights);
+    }
+
+    void OnDrawGizmos()
+    {
+        print(weights);
+        if (weights == null)
+        {
+            return;
+        }
+        for (int x = 0; x < weights.GetLength(0); x++)
+        {
+            for (int y = 0; y < weights.GetLength(1); y++)
+            {
+                DrawDebugPoint(x, y);
             }
         }
     }
 
-    void DrawDebugGridLine(GridPoint a, GridPoint b) {
-        Color color = a.value || b.value ? InsideColor : OutsideColor;
-        Debug.DrawLine(a.position, b.position, color);
+    void DrawDebugPoint(int x, int y)
+    {
+        Vector2 point = points[x, y];
+        float weight = weights[x, y];
+
+        Color color = weight > threshold ? InsideColor : OutsideColor;
+        Debug.DrawRay(point, Vector3.one / resolution / 2, color);
     }
 
-    Vector2 WorldPositionFromGridCoordsVector(int x, int y, Vector2 offset) {
-        return new Vector2(x, y) / Resolution + offset;
+    Vector2 WorldPositionFromGridCoordsVector(int x, int y, Vector2 offset)
+    {
+        return new Vector2(x, y) / resolution + offset;
     }
 
-    float CalcInfluence(Transform end, Vector2 point) {
+    float CalcInfluence(Transform end, Vector2 point)
+    {
         float r = (point - (Vector2)end.position).sqrMagnitude;
-        if (r > InfluenceZeroRadius) {
+        if (r > InfluenceZeroRadius)
+        {
             return 0;
         }
 
