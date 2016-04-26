@@ -82,7 +82,6 @@ public class PlayerMesh : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        print(weights);
         if (weights == null)
         {
             return;
