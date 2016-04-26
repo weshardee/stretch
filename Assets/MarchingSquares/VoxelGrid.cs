@@ -324,4 +324,23 @@ public class VoxelGrid : MonoBehaviour {
         x = (int)(point.x * resolution);
         y = (int)(point.y * resolution);
     }
+
+    public void Use(float[,] weights)
+    {
+        int weightsLengthX = weights.GetLength(0);
+        int weightsLengthY = weights.GetLength(1);
+
+        for (int y = 0; y < voxels.GetLength(1); y++)
+        {
+            for (int x = 0; x < voxels.GetLength(0); x++)
+            {
+                float weight;
+
+                if (y >= weightsLengthY || x >= weightsLengthX) weight = 0;
+                else weight = weights[x, y];
+
+                SetVoxel(x, y, weight);
+            }
+        }
+    }
 }
