@@ -87,6 +87,9 @@ public class VoxelGrid : MonoBehaviour {
 
     void OnDrawGizmos()
     {
+        if (voxels == null) {
+            return;
+        }
         for (int y = 0; y < voxels.GetLength(1); y++) {
             for (int x = 0; x < voxels.GetLength(0); x++) {
                 DrawVoxelDebug(x, y);
