@@ -96,7 +96,6 @@ public class VoxelGrid : MonoBehaviour {
 
     void DrawVoxelDebug(int x, int y) {
         Vector2 offset = transform.position;
-        print(transform.position);
         Voxel v = voxels[x, y];
         Vector3 globalPosition = (offset + v.position);
         Vector3 globalXEdge = (offset + v.xEdgePosition);
