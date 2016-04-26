@@ -16,7 +16,7 @@ public class PlayerMesh : MonoBehaviour
     private Color OutsideColor = Color.red;
     private float resolution = 10f;
     private const float InfluenceThreshold = 0.99f;
-    private const float InfluenceZeroRadius = 1f;
+    private const float InfluenceZeroRadius = 3f;
     private VoxelGrid grid;
     private float[,] weights;
     private Vector2[,] points;
@@ -71,12 +71,18 @@ public class PlayerMesh : MonoBehaviour
                 float pow1 = CalcInfluence(end1, point);
                 float pow2 = CalcInfluence(end2, point);
 
+                // clamp values
+                if (pow1 < 0) pow1 = 0;
+                if (pow2 < 0) pow2 = 0;
+                if (pow1 > 1) pow1 = 1;
+                if (pow2 > 1) pow2 = 1;
+
                 // save it to the grid
                 weights[x, y] = pow1 + pow2;
             }
         }
 
-        // grid.Use(weights);
+        grid.Use(weights);
         grid.transform.position = corner2;
     }
 
@@ -111,14 +117,16 @@ public class PlayerMesh : MonoBehaviour
 
     float CalcInfluence(Transform end, Vector2 point)
     {
-        float r = (point - (Vector2)end.position).sqrMagnitude;
+        Vector2 deltaVector = point - (Vector2)end.position;
+        float r = deltaVector.sqrMagnitude;
+
         if (r > InfluenceZeroRadius)
         {
             return 0;
         }
 
         // adjust radius by a factor
-        r /= InfluenceZeroRadius;
+        r *= InfluenceZeroRadius;
 
         float power = r * r * r * (r * (r * 6 - 15) + 10); // http://www.geisswerks.com/ryan/BLOBS/blobs.html
         return 1 - power;
