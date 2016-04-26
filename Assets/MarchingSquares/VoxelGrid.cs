@@ -80,19 +80,23 @@ public class VoxelGrid : MonoBehaviour {
     }
 
     void Update () {
-        for (int y = 0; y < voxels.GetLength(1); y++) {
-            for (int x = 0; x < voxels.GetLength(0); x++) {
-                DrawVoxelDebug(x, y);
-            }
-        }
-
         if (true) {
             Refresh();
         }
     }
 
+    void OnDrawGizmos()
+    {
+        for (int y = 0; y < voxels.GetLength(1); y++) {
+            for (int x = 0; x < voxels.GetLength(0); x++) {
+                DrawVoxelDebug(x, y);
+            }
+        }
+    }
+
     void DrawVoxelDebug(int x, int y) {
         Vector2 offset = transform.position;
+        print(transform.position);
         Voxel v = voxels[x, y];
         Vector3 globalPosition = (offset + v.position);
         Vector3 globalXEdge = (offset + v.xEdgePosition);

@@ -25,7 +25,7 @@ public class PlayerMesh : MonoBehaviour
     void Start()
     {
         // cache components
-        grid = GetComponent<VoxelGrid>();
+        grid = GetComponentInChildren<VoxelGrid>();
         stretch = GetComponent<Stretch>();
         end1 = stretch.head.transform;
         end2 = stretch.core.transform;
@@ -77,6 +77,7 @@ public class PlayerMesh : MonoBehaviour
         }
 
         // grid.Use(weights);
+        grid.transform.position = corner2;
     }
 
     void OnDrawGizmos()
