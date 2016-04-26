@@ -116,9 +116,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   voxelPrefab: {fileID: 189576, guid: 6ea1ba4cddd0d49ce95a6b352152c4cb, type: 2}
-  resolution: 3
+  resolution: 4
   width: 1
   height: 1
+  threshold: 0.5
 --- !u!4 &471809701
 Transform:
   m_ObjectHideFlags: 0
@@ -235,7 +236,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1.5
+  orthographic size: 1
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
