@@ -78,11 +78,11 @@ public class PlayerMesh : MonoBehaviour
                 if (pow2 > 1) pow2 = 1;
 
                 // save it to the grid
-                weights[x, y] = pow1 + pow2;
+                grid.SetVoxel(x, y, pow1 + pow2);
             }
         }
 
-        grid.Use(weights);
+        // grid.Use(weights);
         grid.transform.position = corner2;
     }
 

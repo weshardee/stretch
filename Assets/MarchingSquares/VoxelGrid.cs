@@ -299,7 +299,13 @@ public class VoxelGrid : MonoBehaviour {
         SetVoxel(x, y, 0);
     }
 
-    public void SetVoxel(int x, int y, float value) {
+    public void SetVoxel(int x, int y, float value)
+    {
+        print(x + "," + y + ": " + value);
+        // verify this is in bounds
+        if (x >= voxels.GetLength(0) || x < 0) return;
+        if (y >= voxels.GetLength(1) || y < 0) return;
+
         // clamp value
         value = value > 1 ? 1 : value;
         value = value < 0 ? 0 : value;
@@ -328,28 +334,20 @@ public class VoxelGrid : MonoBehaviour {
         return voxels[x, y].value;
     }
 
-    private void PointToGridCoord(Vector2 point, out int x, out int y) {
+    private void PointToGridCoord(Vector2 point, out int x, out int y)
+    {
+        // convert to a local point
+        point = point - (Vector2)transform.position;
         point = point + Vector2.one * voxelSize / 2;
         x = (int)(point.x * resolution);
         y = (int)(point.y * resolution);
     }
 
-    public void Use(float[,] weights)
-    {
-        int weightsLengthX = weights.GetLength(0);
-        int weightsLengthY = weights.GetLength(1);
+    public Vector2 ToGlobalPosition(float x, float y) {
+        x = x / resolution;
+        y = y / resolution;
 
-        for (int y = 0; y < voxels.GetLength(1); y++)
-        {
-            for (int x = 0; x < voxels.GetLength(0); x++)
-            {
-                float weight;
-
-                if (y >= weightsLengthY || x >= weightsLengthX) weight = 0;
-                else weight = weights[x, y];
-
-                SetVoxel(x, y, weight);
-            }
-        }
+        Vector2 position = new Vector2(x, y);
+        return position + (Vector2)transform.position;
     }
 }

@@ -16,23 +16,19 @@ public class InfluenceField : MonoBehaviour {
         Vector3 gridPosition = grid.transform.position;
 		int gridWidth = (int)(grid.width * grid.resolution);
         int gridHeight = (int)(grid.height * grid.resolution);
-
+        print(gridWidth);
         for (int gridX = 0; gridX < gridWidth; gridX++)
         {
-            float globalX = gridX * grid.resolution + gridPosition.x;
             for (int gridY = 0; gridY < gridHeight; gridY++)
             {
-                float globalY = gridY * grid.resolution + gridPosition.y;
-                Vector2 globalPosition = new Vector2(globalX, globalY);
+                Vector2 globalPosition = grid.ToGlobalPosition(gridX, gridY);
                 float sum = 0;
                 foreach (MetaBall ball in balls)
                 {
                     sum += ball.CalcInfluence(globalPosition);
                 }
-                grid.SetVoxel(gridX, gridY, sum);
+                grid.SetVoxelAt(globalPosition, sum);
             }
         }
-
-        Debug.Log(gridWidth);
     }
 }
