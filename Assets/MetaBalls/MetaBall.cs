@@ -7,9 +7,10 @@ public class MetaBall : MonoBehaviour {
 		Gizmos.DrawWireSphere(transform.position, power);
 	}
 
-    public float CalcInfluence(Vector2 globalPoint) {
-        float distance = (globalPoint - (Vector2)transform.position).sqrMagnitude;
-        float influence = 1 - distance * power;
+    public float CalcInfluence(Vector2 point)
+    {
+        float distance = (point - (Vector2)transform.localPosition).sqrMagnitude;
+        float influence = 1 - distance / power;
         if (influence > 1) influence = 1;
         if (influence < 0) influence = 0;
         return influence;

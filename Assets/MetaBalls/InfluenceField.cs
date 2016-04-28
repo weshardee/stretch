@@ -2,12 +2,13 @@
 
 [RequireComponent (typeof (VoxelGrid))]
 public class InfluenceField : MonoBehaviour {
-    public MetaBall[] balls;
+    private MetaBall[] balls;
 	private VoxelGrid grid;
 
     // Use this for initialization
     void Start () {
         grid = GetComponent<VoxelGrid>();
+        balls = GetComponentsInChildren<MetaBall>();
     }
 
     // Update is called once per frame
@@ -16,7 +17,7 @@ public class InfluenceField : MonoBehaviour {
         Vector3 gridPosition = grid.transform.position;
 		int gridWidth = (int)(grid.width * grid.resolution);
         int gridHeight = (int)(grid.height * grid.resolution);
-        print(gridWidth);
+
         for (int gridX = 0; gridX < gridWidth; gridX++)
         {
             for (int gridY = 0; gridY < gridHeight; gridY++)

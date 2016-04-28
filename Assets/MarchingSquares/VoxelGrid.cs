@@ -336,8 +336,6 @@ public class VoxelGrid : MonoBehaviour {
 
     private void PointToGridCoord(Vector2 point, out int x, out int y)
     {
-        // convert to a local point
-        point = point - (Vector2)transform.position;
         point = point + Vector2.one * voxelSize / 2;
         x = (int)(point.x * resolution);
         y = (int)(point.y * resolution);
