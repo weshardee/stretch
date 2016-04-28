@@ -33,8 +33,6 @@ public class VoxelGrid : MonoBehaviour {
         public Material mat;
     }
 
-    [SerializeField]
-    private GameObject voxelPrefab;
     public float resolution;
     public float width;
     public float height;
@@ -52,6 +50,8 @@ public class VoxelGrid : MonoBehaviour {
     private List<int> triangles;
     private bool needsUpdate = false;
     [Range(0, 1)]public float threshold = 0.5f;
+
+    private static Vector3 GizmoSize = Vector3.one / 10;
 
     public void Awake () {
         // calc sizes
@@ -90,11 +90,12 @@ public class VoxelGrid : MonoBehaviour {
 
     void OnDrawGizmos()
     {
-        if (voxels == null) {
-            return;
-        }
-        for (int y = 0; y < voxels.GetLength(1); y++) {
-            for (int x = 0; x < voxels.GetLength(0); x++) {
+        float cellSize = 1 / resolution;
+        float cellsX = width * resolution;
+        float cellsY = height * resolution;
+
+        for (int y = 0; y < cellsY; y ++) {
+            for (int x = 0; x < cellsX; x++) {
                 DrawVoxelDebug(x, y);
             }
         }
@@ -102,6 +103,16 @@ public class VoxelGrid : MonoBehaviour {
 
     void DrawVoxelDebug(int x, int y) {
         Vector2 offset = transform.position;
+
+        // draw center point
+        float size = 1 / resolution;
+        Vector3 centerPoint = new Vector3(x * size, y * size, 0) + transform.position;
+        Gizmos.DrawCube(centerPoint, GizmoSize);
+
+        // draw edge positions if game is running
+        if (voxels == null) {
+            return;
+        }
         Voxel v = voxels[x, y];
         Vector3 globalPosition = (offset + v.position);
         Vector3 globalXEdge = (offset + v.xEdgePosition);
@@ -270,22 +281,17 @@ public class VoxelGrid : MonoBehaviour {
         AddTriangle(a, d, e);
     }
 
-    void CreateVoxel(int x, int y) {
-        GameObject o = Instantiate(voxelPrefab) as GameObject;
-        o.transform.parent = transform;
+    void CreateVoxel(int x, int y)
+    {
+        Voxel v = voxels[x, y];
 
+        // calc position
         float localX = x * voxelSize;
         float localY = y * voxelSize;
-        o.transform.localPosition = new Vector3(localX, localY, Z);
-        o.transform.localScale = Vector2.one * voxelSize * 0.1f;
+        v.position = new Vector2(localX, localY);
 
-        // set voxel material
-        Voxel v = voxels[x, y];
-        v.mat = o.GetComponent<Renderer>().material;
-
-        // set initial voxel positions
+        // set initial edge positions
         float halfVoxelSize = voxelSize / 2f;
-        v.position = o.transform.localPosition;
         v.xEdgePosition = v.position + Vector2.right * halfVoxelSize;
         v.yEdgePosition = v.position + Vector2.up * halfVoxelSize;
 
@@ -301,7 +307,7 @@ public class VoxelGrid : MonoBehaviour {
         // store that value
         Voxel v = voxels[x, y];
         v.value = value;
-        v.mat.color = Color.Lerp(ColorOn, ColorOff, value);
+        // v.mat.color = Color.Lerp(ColorOn, ColorOff, value);
 
         // set back to the grid
         voxels[x, y] = v;

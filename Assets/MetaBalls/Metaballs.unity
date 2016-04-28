@@ -96,6 +96,7 @@ GameObject:
   - 114: {fileID: 253782819}
   - 33: {fileID: 253782818}
   - 23: {fileID: 253782817}
+  - 114: {fileID: 253782821}
   m_Layer: 0
   m_Name: Field
   m_TagString: Untagged
@@ -147,8 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7f1303e1e30498fbba4480c3be51df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  voxelPrefab: {fileID: 0}
-  resolution: 5
+  resolution: 1
   width: 10
   height: 10
   threshold: 0.5
@@ -164,6 +164,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &253782821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 253782816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c62e9343f13349f4da528f307c48cc44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  balls:
+  - {fileID: 1852950949}
+  - {fileID: 1505673438}
 --- !u!1 &1505673437
 GameObject:
   m_ObjectHideFlags: 0
