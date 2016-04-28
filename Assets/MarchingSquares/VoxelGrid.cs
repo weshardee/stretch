@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof (MeshFilter))]
+[RequireComponent (typeof (MeshRenderer))]
+[RequireComponent (typeof (Material))]
 public class VoxelGrid : MonoBehaviour {
     enum MarchStates {
         Empty, // 0000
