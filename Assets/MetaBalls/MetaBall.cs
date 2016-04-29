@@ -19,7 +19,7 @@ public class MetaBall : MonoBehaviour {
         //}
 
         // adjust radius by a factor
-        r *= power;
+        r /= power;
 
         float influence = r * r * r * (r * (r * 6 - 15) + 10); // http://www.geisswerks.com/ryan/BLOBS/blobs.html
 
