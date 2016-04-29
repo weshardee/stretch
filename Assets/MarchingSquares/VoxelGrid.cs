@@ -301,7 +301,6 @@ public class VoxelGrid : MonoBehaviour {
 
     public void SetVoxel(int x, int y, float value)
     {
-        print(x + "," + y + ": " + value);
         // verify this is in bounds
         if (x >= voxels.GetLength(0) || x < 0) return;
         if (y >= voxels.GetLength(1) || y < 0) return;
