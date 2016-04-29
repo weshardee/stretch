@@ -17,7 +17,7 @@ public class InfluenceField : MonoBehaviour {
         Vector3 gridPosition = grid.transform.position;
 		int gridWidth = (int)(grid.width * grid.resolution);
         int gridHeight = (int)(grid.height * grid.resolution);
-        Debug.Log(gridWidth);
+
         for (int gridX = 0; gridX < gridWidth; gridX++)
         {
             for (int gridY = 0; gridY < gridHeight; gridY++)
