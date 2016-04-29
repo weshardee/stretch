@@ -13,10 +13,10 @@ public class MetaBall : MonoBehaviour {
         Vector2 deltaVector = point - (Vector2)transform.localPosition;
         float r = deltaVector.sqrMagnitude;
 
-        if (r > power)
-        {
-            return 0;
-        }
+        //if (r > power)
+        //{
+        //    return 0;
+        //}
 
         // adjust radius by a factor
         r *= power;
