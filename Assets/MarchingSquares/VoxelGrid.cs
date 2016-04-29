@@ -106,23 +106,31 @@ public class VoxelGrid : MonoBehaviour {
 
     void DrawVoxelDebug(int x, int y) {
         Vector2 offset = transform.position;
+        Color nodeColor = Color.white;
+
+        Voxel v;
+        if (voxels != null)
+        {
+            v = voxels[x, y];
+            nodeColor = Color.Lerp(Color.white, Color.black, v.value);
+        }
 
         // draw center point
         float size = 1 / resolution;
         Vector3 centerPoint = new Vector3(x * size, y * size, 0) + transform.position;
+        Gizmos.color = nodeColor;
         Gizmos.DrawCube(centerPoint, GizmoSize);
 
         // draw edge positions if game is running
-        if (voxels == null) {
-            return;
-        }
-        Voxel v = voxels[x, y];
-        Vector3 globalPosition = (offset + v.position);
-        Vector3 globalXEdge = (offset + v.xEdgePosition);
-        Vector3 globalYEdge = (offset + v.yEdgePosition);
+//        if (voxels == null) {
+//            return;
+//        }
+//        Vector3 globalPosition = (offset + v.position);
+//        Vector3 globalXEdge = (offset + v.xEdgePosition);
+//        Vector3 globalYEdge = (offset + v.yEdgePosition);
 
-        if (v.xEdgePosition != Vector2.zero) Debug.DrawLine(globalPosition, globalXEdge, Color.red);
-        if (v.yEdgePosition != Vector2.zero) Debug.DrawLine(globalPosition, globalYEdge, Color.red);
+//         if (v.xEdgePosition != Vector2.zero) Debug.DrawLine(globalPosition, globalXEdge, Color.red);
+//         if (v.yEdgePosition != Vector2.zero) Debug.DrawLine(globalPosition, globalYEdge, Color.red);
     }
 
     void Refresh() {
