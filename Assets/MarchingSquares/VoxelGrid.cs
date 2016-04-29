@@ -136,6 +136,7 @@ public class VoxelGrid : MonoBehaviour {
         int cellsY = voxels.GetLength(1) - 1;
 
         for (int x = 0; x < cellsX; x++) {
+            print(x);
             for (int y = 0; y < cellsX; y++) {
                 Voxel sw = voxels[x + 0, y + 0]; // (0, 0)
                 Voxel se = voxels[x + 1, y + 0]; // (1, 0)
@@ -171,9 +172,9 @@ public class VoxelGrid : MonoBehaviour {
 
     Vector2 LerpEdge(Voxel a, Voxel b) {
         // only lerp if there's an edge
-        if (a.value < threshold == b.value < threshold) {
-            if (a.xEdgePosition.y == b.xEdgePosition.y) return a.xEdgePosition;
-            else return a.yEdgePosition;
+        if (a.value < threshold == b.value < threshold)
+        {
+            return a.position;
         }
 
         float lerp = (threshold - a.value) / (b.value - a.value);
@@ -292,8 +293,8 @@ public class VoxelGrid : MonoBehaviour {
 
         // set initial edge positions
         float halfVoxelSize = voxelSize / 2f;
-        v.xEdgePosition = v.position + Vector2.right * halfVoxelSize;
-        v.yEdgePosition = v.position + Vector2.up * halfVoxelSize;
+        v.xEdgePosition = v.position;
+        v.yEdgePosition = v.position;
 
         voxels[x, y] = v;
         SetVoxel(x, y, 0);
