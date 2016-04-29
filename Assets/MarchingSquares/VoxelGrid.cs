@@ -53,10 +53,13 @@ public class VoxelGrid : MonoBehaviour {
 
     private static Vector3 GizmoSize = Vector3.one / 10;
 
+    public int voxelsX;
+    public int voxelsY;
+
     public void Awake () {
         // calc sizes
-        int voxelsX = (int)(Mathf.Ceil(width) * resolution) + 1;
-        int voxelsY = (int)(Mathf.Ceil(height) * resolution) + 1;
+        voxelsX = (int)(Mathf.Ceil(width) * resolution) + 1;
+        voxelsY = (int)(Mathf.Ceil(height) * resolution) + 1;
         voxelSize = 1f / resolution;
 
         // initialize voxels
@@ -172,10 +175,10 @@ public class VoxelGrid : MonoBehaviour {
 
     Vector2 LerpEdge(Voxel a, Voxel b) {
         // only lerp if there's an edge
-        if (a.value < threshold == b.value < threshold)
-        {
-            return a.position;
-        }
+        // if (a.value < threshold && b.value < threshold)
+        // {
+        //     return a.position;
+        // }
 
         float lerp = (threshold - a.value) / (b.value - a.value);
 
@@ -341,11 +344,7 @@ public class VoxelGrid : MonoBehaviour {
         y = (int)(point.y * resolution);
     }
 
-    public Vector2 ToGlobalPosition(float x, float y) {
-        x = x / resolution;
-        y = y / resolution;
-
-        Vector2 position = new Vector2(x, y);
-        return position + (Vector2)transform.position;
+    public Vector2 ToPoint(int x, int y) {
+        return new Vector2(x / resolution, y / resolution);
     }
 }

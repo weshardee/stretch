@@ -18,17 +18,17 @@ public class InfluenceField : MonoBehaviour {
 		int gridWidth = (int)(grid.width * grid.resolution);
         int gridHeight = (int)(grid.height * grid.resolution);
 
-        for (int gridX = 0; gridX < gridWidth; gridX++)
+        for (int gridX = 0; gridX < grid.voxelsX; gridX++)
         {
-            for (int gridY = 0; gridY < gridHeight; gridY++)
+            for (int gridY = 0; gridY < grid.voxelsY; gridY++)
             {
-                Vector2 globalPosition = grid.ToGlobalPosition(gridX, gridY);
+                Vector2 point = grid.ToPoint(gridX, gridY);
                 float sum = 0;
                 foreach (MetaBall ball in balls)
                 {
-                    sum += ball.CalcInfluence(globalPosition);
+                    sum += ball.CalcInfluence(point);
                 }
-                grid.SetVoxelAt(globalPosition, sum);
+                grid.SetVoxelAt(point, sum);
             }
         }
     }
