@@ -51,7 +51,7 @@ public class VoxelGrid : MonoBehaviour {
     private bool needsUpdate = false;
     [Range(0, 1)]public float threshold = 0.5f;
 
-    private static Vector3 GizmoSize = Vector3.one / 10;
+    private static Vector3 GizmoSize = Vector3.one / 20;
 
     public int voxelsX;
     public int voxelsY;
