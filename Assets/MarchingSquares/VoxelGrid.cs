@@ -130,17 +130,17 @@ public class VoxelGrid : MonoBehaviour {
         needsUpdate = false;
     }
 
-    void Triangulate() {
+    void Triangulate()
+    {
         triangles.Clear();
         vertices.Clear();
         mesh.Clear();
 
-        int cellsX = voxels.GetLength(0) - 1;
-        int cellsY = voxels.GetLength(1) - 1;
+        int cellsX = voxelsX - 1;
+        int cellsY = voxelsY - 1;
 
         for (int x = 0; x < cellsX; x++) {
-            print(x);
-            for (int y = 0; y < cellsX; y++) {
+            for (int y = 0; y < cellsY; y++) {
                 Voxel sw = voxels[x + 0, y + 0]; // (0, 0)
                 Voxel se = voxels[x + 1, y + 0]; // (1, 0)
                 Voxel ne = voxels[x + 1, y + 1]; // (1, 1)
