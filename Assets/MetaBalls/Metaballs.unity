@@ -148,10 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff7f1303e1e30498fbba4480c3be51df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolution: 1
+  resolution: 10
   width: 10
-  height: 10
+  height: 5
   threshold: 0.26
+  voxelsX: 0
+  voxelsY: 0
 --- !u!4 &253782820
 Transform:
   m_ObjectHideFlags: 0
