@@ -151,7 +151,7 @@ MonoBehaviour:
   resolution: 10
   width: 10
   height: 5
-  threshold: 0.26
+  threshold: 0.5
   voxelsX: 0
   voxelsY: 0
 --- !u!4 &253782820
