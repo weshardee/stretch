@@ -10,8 +10,8 @@ public class MetaBall : MonoBehaviour {
     public float CalcInfluence(Vector2 point)
     {
         // TODO performance bottleneck? Maybe cache position on update?
-        Vector2 deltaVector = point - (Vector2)transform.localPosition;
-        float r = deltaVector.sqrMagnitude;
+        var deltaVector = point - (Vector2)transform.localPosition;
+        var r = deltaVector.sqrMagnitude;
 
         var influence = (power*power)/(r*r);
 
